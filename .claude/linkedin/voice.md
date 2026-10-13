@@ -41,7 +41,7 @@ Hinweis: Das sind Haltungen, keine Streitthesen. Die Skills dürfen sie nicht zu
 
 ## Off limits
 
-- **Topics I do not post about:** (offen)
+- **Topics I do not post about:** Beleidigendes, Anstößiges oder sonst unsachgemäßen Inhalt. Nichts posten, was Christopher nicht ausdrücklich freigegeben hat.
 - **Clients or numbers I cannot name publicly:** Interne Details von Philips Medical Systems (Fertigung, Produkte, Prozesse) nur nach Rückfrage. Bis zur Klärung nicht nennen.
 - **Claims I am not allowed to make:** Keine Berufserfahrung in der IT behaupten. Alle KI- und Netzwerkkenntnisse sind laut Lebenslauf Grundkenntnisse.
 
