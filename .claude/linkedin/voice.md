@@ -12,25 +12,25 @@ at the answers.
 
 ## Who I am
 
-- **Name:**
-- **What I do, in one sentence:**
-- **Who I am writing for:** (be specific: "agency owners doing $1-5M", not "professionals")
-- **What I sell:**
+- **Name:** Christopher Hanke
+- **What I do, in one sentence:** Umschüler zum Fachinformatiker für Systemintegration (IHK) bei der GFN Norderstedt, vorher sieben Jahre Fertigung, Montage und Prüfung von Röntgenkomponenten bei Philips Medical Systems in Hamburg.
+- **Who I am writing for:** (offen, bitte ergänzen) Vermutlich IT-Betriebe und Recruiter im Raum Hamburg, das ist nur eine Annahme aus dem Lebenslauf.
+- **What I sell:** Nichts. Ziel laut Lebenslauf: Praktikumsplatz für die betriebliche Praxisphase ab 18.10.2027 (ca. 8,5 Monate) im Raum Hamburg in IT-Support, Systemadministration oder Netzwerktechnik, danach Berufsstart in Systemadministration, Netzwerktechnik oder IT-Infrastruktur.
 
 ## What I sound like
 
-- **Three of my own posts that sound most like me:** (paste them, or link them)
-- **Words I actually use:**
-- **Words I would never use:**
-- **Sentence length:** (short and punchy / mixed / long and considered)
-- **Do I swear:** (yes / mild / no)
-- **Emoji:** (never / one, rarely / freely)
-- **Contractions:** (yes - almost always yes)
+- **Three of my own posts that sound most like me:** (noch keine geliefert)
+- **Words I actually use:** (offen)
+- **Words I would never use:** (offen)
+- **Sentence length:** (offen)
+- **Do I swear:** (offen)
+- **Emoji:** (offen)
+- **Contractions:** (offen)
+- **Sprache:** Deutsch (Muttersprache). Englisch nur Grundkenntnisse, also keine englischen Posts.
 
 ## My positions
 
-Three to five things I believe that some of my audience does not. These are
-where the good posts come from.
+(offen, bitte 3 bis 5 eigene Überzeugungen ergänzen. Nicht aus dem Lebenslauf ableitbar.)
 
 1.
 2.
@@ -38,16 +38,17 @@ where the good posts come from.
 
 ## Off limits
 
-- **Topics I do not post about:**
-- **Clients or numbers I cannot name publicly:**
-- **Claims I am not allowed to make:** (regulated industry, employer policy, NDA)
+- **Topics I do not post about:** (offen)
+- **Clients or numbers I cannot name publicly:** Interne Details von Philips Medical Systems (Fertigung, Produkte, Prozesse) nur nach Rückfrage. Bis zur Klärung nicht nennen.
+- **Claims I am not allowed to make:** Keine Berufserfahrung in der IT behaupten. Alle KI- und Netzwerkkenntnisse sind laut Lebenslauf Grundkenntnisse.
 
 ## Proof I can use
 
-Real numbers, outcomes and stories I am happy to put my name on. The skills
-will never invent one, so if this section is empty, every draft comes back
-with `{{your number}}` in it.
+Alles aus dem Lebenslauf vom 10.10.2026:
 
--
--
--
+- Umschulung Fachinformatiker Systemintegration (IHK), GFN Norderstedt, 07/2026 bis 07/2028.
+- 02/2025 bis 02/2026 Mitarbeiter High Voltage Components, Philips Medical Systems: Fertigung, Montage, Verguss und Prüfung von Hochspannungskomponenten für Röntgensysteme; SAP-Anwender; Einarbeitung neuer Kolleginnen und Kollegen nach TWI-Methode.
+- 11/2018 bis 02/2025 Fachhelfer (Randstad, Einsatz bei Philips Medical Systems): Montage, Löten nach ESD-Vorgaben, Ölbefüllung, Dichtheits- und Funktionsprüfungen.
+- Zertifikate: AI Fluency (Anthropic, 10/2026), Microsoft Copilot in Microsoft 365 (GFN, 09/2026), IT-Sicherheitsschulung Social Engineering und Phishing (Amadeus Fire Academy, 09/2026), KI-Führerschein (GFN, 08/2026), Job Instruction Training / TWI (Philips, 01/2025).
+- Eigene Projekte: PC-Bau (Ryzen 9 5950X, RTX 4090), eigenes Heimnetzwerk, lokale Sprachmodelle mit Ollama, KI-Gateway OmniRoute, Claude Code mit MCP-Servern, n8n, LangChain (jeweils Grundkenntnisse).
+- Windows inkl. BitLocker-Wiederherstellung (gute Kenntnisse), Linux, PowerShell (Grundkenntnisse).
