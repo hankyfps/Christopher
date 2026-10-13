@@ -14,7 +14,7 @@ at the answers.
 
 - **Name:** Christopher Hanke
 - **What I do, in one sentence:** Umschüler zum Fachinformatiker für Systemintegration (IHK) bei der GFN Norderstedt, vorher sieben Jahre Fertigung, Montage und Prüfung von Röntgenkomponenten bei Philips Medical Systems in Hamburg.
-- **Who I am writing for:** (offen, bitte ergänzen) Vermutlich IT-Betriebe und Recruiter im Raum Hamburg, das ist nur eine Annahme aus dem Lebenslauf.
+- **Who I am writing for:** IT-Betriebe und Recruiter im Raum Hamburg.
 - **What I sell:** Nichts. Ziel laut Lebenslauf: Praktikumsplatz für die betriebliche Praxisphase ab 18.10.2027 (ca. 8,5 Monate) im Raum Hamburg in IT-Support, Systemadministration oder Netzwerktechnik, danach Berufsstart in Systemadministration, Netzwerktechnik oder IT-Infrastruktur.
 
 ## What I sound like
