@@ -22,10 +22,10 @@ at the answers.
 - **Three of my own posts that sound most like me:** (noch keine geliefert)
 - **Words I actually use:** (offen)
 - **Words I would never use:** (offen)
-- **Sentence length:** (offen)
-- **Do I swear:** (offen)
-- **Emoji:** (offen)
-- **Contractions:** (offen)
+- **Sentence length:** Gemischt, kurze und längere Sätze im Wechsel.
+- **Do I swear:** Nein. Ton professionell, kein Fluchen.
+- **Emoji:** Nie.
+- **Anrede:** Ich-Form, sachlich. Leser weder duzen noch siezen, möglichst nicht direkt ansprechen.
 - **Sprache:** Deutsch (Muttersprache). Englisch nur Grundkenntnisse, also keine englischen Posts.
 
 ## My positions
