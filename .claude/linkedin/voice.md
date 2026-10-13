@@ -30,11 +30,14 @@ at the answers.
 
 ## My positions
 
-(offen, bitte 3 bis 5 eigene Überzeugungen ergänzen. Nicht aus dem Lebenslauf ableitbar.)
+Aus dem Interview vom 13.10.2026, in Christophers eigenen Worten sinngemäß:
 
-1.
-2.
-3.
+1. **Warum IT:** Großes Interesse an IT, mehr Leidenschaft für Hardware und Software. Gepackt haben ihn PC-Bau, Netzwerke einrichten, KI und Prozessoptimierung.
+2. **Was die Fertigung gebracht hat:** Strukturiertes Arbeiten und generell das Arbeitsleben kennengelernt.
+3. **KI:** Hilft ihm bei Alltagsthemen. Man muss der KI aber einen guten Plan zur Delegierung geben.
+4. **Rat an Umschüler:** Mach das, was dich glücklich macht, also die IT-Arbeit, in der du deine größte Leidenschaft hast.
+
+Hinweis: Das sind Haltungen, keine Streitthesen. Die Skills dürfen sie nicht zu schärferen Behauptungen aufblasen oder Beispiele und Zahlen dazuerfinden.
 
 ## Off limits
 
