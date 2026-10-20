@@ -42,7 +42,7 @@ Erfolgskriterien definieren, in der Schleife arbeiten bis verifiziert.
 
 ## Git
 - Änderungen verständlich beschreiben, Auswirkungen zusammenfassen.
-- Commit-Message nach ecc-Format vorschlagen: feat/fix/refactor/docs/test/chore/perf/ci. Typ-Präfix englisch, Beschreibung auf Deutsch.
+- Commit-Message nach ecc-Format: feat/fix/refactor/docs/test/chore/perf/ci. Typ-Präfix englisch, Beschreibung auf Deutsch.
 - Auf dem zugewiesenen Claude-Branch (`claude/...`) nach abgeschlossener Aufgabe selbstständig committen und pushen. Cloud-Container sind flüchtig, Ungepushtes geht verloren.
 - Pull Requests, `main` und fremde Branches nur auf ausdrückliche Ansage.
 
