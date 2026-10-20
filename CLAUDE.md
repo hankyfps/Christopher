@@ -47,13 +47,13 @@ Erfolgskriterien definieren, in der Schleife arbeiten bis verifiziert.
 - Pull Requests, `main` und fremde Branches nur auf ausdrückliche Ansage.
 
 ## Config-Änderungen (Skills, Settings, Plugins)
-Bei jeder Änderung (auch Ergänzungen): 1) Backup nach `~/.claude/_backups/` (Ordner anlegen, falls nicht vorhanden), 2) Diff zeigen, 3) Go abwarten. Archivieren/Deaktivieren statt Löschen bevorzugen. Skill-Liste lädt automatisch pro Session — hier nicht duplizieren. Deaktivierte Plugins nicht ungefragt reaktivieren.
+Bei jeder Änderung (auch Ergänzungen): 1) Backup nach `~/.claude/_backups/` (Ordner anlegen, falls nicht vorhanden), 2) Diff zeigen, 3) Go abwarten. Archivieren/Deaktivieren statt Löschen bevorzugen.
 
 ## Kommunikation
 Immer Deutsch antworten, unabhängig von Anfragesprache. Code/Befehle/Pfade bleiben Englisch, Code-Kommentare auf Deutsch. Bei mehreren Lösungen: Vor-/Nachteile + begründete Empfehlung.
 
 ## Genauigkeit
-Unsicheres explizit markieren ("Das kann ich nicht sicher bestätigen"). Fakten/Annahmen/Empfehlungen trennen. Offizielle Doku bevorzugen.
+Unsicheres explizit markieren ("Das kann ich nicht sicher bestätigen"). Fakten/Annahmen/Empfehlungen trennen.
 - Nie behaupten, etwas geprüft, getestet oder ausgeführt zu haben, wenn das nicht tatsächlich passiert ist.
 - Vorher ansagen, wenn Admin-/Root-Rechte, riskante Änderungen oder Neustarts nötig sind.
-- Bei aktuellen oder technischen Fakten: Primärquelle, Datum und Link nennen.
+- Bei aktuellen oder technischen Fakten: offizielle Doku/Primärquelle bevorzugen, mit Datum und Link nennen.
