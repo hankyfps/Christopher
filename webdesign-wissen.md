@@ -7,18 +7,18 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 | # | Bereich | Status |
 |---|---|---|
-| 1 | Aufbau/Struktur | ❓ (nur HTML-Semantik) |
-| 2 | Technik-Grundlagen | ❓ (nur CSS-Teile: Grid, clamp) |
-| 3 | Navigation/UX | ❓ (Hamburger-Studie, IA vs. Navigation, Startseiten-Prinzipien) |
-| 4 | Layout, Typografie, Farben, Animation | ❓ (Layout/Animation/Schrift teilweise; Farben ❌) |
-| 5 | Responsive/Mobile | ❓ |
-| 6 | Performance | ❓ (CWV, Caching, Lighthouse, INP-Maßnahmen, CDN, Bildformate, Lab vs. Feld; konkrete Hosting-Wahl offen) |
-| 7 | Barrierefreiheit | ✅ für WCAG-Grundkriterien (Kontrast, Text, Tastatur, Fokus, Alt, Zielgröße, Motion); ❓ ARIA/Formulare/Screenreader-Test |
-| 8 | SEO | ❓ (Starter-Guide, Sitemap, robots.txt/noindex; strukturierte Daten, lokale SEO offen) |
-| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH am Original; BFSG über Bundesfachstelle-FAQ; BFSG-Gesetzestext und Urteilstexte offen (siehe 9) |
-| 10 | Trends | ❓ (Beobachtungen aus Inspiration-Datei, 2026-10; nicht selbst gemessen) |
-| 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten (Abschnitt 11); einmal an apple.com/de erprobt, ohne Lighthouse/Screenreader |
-| 12 | KI-Builder-Prompts | ❓ offizielle Lovable-Doku ausgewertet; andere Builder nicht |
+| 1 | Aufbau/Struktur | ❓ HTML-Semantik, Überschriften, IA vs. Navigation, Startseiten-Prinzipien belegt; Seitentypen/Content-Planung nur Sekundärquelle |
+| 2 | Technik-Grundlagen | ❓ HTML-Semantik, CSS (Grid, clamp, Farben, Fonts) belegt; JavaScript, CMS, Baukästen nicht recherchiert |
+| 3 | Navigation/UX | ✅ Grundregeln belegt (NN/g, W3C APG); ❓ Hamburger-Studie von 2016, Zahlen nicht neu geprüft |
+| 4 | Layout, Typografie, Farben, Animation | ❓ Layout, Animation, Schrift, Farbwerte belegt; offen: Schriftpaarung, Größenskalen, Farbwirkung, 16-px-Standard |
+| 5 | Responsive/Mobile | ✅ Grundlagen belegt (Viewport, mobile-first, Reflow 320 px, Bilder); web.dev-Artikel von 2019 |
+| 6 | Performance | ✅ Grundlagen belegt (Core Web Vitals, LCP/CLS/INP-Maßnahmen, Caching, CDN, Bilder, Lab vs. Feld); ❓ konkrete Hosting-Wahl |
+| 7 | Barrierefreiheit | ✅ WCAG-Grundkriterien belegt; ❓ Test mit echtem Screenreader, weitere ARIA-Muster |
+| 8 | SEO | ✅ Grundlagen belegt (Starter-Guide, Sitemap, robots/noindex, strukturierte Daten, lokale Suche); ❓ Ranking-Wirkung im Einzelfall |
+| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH, LG-München-Urteil am Original; BFSG-Gesetzestext, EU-Richtlinie, VG-Hannover-Urteilstext, Banner mit deutscher IP offen |
+| 10 | Trends | ❓ Beobachtungen aus Inspiration-Datei (Okt. 2026), nicht selbst gemessen; keine Aktualitätsprüfung |
+| 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten; an apple.com/de mit Skript und Lighthouse erprobt, ohne Screenreader und ohne deutsche IP |
+| 12 | KI-Builder-Prompts | ❓ Lovable, Framer, Webflow (Anbieter-Doku) ausgewertet; Wix, v0 u. a. nicht |
 
 ---
 
