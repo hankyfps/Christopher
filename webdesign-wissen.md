@@ -12,7 +12,7 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 3 | Navigation/UX | ❓ (Hamburger-Studie, IA vs. Navigation, Startseiten-Prinzipien) |
 | 4 | Layout, Typografie, Farben, Animation | ❓ (Layout/Animation/Schrift teilweise; Farben ❌) |
 | 5 | Responsive/Mobile | ❓ |
-| 6 | Performance | ❓ (Core Web Vitals, Caching-Grundlagen, Lighthouse; Hosting/CDN-Wahl offen) |
+| 6 | Performance | ❓ (CWV, Caching, Lighthouse, INP-Maßnahmen, CDN, Bildformate, Lab vs. Feld; konkrete Hosting-Wahl offen) |
 | 7 | Barrierefreiheit | ✅ für WCAG-Grundkriterien (Kontrast, Text, Tastatur, Fokus, Alt, Zielgröße, Motion); ❓ ARIA/Formulare/Screenreader-Test |
 | 8 | SEO | ❓ (Starter-Guide, Sitemap, robots.txt/noindex; strukturierte Daten, lokale SEO offen) |
 | 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH am Original; BFSG über Bundesfachstelle-FAQ; BFSG-Gesetzestext und Urteilstexte offen (siehe 9) |
@@ -42,7 +42,14 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 **Informationsarchitektur (IA) vs. Navigation** (NN/g, Cardello, 22.06.2014): IA = unsichtbares Grundgerüst (welche Inhalte, wie gegliedert und benannt; dokumentiert in Tabellen/Diagrammen). Navigation = sichtbare Elemente (Hauptmenü, Breadcrumbs, Filter, Footer) und nur die "Spitze des Eisbergs". Reihenfolge: **erst IA, dann Navigation gestalten**; Navigation nicht nach Optik wählen (Beispiel: Inverted-L-Layout trägt nur bis ~4 Ebenen).
 
-**Startseiten-Prinzipien** (NN/g, Wang, 15.03.2024): Logo oben links (nicht zentriert); kurzer Slogan, der klar sagt, was angeboten wird; Alltagssprache statt Jargon; Wichtigstes über dem Falz; konkrete Beispiele statt nur Kategorien; Linktexte konkret (kein "Klicken Sie hier"/"Mehr erfahren"); Logo-Link und "Home" auf jeder Seite; Standardlayouts nutzen; Animationen/Autoplay/Parallax minimieren und steuerbar machen; keine Popups/Splash-Screens außer gesetzlich nötig (Cookie, Altersprüfung); Hauptnavigation auffällig, nicht versteckt.
+**Buttons, Links und Call-to-Action (NN/g):**
+- **Link = Versprechen** (Pernice 2014): Linktext eigenständig verständlich (nicht „mehr", „weiterlesen"), und die Zielseite löst das Versprechen sofort ein (Überschrift passt zum Linktext, erwarteter Inhalt ohne Scrollen sichtbar).
+- **Generische Labels schaden** („Get Started", Harley/Flaherty 2017): in der Studie klickten 6 von 8 Teilnehmern darauf und landeten in Anmelde-/Verkaufsstrecken statt bei Informationen → Button sagt konkret, was passiert („Stilquiz starten"); erst Informationen geben, dann Daten/Anmeldung verlangen; Preise/Kernangaben sichtbar, nicht im Footer.
+- **Button-Stile** (Gordon 2025): *primär* = gefüllt, stärkste Betonung (Hauptaktion); *sekundär* = Outline; *tertiär* = geringste Betonung. **Zustände:** enabled, disabled (zusätzlich `aria-disabled="true"`), hover (leichte Abdunklung), focus (Rahmen, nicht nur Farbe), pressed (Rückmeldung in 100–150 ms), loading. Das entspricht dem gefüllt/umrandet-Paar bei Apple (Abschnitt 10).
+- **Touch-Ziele** (Harley 2019): mindestens ca. **1 cm × 1 cm** physisch (kein Pixelwert), Primäraktionen größer; Abstand ca. 2 mm; erst Größe, dann Abstand.
+- ❓ Zahlenbasierte CTA-Tests (Farbe, Position, Conversion) wurden nicht gefunden – NN/g liefert Prinzipien, keine Conversion-Zahlen.
+
+**Startseiten-Prinzipien** (NN/g, Wang
 
 **Einschränkung:** Studie ist von 2016 → ❓ ob Zahlen heute (2026) gleich ausfallen; nicht aktuell geprüft. Die Zahlen gelten für diese Studie, nicht pauschal.
 
@@ -50,6 +57,10 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 - Pernice & Budiu: „Hamburger Menus and Hidden Navigation Hurt UX Metrics", NN/g, 26.06.2016 – https://www.nngroup.com/articles/hamburger-menus/
 - Hinweis: NN/g-Seite „navigation-design-guide" lieferte 404, nicht ausgewertet.
 - Cardello: „The Difference Between Information Architecture (IA) and Navigation", NN/g, 22.06.2014 – https://www.nngroup.com/articles/ia-vs-navigation/
+- Pernice: „A Link is a Promise", NN/g, 14.12.2014 – https://www.nngroup.com/articles/link-promise/
+- Harley & Flaherty: „„Get Started" Stops Users", NN/g, 20.08.2017 – https://www.nngroup.com/articles/get-started/
+- Gordon: „Button States: Communicate Interaction", NN/g, 25.04.2025 – https://www.nngroup.com/articles/button-states-communicate-interaction/
+- Harley: „Touch Targets on Touchscreens", NN/g, 05.05.2019 – https://www.nngroup.com/articles/touch-target-size/
 - Wang: „Homepage Design: 5 Fundamental Principles", NN/g, 15.03.2024 – https://www.nngroup.com/articles/homepage-design-principles/
 
 ---
@@ -73,7 +84,8 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 - Zeilenhöhe/Abstände: WCAG 1.4.12 verlangt nur, dass der Inhalt bei Zeilenhöhe 1,5×, Absatzabstand 2×, Buchstabenabstand 0,12×, Wortabstand 0,16× (jeweils der Schriftgröße) nichts verliert → keine Pflichtwerte, aber Layout darf nicht auf feste Höhen bauen.
 - `line-height` (MDN): als **Zahl ohne Einheit** angeben (z. B. `1.5`), bleibt beim Zoom/Vererben proportional; für Fließtext **mindestens 1,5** (hilft bei Sehschwäche, Legasthenie). Das 1,7 aus dem Beispiel-CSS der Inspiration-Datei ist kein Standard, aber ≥ 1,5 passt.
 - Webfont-Best-Practices (web.dev, 04.10.2022): nur **WOFF2**; Self-Hosting spart Drittverbindung (Vorteil nicht garantiert; CDN + HTTP/2); `preload` gezielt nur für wenige kritische Fonts; `font-display: optional` am stabilsten, Kombination möglich (`swap` für Marke, `optional` für Fließtext); **Subsetting** per `unicode-range` (Lizenz muss das erlauben); `size-adjust` gegen CLS; jeder weitere Font kostet Ladezeit, `system-ui` braucht keinen Download; **Icon-Fonts durch SVG ersetzen**.
-- ❓ Nicht belegt: Schriftpaarung, Schriftgrößen-Skalen, Mindestgröße 16 px → offene Lücke (Webdesign Journal: ≥16 px, Apple misst 17 px – nur Beobachtung).
+- **Schriftgröße/Paarung (NN/g, Nielsen 15.11.2015):** „reasonably large default font size", Nutzern Größenänderung erlauben, Größen **relativ statt absolut in Pixeln** (NN/g „Top 10 Mistakes"); hoher Kontrast, schlichter Hintergrund; saubere Schrift – Serif ist auf hochauflösenden Bildschirmen ok, Schriften, die Handschrift/Gotik nachahmen, schaden der Lesbarkeit. NN/g nennt **keine feste Pixelzahl** → die **16-px-Mindestgröße ist kein belegter Standard**, sondern Praxisrichtwert (Webdesign Journal; Apple misst 17 px). Zeilenlänge behandelt der Artikel nicht.
+- ❓ Weiter offen: Schriftpaarungs-Regeln und Größenskalen aus Primärquelle (Apple-HIG- und Material-3-Seite lieferten nur den Titel, da JavaScript-Seiten).
 - Hinweis: web.dev-Artikel ist intern widersprüchlich datiert (Update 2018, Browser-Stand Mai 2020).
 
 ### Animationen
@@ -87,11 +99,12 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 ### Farben / Dark Mode (Teilwissen)
 - `prefers-color-scheme: light|dark` (Baseline seit Jan. 2020): helles Standard-Theme, per Media Query für Dunkel überschreiben. `color-scheme` (CSS/Meta) lässt den Browser Formularelemente/Scrollbars automatisch anpassen.
 - Beide Themes müssen die Kontrastwerte aus Abschnitt 7 einhalten.
-- Farbwerte in CSS (MDN „Applying color"): benannte Farben, Hex, `rgb()`, `hsl()`, `hwb()`; **im Team/Projekt eine einzige Schreibweise** verwenden. `oklch()` wurde dort nur verwiesen, nicht erklärt (❓).
+- Farbwerte in CSS (MDN „Applying color"): benannte Farben, Hex, `rgb()`, `hsl()`, `hwb()`; **im Projekt eine einzige Schreibweise** verwenden. **`oklch(L C H / A)`** (MDN, Baseline „Widely available" seit Mai 2023): L = wahrgenommene Helligkeit 0–1, C = Farbintensität (100 % = 0,4), H = Farbton als Winkel; Helligkeit/Intensität/Farbton einzeln einstellbar; Varianten per relativer Syntax `oklch(from var(--basis) calc(l + 0.15) c h)` (Teile davon noch uneinheitlich unterstützt → Fallback-Farbe davor setzen).
 - Kontrast bewusst prüfen (MDN verweist auf den WebAIM Color Contrast Checker); hoher Kontrast hilft auch bei Blendung (Smartphone in der Sonne). Pflichtfelder z. B. mit Sternchen **und** Farbe kennzeichnen (MDN „CSS and JavaScript accessibility best practices").
-- Hover/Fokus: Cursor und Fokus-Outline nicht entfernen; Mauszustände (`mouseover`) brauchen Tastatur-Gegenstück (`focus`). (`:focus-visible` steht nicht in der MDN-Seite; Hinweis aus meinem Vorwissen, ❓ nicht belegt.)
+- Hover/Fokus: Cursor und Fokus-Outline nicht entfernen; Mauszustände (`mouseover`) brauchen Tastatur-Gegenstück (`focus`). **`:focus-visible`** (MDN, Baseline seit März 2022): Fokus nur bei Tastaturbedienung sichtbar gestalten statt `outline: none`, z. B. `outline: 2px solid …; outline-offset: 2px`; Indikator braucht ≥ 3:1 Kontrast (WCAG 1.4.11).
 - Quelle: MDN „prefers-color-scheme" (abgerufen 2026-10-26; zu ~77 % gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
-- ❓ Weiter offen: Farbharmonien/Palettenaufbau und Farbwirkung – MDN behandelt sie nicht, Material-Design-Seite lieferte nur den Titel; bisher nur Sekundärquelle Webdesign Journal (siehe 10). Keine Primärquelle gefunden.
+- **Farbschemata (MDN „Using color wisely"):** Basisfarbe + Neutralfarben (Weiß/Schwarz/Grau), **möglichst wenige Farben**, Farbe gezielt zur Hervorhebung; Beispiele **monochrom**, **komplementär** (Gegenfarbe als Akzent), **triadisch** (drei gleichmäßig verteilte Farbtöne, ±120°). *Analog* behandelt MDN nicht; Material Design sagt nur, dass Farben mit nahen Farbtönen harmonischer wirken (Blog „Designing Harmony into Dynamic Color", nicht selbst gelesen, nur Suchausschnitt ❓). Farbwirkung: Basisfarbe soll Thema/Stimmung spiegeln; **MDN geht nicht ins Detail zur Psychologie einzelner Farben** → feste Aussagen wie „Blau = Vertrauen" bleiben ❓ Faustregel. Rot-Grün-Schwäche ist die häufigste Farbenblindheit → Häkchen/Kreuz statt nur Grün/Rot; Palettenwerkzeuge mit Farbenblindheits-Simulation existieren (Paletton, laut MDN).
+- **Niedriger Kontrast (NN/g, Sherwin 07.06.2015):** Low-Contrast-Text verschlechtert Lesbarkeit und Auffindbarkeit; Grau wirkt oft wie deaktiviert; bei Sonnenlicht kaum lesbar; Alternative: Gewichtung über Größe/Position statt blasser Farbe.
 
 **Quellen**
 - MDN: „Basic concepts of grid layout" (teilweise gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout
@@ -163,7 +176,12 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 **Lighthouse** (Chrome, aktualisiert 02.06.2025): Open-Source-Audit mit Kategorien Performance (u. a. FCP, LCP, TBT), Accessibility, Best Practices, SEO. Start: Chrome-DevTools → Reiter „Lighthouse", per `npm install -g lighthouse` + `lighthouse <url>`, oder **PageSpeed Insights** ohne Installation. Fehlgeschlagene Audits sind Hinweise mit Erklärung. Lab-/Felddaten-Unterschied erklärte die Seite nicht (❓). https://developer.chrome.com/docs/lighthouse/overview
 
-❓ Offen: Bildformate-Praxis im Detail, CDN-/Hosting-Auswahl, INP-Maßnahmen im Detail.
+**Lab vs. Feld** (web.dev, 18.07.2022): Lab (Lighthouse) = kontrollierte, reproduzierbare Messung für **ein** Gerät/Netz/Standort; Feld (CrUX, 28 Tage, 75. Perzentil) = echte Nutzer. Abweichungen u. a.: Lab misst kalten Cache, Feld oft Cache-Treffer; CLS im Feld über die gesamte Lebensdauer, im Lab meist nur beim Laden. **Felddaten haben Vorrang**; Lab zum Debuggen. https://web.dev/articles/lab-and-field-data-differences
+**INP verbessern** (web.dev, aktualisiert 02.09.2025): lange Tasks im Hauptthread vermeiden/aufteilen, Event-Handler schlank halten und per Yielding Arbeit aufteilen, Layout-Thrashing vermeiden, **kleines DOM**, `content-visibility`, nicht große HTML-Mengen per Client-JS erzeugen. https://web.dev/articles/optimize-inp
+**Bildformate** (MDN): Fotos → **WebP** (≈25–35 % kleiner als JPEG) oder **AVIF** (beste Kompression, mit Fallback; Safari ab 16.1), JPEG als Fallback; Logos/Screenshots/Transparenz → PNG oder WebP lossless; **Icons/Diagramme → SVG**; GIF veraltet. **Responsive Bilder:** `srcset` + `sizes` (Auflösung/Größe), `<picture>` nur für Art Direction, `alt` und `src` am `img` Pflicht; Austausch per JS/CSS käme zu spät (Preload). https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types
+**CDN** (web.dev, 05.12.2023): verteilte Server nahe am Nutzer, senkt Latenz/TTFB (hilft LCP); statisch lange cachen, dynamisch kurz; `private`/`no-store` nicht ins CDN; Ziel Cache-Hit-Ratio ca. 90 %; bei der Auswahl Performance, Funktionen, Preis, Support; **eigene Tests**, da Leistung nach Region/Tageszeit schwankt; Brotli, TLS 1.3, HTTP/2/3 aktivieren. https://web.dev/articles/content-delivery-networks
+**Ranking-Einfluss** (Google, „Understanding page experience", aktualisiert 22.09.2026): Core Web Vitals werden von den Ranking-Systemen genutzt, aber **kein einzelnes Page-Experience-Signal**; gute Werte garantieren kein Top-Ranking; nicht nur für SEO auf perfekte Scores optimieren. https://developers.google.com/search/docs/appearance/page-experience
+❓ Offen: konkrete Hosting-/CDN-Wahl für Baukästen (nicht prüfbar ohne Anbieterdaten).
 
 ---
 
@@ -188,6 +206,9 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 2.4.1 Blöcke umgehen | A | Mechanismus zum Überspringen wiederkehrender Blöcke: **Skip-Link** zum Hauptinhalt, Landmarks (`nav`, `main`), Überschriften pro Abschnitt. |
 | 3.3.1 Fehler erkennen | A | Automatisch erkannte Eingabefehler: Feld identifizieren und Fehler **als Text** beschreiben (Farbe/Symbol nur zusätzlich); Techniken: `aria-invalid`, `role="alert"`/Live-Region; empfohlen: Sprung zu Fehlern, Erfolgsmeldung. Native Browser-Validierung zeigt oft generische Meldungen, nur den ersten Fehler, nicht zoomfest → prüfen. |
 | 3.3.2 Labels/Anweisungen | A | Jedes Eingabefeld hat Label/Anweisung (`<label>`, `fieldset`+`legend` für Gruppen); Formathinweise (z. B. Datum). |
+| 3.3.3 Fehlervorschläge | AA | Sind Korrekturvorschläge bekannt, müssen sie angeboten werden (z. B. gültige Werte oder „Meinten Sie Dezember?"); Ausnahme: gefährdet Sicherheit/Zweck. |
+| 1.3.5 Eingabezweck | AA | Felder zu Angaben über die Person (Name, E-Mail, Adresse, Telefon) tragen das passende `autocomplete`-Token (`given-name`, `email`, `tel` …); falsche Werte sind ein Fehler. |
+| 2.1.2 Keine Tastaturfalle | A | Fokus muss per Tastatur wieder verlassbar sein; Modal darf Fokus halten, wenn Esc/„Abbrechen" funktioniert; Ursachen: eigene Widgets, eingebettete Inhalte, Editoren. |
 
 **ARIA** (W3C APG „Read Me First"): *„No ARIA is better than Bad ARIA"*; eine Rolle ist ein Versprechen (`role="button"` auf `div` verlangt auch Tastaturverhalten per JS); ARIA kann Semantik überdecken. Folgerung: zuerst natives HTML (`button`, `a`, `nav`, `label`), ARIA nur ergänzend, mit Assistenztechnik testen. (Die Seite nennt „natives HTML zuerst" nicht wörtlich.)
 
@@ -197,8 +218,10 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 Außerdem: `prefers-reduced-motion` beachten, Zoom nie sperren (siehe 4/5).
 **Typische Fehler:** hellgraue Schrift auf Weiß (#999 ≈ 2,85:1, eigene Rechnung); Fokus-Outline per CSS entfernt; Sticky-Header/Cookie-Banner verdecken Fokus; winzige Icon-Buttons; feste Höhen, die bei größerem Text Inhalt abschneiden; Deko-Bilder mit Alt-Text.
-❓ Offen: 1.3.5 Autocomplete, 3.3.3 Fehlervorschläge, 2.1.2 Tastaturfalle, konkrete ARIA-Muster, Test mit echtem Screenreader.
+**ARIA-Muster Navigation** (W3C APG „Disclosure Navigation Menu"): `nav`-Landmark mit Namen, Liste, je Untermenü ein **Button mit `aria-expanded` und `aria-controls`**, aktueller Link `aria-current="page"`; Tab/Umschalt+Tab, Enter/Leertaste öffnet, **Esc schließt und gibt Fokus an den Button zurück**; **kein `role="menu"`** für normale Website-Navigation (dafür wäre komplexes Tastaturverhalten nötig). https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/
+❓ Offen: Test mit echtem Screenreader (NVDA/VoiceOver/JAWS) – in dieser Umgebung nicht möglich; weitere ARIA-Muster (Tabs, Dialog, Akkordeon) nicht gelesen.
 Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimum.html · …/contrast-enhanced.html · …/visual-presentation.html · …/text-spacing.html · …/reflow.html · …/keyboard.html · …/bypass-blocks.html · …/labels-or-instructions.html · …/use-of-color.html · …/error-identification.html · …/focus-visible.html · …/focus-not-obscured-minimum.html · …/target-size-minimum.html (alle unter https://www.w3.org/WAI/WCAG22/Understanding/) · Alt-Texte: https://www.w3.org/WAI/tutorials/images/decision-tree/ · ARIA: https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/
+(zusätzlich abgerufen: …/error-suggestion.html · …/identify-input-purpose.html · …/no-keyboard-trap.html)
 
 ---
 
@@ -219,7 +242,7 @@ Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimu
 - Typischer Fehler: Seite mit `robots.txt` „verstecken" statt `noindex`; Test-/Entwurfsseiten öffentlich lassen.
 - **Strukturierte Daten** (Google, 10.12.2025): standardisierte Beschreibung von Seiteninhalt (z. B. Rezept, Produkt); **JSON-LD empfohlen** (Skript-Tag, getrennt vom Text), Microdata/RDFa gleichwertig. Nur Sichtbares markieren, Seiten nicht nur dafür bauen. Ermöglichen **Rich Results**, **versprechen aber kein besseres Ranking**. Tests: Rich-Results-Test, Status-Berichte, URL-Prüftool. https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
 - **Lokale Suche** (Google-Unternehmensprofil-Hilfe): Profil **verifizieren**, Adresse/Öffnungszeiten/Branche aktuell halten, Bewertungen beantworten, Fotos hinzufügen. Ranking-Faktoren: **Relevanz, Entfernung, Bekanntheit** (Links, Anzahl/Bewertung der Rezensionen); Ranking lässt sich weder anfordern noch bezahlen. https://support.google.com/business/answer/7091
-- ❓ Offen: Ranking-Einfluss der Core Web Vitals (nicht belegt).
+- Ranking-Einfluss der Core Web Vitals: siehe Abschnitt 6 (Google: werden genutzt, aber keine Garantie).
 
 ---
 
@@ -248,11 +271,11 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 - **Drittinhalte:** Einbindung (u. a. **Schriftarten**, Skripte, Karten, Videos, Fotos, Social-Media) offenbart regelmäßig personenbezogene Daten an den Drittserver und braucht eine Rechtsgrundlage; Rechenschaftspflicht, in der Datenschutzerklärung nennen (Rn. 101).
 - Quelle: DSK/BfDI, „Orientierungshilfe der Aufsichtsbehörden für Anbieter:innen von digitalen Diensten (OH Digitale Dienste) Version 1.2", Nov. 2024 – https://www.bfdi.bund.de/SharedDocs/Downloads/DE/DSK/Orientierungshilfen/OH_Digitale-Dienste.pdf?__blob=publicationFile&v=1 — Behördenauslegung, kein Gesetz; keine Rechtsberatung.
 
-**Gericht (Banner):** VG Hannover, 19.03.2025, Az. 10 A 5385/22 (nur laut Kanzleibericht WBS.LEGAL, Urteilstext nicht gelesen): Banner mit „Alle akzeptieren"/„Einstellungen" ohne gleichwertiges Ablehnen auf erster Ebene → Einwilligung unwirksam. Passt zur OH (Rn. 58–60, 137). Google Tag Manager als einwilligungspflichtig bewertet.
+**Gericht (Banner):** VG Hannover, 19.03.2025, Az. 10 A 5385/22 (laut zm-online am 19.05.2025 bekanntgegeben; **Urteilstext nicht gefunden**, nur Kanzlei-/Fachberichte: WBS.LEGAL, Dr. Datenschutz): Banner mit „Alle akzeptieren"/„Einstellungen" ohne gleichwertiges Ablehnen auf erster Ebene → Einwilligung unwirksam; vorausgewählte Felder unzulässig; Google Tag Manager einwilligungspflichtig. Deckt sich mit DSK-OH (Rn. 58–60, 137). ❓ Wortlaut/Randnummern des Urteils nicht geprüft.
 
 **Datenschutzerklärung – Art. 13 DSGVO** (Gesetzestext gelesen via dejure.org). Bei Datenerhebung mitzuteilen: Verantwortlicher + Kontakt, ggf. Datenschutzbeauftragter, **Zwecke und Rechtsgrundlage**, berechtigte Interessen (bei Art. 6 Abs. 1 lit. f), Empfänger(kategorien), Drittlandübermittlung + Garantien; zusätzlich **Speicherdauer**, Betroffenenrechte (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch, Übertragbarkeit), **Widerrufsrecht** bei Einwilligung, **Beschwerderecht** bei Aufsichtsbehörde, ob Bereitstellung vorgeschrieben/erforderlich ist, automatisierte Entscheidung/Profiling. → Die Erklärung muss zu den **tatsächlich genutzten Diensten** passen (Schriften, Formulare, Einbettungen, Analytics).
 
-**Google Fonts:** LG München I, 20.01.2022, Az. 3 O 17493/20 (laut IHK-/Kanzleibericht, Urteilstext nicht gelesen): dynamische Einbindung überträgt IP-Adresse an Google; 100 € Schadensersatz + Unterlassung; Lösung: Schriften **lokal hosten**. ❓ Spätere Rechtsprechung nicht geprüft.
+**Google Fonts:** LG München I, 3. Zivilkammer, Urteil vom **20.01.2022** (Zitierempfehlung der Fundstelle nennt 19.01.2022), Az. 3 O 17493/20 — **Entscheidungstext gelesen** (Archivkopie von rewis.io): *Tenor:* Unterlassen der IP-Weitergabe an Google über Google Fonts, Ordnungsgeld bis 250.000 € je Fall; Auskunft nach Art. 15 DSGVO; **100 € Schadensersatz**. *Gründe (Kurzfassung):* dynamische IP-Adresse ist auch für den Betreiber personenbezogen (BGH VI ZR 135/13); ohne Einwilligung Eingriff in informationelle Selbstbestimmung; kein berechtigtes Interesse, weil Google Fonts auch **ohne Verbindung zu Google-Servern** eingebunden werden kann (lokal); keine Pflicht des Besuchers, die IP zu verschleiern; Wiederholungsgefahr entfällt nicht durch bloße Umstellung (nur strafbewehrte Unterlassungserklärung); immaterieller Schaden: Kontrollverlust, Übermittlung in die USA, Höhe 100 € nicht angegriffen. ❓ Spätere Rechtsprechung anderer Gerichte nicht geprüft; Einzelfall-Urteil einer Kammer, keine einheitliche Rechtslage.
 
 **BFSG (Barrierefreiheit)** — Quelle: Bundesfachstelle Barrierefreiheit (Bund), Startseite BFSG + FAQ (selbst gelesen; Gesetzestext gesetze-im-internet 503, nicht abrufbar):
 - Gilt für Produkte/Dienstleistungen, die **seit 28.06.2025** hergestellt bzw. erbracht werden.
@@ -260,7 +283,7 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 - **Kleinstunternehmen** (< 10 Beschäftigte und ≤ 2 Mio. € Jahresumsatz): bei **Dienstleistungen** ausgenommen; wer **Produkte** in Verkehr bringt, nicht. Kostenlose Beratung durch die Bundesfachstelle.
 - **Standard:** Für Websites gilt EN 301 549, die auf **WCAG 2.1 Level A und AA** verweist; eine aktualisierte Fassung soll auf WCAG 2.2 verweisen. → Die WCAG-2.2-Kriterien in Abschnitt 7 sind eine Obermenge/Annäherung; maßgeblich für die Pflicht ist die Norm.
 - **Aufsicht:** Seit 26.09.2025 Marktüberwachungsstelle der Länder (MLBF) in Magdeburg; bei Dienstleistungen stichprobenartig; bei Verstoß Aufforderung zur Herstellung der Konformität, dann Bußgelder bis zur Untersagung. (Bußgeldhöhe „bis 100.000 €" nur aus Sekundärquellen/IHK, ❓ nicht am Gesetz geprüft.)
-- Offen/Streit: Betrifft die Anforderung die ganze Website oder nur den Bestellprozess? Sekundärquelle (Kanzlei) sagt: ganze Website; ❓ ungeklärt. IHK Berlin und e-recht24 widersprachen sich zum Shop eines Kleinstunternehmens → die Bundesfachstelle-FAQ deckt sich mit IHK Berlin nur für Dienstleistungen; **Rechtsrat einholen**.
+- Offen/Streit: Betrifft die Anforderung die ganze Website oder nur den Bestellprozess? Sekundärquelle (Kanzlei) sagt: ganze Website; ❓ ungeklärt. Bundesfachstelle-FAQ (Rest gelesen): Verbraucher können sich an die Marktüberwachung wenden, bei Ablehnung Verwaltungsgericht; **Verbandsklage** vorgesehen; kostenlose **Schlichtungsstelle BGG** für Verbraucher; **kostenlose Beratung** (§ 15 BFSG) für Kleinstunternehmen (Beratungsteam laut Seite noch im Aufbau). EU-Richtlinie 2019/882 und BFSG-Gesetzestext: Abruf scheiterte (EUR-Lex leer, gesetze-im-internet 503) → ❓ im Original ungeprüft.
 - Quelle: Bundesfachstelle Barrierefreiheit – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · FAQ: …/Barrierefreiheitsstaerkungsgesetz/FAQ/faq_node.html (abgerufen 2026-10-26; FAQ zu ~88 % gelesen)
 
 **Praxis für KI-Builder-Seiten:** Footer-Links „Impressum"/„Datenschutz" auf jeder Seite; Impressum vollständig nach Rechtsform; Schriften lokal; keine Tracker/Einbettungen (YouTube, Maps, Analytics) ohne Einwilligungslösung; Cookie-Banner mit „Alles ablehnen" (statt „Einstellungen oder Ablehnen") gleichwertig in Größe/Farbe/Kontrast auf Ebene 1; Datenschutzerklärung an genutzte Dienste anpassen.
@@ -276,10 +299,10 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 
 **Struktur & Navigation:** eine `h1`, Überschriften logisch absteigend · `header/nav/main/footer`, `main` nur einmal · Logo links, verlinkt auf Startseite · Hauptnavigation auf Desktop sichtbar (kein Hamburger), mobil ≤4 Hauptlinks sichtbar oder wichtige Inhalte auch per Inhalts-Links · Linktexte konkret (nicht „Mehr erfahren") · Slogan sagt klar, was angeboten wird.
 **Layout & Responsive:** Viewport-Meta-Tag · Zoom nicht gesperrt · bei 320 px kein horizontales Scrollen · Breakpoints nach Inhalt · Fließtext-Zeilen ≤ 80 Zeichen.
-**Schrift:** Fließtext `line-height` ≥ 1,5 (Zahl ohne Einheit) · `rem`-Größen, `clamp()` mit Max ≥ 2× Min · WOFF2, lokal gehostet, wenige Schnitte, `font-display` bewusst gesetzt · Icon-Fonts durch SVG ersetzt.
+**Schrift:** Fließtext `line-height` ≥ 1,5 (Zahl ohne Einheit) · Größen relativ (`rem`), nicht fest in Pixeln · Buttons mit konkreten Labels, ein primärer (gefüllter) Button je Bereich ·, `clamp()` mit Max ≥ 2× Min · WOFF2, lokal gehostet, wenige Schnitte, `font-display` bewusst gesetzt · Icon-Fonts durch SVG ersetzt.
 **Farben & Kontrast:** Text 4,5:1 (groß 3:1) · Information nie nur über Farbe · Dark Mode (falls vorhanden) mit gleichen Kontrastwerten.
 **Animation:** nur `transform`/`opacity` · 100–400 ms, ease-out beim Erscheinen · `prefers-reduced-motion` respektiert · kein Autoplay/Parallax ohne Kontrolle · keine Info nur über Bewegung.
-**Barrierefreiheit:** Formularfehler als Text beschrieben · alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Skip-Link · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` · Alt-Texte (dekorativ = `alt=""`) · ARIA nur wenn nötig.
+**Barrierefreiheit:** Formularfehler als Text beschrieben · alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Skip-Link · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` und passendem `autocomplete` · Fehler mit Korrekturvorschlag · Fokus per `:focus-visible` gestaltet (≥ 3:1) · Alt-Texte (dekorativ = `alt=""`) · ARIA nur wenn nötig.
 **Performance:** LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 · LCP-Bild nicht lazy, mit `fetchpriority="high"` · Bilder mit `width`/`height` · AVIF/WebP · Platz für Einbettungen reserviert.
 **SEO:** eigener `<title>` je Seite · Testseiten mit `noindex`, nicht mit robots.txt · Sitemap vorhanden (meist automatisch) · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
 **Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen (Verbraucher-Dienstleistung/Shop? Kleinstunternehmen?).
@@ -336,7 +359,7 @@ Methode: Seite mit Chromium (Playwright) geladen, Desktop 1280 px und 320 px, We
 
 ## 12. Gute Anweisungen an KI-Website-Builder
 
-*Stand: 2026-10-26* — Quelle: **Lovable-Dokumentation** (Anbieter-Selbstaussagen, keine unabhängige Studie). ❓ Andere Builder (Wix, Framer, Webflow AI, v0, Claude Design …) nicht geprüft; Prinzipien vermutlich übertragbar, aber nicht belegt.
+*Stand: 2026-10-26* — Quellen: **Lovable-Dokumentation**, **Framer** (Academy/Help), **Webflow** (Help) – alles Anbieter-Selbstaussagen, keine unabhängige Studie. ❓ Wix, v0 und andere nicht gefunden/geprüft; Prinzipien der drei geprüften Anbieter decken sich weitgehend.
 
 **Aufbau eines guten Prompts (laut Doku):**
 1. **Was** gebaut wird – kleiner Baustein statt ganze Seite
@@ -348,6 +371,8 @@ Vorab klären: Für wen ist die Seite, warum kommt die Zielgruppe, welche **eine
 
 **Arbeitsweise:** eine Änderung pro Prompt → in der Vorschau prüfen → weiter · bei vielen „und" aufteilen · Rückfragen der KI zulassen · Plan-Modus für Entscheidungen, Build für Umsetzung · nach jedem funktionierenden Stand speichern (Versionsverlauf) · bei generischem Ergebnis Polish-Durchgang ohne neue Funktionen · Screenshots statt Beschreibung bei visuellen Fehlern · kurzes Briefing („Knowledge-Datei") als Dauerkontext · nach 1–2 Fehlversuchen Ursache im Plan-Modus untersuchen statt raten.
 **Typische Fehler:** „mach es besser" · ganze Seite auf einmal · Platzhaltertexte · kein Stil · keine Grenzen · Lade-/Leer-/Fehlerzustände vergessen.
+**Ergänzung Framer** (Academy „Build your first site", Help „Framer Agents"): im ersten Prompt Organisation/Produkt, **benötigte Seiten**, Inhalte und CMS-Sammlungen, wiederverwendbare Komponenten, responsives Verhalten und visuelle Richtung (Ton, Farben, Typografie) nennen; je konkreter, desto näher das Ergebnis; danach per Chat iterieren (z. B. Hero vollflächig, Preisbereich mit 3 Stufen). https://www.framer.com/academy/lessons/build-your-first-site
+**Ergänzung Webflow** (Help „AI site builder"): **ein** Prompt mit Look & Feel (Farben, Schrift, Stil wie „minimal", „upscale"), was die Firma tut und dem Ziel der Seite (z. B. Anfragen, Verkäufe); **Neu-Generieren ersetzt die aktuelle Struktur und verwirft manuelle Änderungen** → erst Struktur festlegen, dann von Hand feinschleifen. https://help.webflow.com/hc/en-us/articles/38840145286035-Build-a-site-with-Webflow-s-AI-site-builder
 
 **Vorlage (eigener Entwurf, nicht aus der Quelle; Inhalte aus Abschnitt 3–11):**
 > Baue den Startbereich für [Name], Zielgruppe [..]. Ziel: Besucher sollen [eine Aktion]. Text: Überschrift „…", Untertitel „…", Button „…". Stil: [ruhig/premium]; Serifenschrift für Überschrift, serifenlose für Text; Fließtext Zeilenhöhe 1,5, Kontrast mind. 4,5:1. Layout: Logo links, 4 sichtbare Menüpunkte rechts, Menü bleibt beim Scrollen sichtbar. Animation: Elemente blenden dezent ein (300 ms, nur Deckkraft/Verschiebung), „Bewegung reduzieren" respektieren. Bilder mit Breite/Höhe und Alt-Text. Schriften lokal einbinden, keine externen Tracker. Ändere nichts außerhalb dieses Bereichs. Stelle mir vorher Rückfragen.
@@ -378,12 +403,12 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 | Zeilenabstand ≥ 1,5 | WCAG 1.4.12 gleich | ✅ |
 | Absatzabstand "1,5-fach des Zeilenabstands" | WCAG 1.4.8 (AAA) identisch; 1.4.12 (AA) nennt 2× Schriftgröße als Toleranzwert | ✅ bestätigt (anderes Level) – frühere Einstufung ❌ korrigiert |
 | Zeilenlänge Desktop 45–80, mobil 30–40 Zeichen | WCAG 1.4.8: max. 80; web.dev 70–80 | ✅ Obergrenze 80 belegt; untere Grenze/Mobil-Werte ❓ Richtwert |
-| Fließtext mindestens 16 px | in meinen Primärquellen nicht belegt | ❓ plausibel, als Praxisrichtwert führen |
+| Fließtext mindestens 16 px | NN/g (Nielsen 2015): „reasonably large", relativ statt Pixel, **keine Zahl**; Browser-Standardgröße nicht geprüft | ❓ Richtwert, nicht normativ |
 | Zeilenhöhe Fließtext 1,7, Überschriften 1,3 | Beispiel-CSS eines Artikels, keine Norm | ❓ Richtwert |
 | BFSG "ab 2025" für Onlineshops | Bundesfachstelle: gilt seit 28.06.2025, E-Commerce betroffen; Kleinstunternehmen-Ausnahme nur bei Dienstleistungen | ✅ im Kern bestätigt, Detail ❓ (Gesetzestext nicht abrufbar) |
 | Stats "10 % brauchen Hilfsmittel, 30 % Einschränkungen" | Herkunft nicht nachvollziehbar | ❓ nicht zitieren |
-| Farbschemata analog/komplementär/triadisch; Rot=Signal, Gelb=Aufmerksamkeit, Blau=Business/Vertrauen | Gestaltungslehre, Sekundärquelle | ❓ Faustregeln, kulturabhängig |
-| Landingpage: 1 Ziel, auffälliger CTA-Button mit Mikrotext (z. B. "dauert nur 1 Minute") | Sekundärquelle | ❓ Praxisregel, nicht belegt/getestet |
+| Farbschemata analog/komplementär/triadisch; Rot=Signal, Gelb=Aufmerksamkeit, Blau=Business/Vertrauen | MDN: monochrom/komplementär/triadisch belegt, analog nicht behandelt; Farbpsychologie laut MDN nicht im Detail | ✅ Schemata (ohne analog) / ❓ Farbwirkung |
+| Landingpage: 1 Ziel, auffälliger CTA-Button mit Mikrotext (z. B. "dauert nur 1 Minute") | NN/g: konkrete Button-Labels, primärer Button gefüllt, Link-Versprechen einlösen; Mikrotext-Beispiel/Conversion-Wirkung nicht belegt | ✅ Prinzipien / ❓ Mikrotext-Wirkung |
 | Informationsarchitektur zuerst, Navigation danach; Begriffe der Nutzer statt Fachsprache | NN/g (Cardello 2014; Wang 2024) | ✅ bestätigt |
 
 **Weitere Hinweise aus der Datei (nicht geprüft):** 6 Qualitätsbereiche einer guten Seite (Design, Content, UX, Informationsarchitektur, Technik, Interaktion) · Website-Typen (Corporate, Landingpage, Microsite, Portfolio, Nische, E-Commerce, E-Learning, Blog) · Webdesign-Checkliste (90+ Punkte) war nicht einsehbar · Farbkontrast-Prüfer und Google-Fonts-Mixer nicht ausgelesen.
@@ -392,11 +417,10 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 ---
 
 ## Offene Lücken (Reihenfolge)
-1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3, BFSGV) und Urteilstexte (LG München I, VG Hannover) im Original; Reichweite BFSG (ganze Website?); aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
-2. Farben: Palettenaufbau/Harmonien und Farbwirkung aus Primär-/Fachquelle (keine gefunden); Schriftpaarung, Größenskalen, Mindestgröße 16 px
-3. Call-to-Action mit belegten Tests (NN/g-Artikel nicht auffindbar; Suche lieferte nur Sekundärquellen)
-4. Praxistest der Checkliste (11): apple.com/de mit Skript + Lighthouse erprobt; weiter: deutsche IP/Banner, Felddaten (CrUX), Screenreader, eigene Seite
-5. Weitere KI-Builder (neben Lovable), strukturierte Daten/lokale SEO, Trends (10) mit Aktualitätsprüfung
+1. ❓ Recht: BFSG-Gesetzestext und EU-Richtlinie 2019/882 im Original (Abruf scheiterte); VG-Hannover-Urteilstext; Banner/Cookies mit **deutscher IP** (hier nicht prüfbar); nur Orientierung, keine Rechtsberatung
+2. ❓ Test mit **echtem Screenreader** (hier nicht möglich); weitere ARIA-Muster (Tabs, Dialog, Akkordeon)
+3. ❓ Schriftpaarungs-Regeln, Größenskalen (Apple HIG/Material 3 nicht lesbar), Farbwirkung/Psychologie, 16-px-Standard, Conversion-Zahlen für CTAs
+4. ❓ KI-Builder: Wix, v0 u. a.; Trends (10) mit Aktualitätsprüfung; konkrete Hosting-Wahl
 
 ## Selbsttest
 **Sitzungen 1–4:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner ✅ · Banner-Buttons (OH Rn. 124/125/137) ✅ · Sprache ohne Banner (Rn. 81) ✅ · Hero-Prompt ✅
@@ -404,3 +428,7 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 1. *Meine Test-Unterseite soll nicht bei Google erscheinen – robots.txt?* → nein, `noindex` oder Passwortschutz; robots.txt steuert nur Crawling ✅
 2. *Formular zeigt Fehler nur mit roter Umrandung – ok?* → nein, Text nötig (3.3.1), Farbe nur zusätzlich (1.4.1) ✅
 3. *Reine Info-Seite einer Einzelunternehmerin (Dienstleistung, 1 Person) – BFSG?* → Info-/Werbeseite voraussichtlich nicht erfasst; Kleinstunternehmen bei Dienstleistungen ausgenommen; Detail ❓ → Rechtsrat ✅/❓
+**Sitzung 6 (nur anhand der Datei):**
+1. *Mein Button heißt „Jetzt starten" und führt zu einem Anmeldeformular – Problem?* → ja: generische Labels führen in der NN/g-Studie in Anmeldestrecken; konkret benennen und erst informieren ✅
+2. *Darf ich den Fokusrahmen per `outline: none` entfernen?* → nein; mit `:focus-visible` gestalten, ≥ 3:1 Kontrast ✅
+3. *Was entschied das LG München I zu Google Fonts und was folgt daraus?* → 100 € Schadensersatz + Unterlassung, weil die IP ohne Einwilligung an Google ging; lokal hosten ✅ (Einzelfall-Urteil, spätere Rechtsprechung ❓)

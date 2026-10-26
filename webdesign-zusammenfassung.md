@@ -1,70 +1,77 @@
 # Webdesign – Das Wichtigste auf einer Seite
 
-Stand: 2026-10-26 · Grundlage: `webdesign-wissen.md` (dort Quellen, Links, Messwerte)
+Stand: 2026-10-26 (Sitzung 6) · Grundlage: `webdesign-wissen.md` (dort Quellen, Links, Messwerte)
 ✅ am Original/Primärquelle geprüft · ❓ Richtwert oder nicht abschließend belegt · Recht = Orientierung, keine Rechtsberatung
 
 ## 1. Aufbau
-- Erst Inhalte und Seitenstruktur festlegen, dann die Navigation gestalten ✅ (NN/g)
-- Pro Seite eine `h1`, danach logisch absteigend (h2 → h3); Ebene nach Struktur, nicht nach Schriftgröße ✅ (MDN)
-- Bausteine: `header`, `nav`, `main` (nur einmal), `footer` ✅
-- Startseite: Logo oben links, Slogan sagt klar, was angeboten wird, Alltagssprache, Wichtigstes ohne Scrollen, konkrete Linktexte statt „Mehr erfahren" ✅ (NN/g 2024)
+- Erst Inhalte und Seitenstruktur festlegen, dann die Navigation ✅ (NN/g)
+- Eine `h1` pro Seite, danach logisch absteigend; Ebene nach Struktur, nicht nach Schriftgröße ✅ (MDN)
+- `header`, `nav`, `main` (nur einmal), `footer` ✅
+- Startseite: Logo oben links, klarer Slogan, Alltagssprache, Wichtigstes ohne Scrollen, konkrete Linktexte ✅ (NN/g 2024)
 
-## 2. Navigation
-- **Desktop: Menü sichtbar, kein Hamburger** ✅ (NN/g-Studie 2016: versteckt 27 % Nutzung, sichtbar 48 %)
-- Mobil: bis 4 Hauptlinks sichtbar; bei mehr Hamburger, aber wichtige Inhalte zusätzlich im Seiteninhalt verlinken ✅
-- Typisch bei guten Seiten: 3–7 Menüpunkte, Logo links, Menü beim Scrollen sichtbar ❓ (Beobachtung)
-- Skip-Link („Zum Inhalt springen") und `nav`/`main` für Tastatur-Nutzer ✅
+## 2. Navigation, Links, Buttons
+- **Desktop: Menü sichtbar, kein Hamburger** ✅ (NN/g 2016: versteckt 27 % Nutzung, sichtbar 48 %); mobil bis 4 Hauptlinks sichtbar, bei mehr Hamburger plus Inhalts-Links ✅
+- Menü mit Untermenüs: Button mit `aria-expanded`, Esc schließt, kein `role="menu"` ✅ (W3C APG)
+- **Link = Versprechen:** Linktext konkret, Zielseite löst es sofort ein ✅ (NN/g)
+- **Keine generischen Buttons** („Get Started"/„Jetzt starten") – sagen, was passiert; erst informieren, dann Anmeldung verlangen ✅ (NN/g-Studie 2017)
+- Ein primärer (gefüllter) Button je Bereich, sekundär umrandet; Zustände hover/focus/pressed/disabled ✅ (NN/g 2025)
+- Touch-Ziele mindestens ca. 1 cm × 1 cm ✅ (NN/g); WCAG: mindestens 24×24 px ✅
+- Zahlenbasierte CTA-Tests (Farbe/Position/Conversion): ❓ nicht gefunden
 
 ## 3. Layout & Responsive
-- Pflicht: `<meta name="viewport" content="width=device-width, initial-scale=1">`, Zoom nie sperren ✅
-- Mobile-first gestalten; Breakpoints nach Inhalt, nicht nach Gerätemodell ✅
-- Bei 320 px darf nichts horizontal scrollen ✅ (WCAG Reflow)
-- Zeilenlänge höchstens ca. 80 Zeichen ✅; CSS Grid für zweidimensionale Layouts (`fr`, `repeat`, `minmax`, `gap`) ✅
-- Häufiges Muster: Vollbild-Bild, große Überschrift, ein Button, darunter 3 Spalten ❓ (Beobachtung)
+- Viewport-Tag setzen, Zoom nie sperren ✅; mobile-first, Breakpoints nach Inhalt ✅
+- Bei 320 px kein horizontales Scrollen ✅ (WCAG Reflow); Zeilen höchstens ca. 80 Zeichen ✅
+- CSS Grid für zweidimensionale Layouts (`fr`, `repeat`, `minmax`, `gap`) ✅
+- Häufiges Muster guter Seiten: Vollbild-Bild, große Überschrift, ein Button, darunter 3 Spalten ❓ (Beobachtung)
 
 ## 4. Schrift
-- Höchstens 1–2 Schriftfamilien (Überschrift + Text) ❓ Beobachtung
-- Fließtext ca. 16 px oder mehr ❓ Richtwert (nicht in Primärquelle); Zeilenhöhe als Zahl ohne Einheit, mindestens 1,5 ✅ (MDN)
-- Größen in `rem`; fließend mit `clamp(min, bevorzugt, max)`, Max mindestens doppelt so groß wie Min (sonst Zoom auf 200 % unmöglich) ✅
-- Schriften als WOFF2, wenige Schnitte, **lokal hosten** (Recht), `font-display` bewusst setzen (`swap` Fließtext, `optional` stabilstes Layout) ✅
-- Icon-Fonts durch SVG ersetzen ✅
+- Größen **relativ** (`rem`), nicht fest in Pixeln; Nutzern Größenänderung erlauben ✅ (NN/g)
+- Fließtext ca. 16 px: ❓ Richtwert – NN/g nennt keine Zahl, nur „reasonably large"
+- Zeilenhöhe als Zahl ohne Einheit, mindestens 1,5 ✅ (MDN)
+- `clamp(min, bevorzugt, max)` mit Max mindestens doppelt so groß wie Min (200 % Zoom) ✅
+- Saubere Schrift; Serif ist auf modernen Bildschirmen ok; keine Handschrift-/Gotik-Imitate ✅ (Nielsen 2015); höchstens 1–2 Familien ❓ Beobachtung
+- Schriften als WOFF2, wenige Schnitte, **lokal hosten**, `font-display` bewusst (`swap` Fließtext, `optional` stabilstes Layout), Icon-Fonts durch SVG ✅
+- Schriftpaarungs-Regeln und Größenskalen aus Primärquelle: ❓ nicht lesbar (Apple/Material)
 
 ## 5. Farben
-- Kontrast: Text **4,5:1**, großer Text (ab ca. 24 px bzw. 18,5 px fett) **3:1** ✅ (WCAG AA); AAA: 7:1 / 4,5:1 ✅
-- Information nie nur über Farbe (Fehler: Text + Farbe) ✅
-- Dark Mode: `prefers-color-scheme`, gleiche Kontrastwerte ✅
-- Farbharmonien/Farbwirkung: ❓ keine Primärquelle gefunden (nur Ratgeber-Faustregeln)
+- Kontrast: Text **4,5:1**, großer Text **3:1** (AA); AAA 7:1 / 4,5:1 ✅; Information nie nur über Farbe ✅
+- **Nicht blasses Grau** für Wichtiges – wirkt deaktiviert, in Sonne unlesbar ✅ (NN/g 2015)
+- Basisfarbe + Neutraltöne, **möglichst wenige Farben**, Farbe zur Hervorhebung ✅ (MDN); Schemata monochrom/komplementär/triadisch ✅
+- CSS: eine Schreibweise im Projekt; `oklch()` (Helligkeit/Intensität/Farbton getrennt) ✅; Dark Mode per `prefers-color-scheme` ✅
+- Farbwirkung/Psychologie („Blau = Vertrauen"): ❓ nur Faustregel; analoge Schemata ❓
 
 ## 6. Animationen
-- Nur `transform` und `opacity` animieren (flüssig); `will-change` nicht vorsorglich ✅
-- Dauer 100–400 ms, ab 500 ms zäh; Erscheinen = ease-out ✅ (NN/g 2020)
-- **`prefers-reduced-motion` respektieren**; Information nie nur über Bewegung ✅
-- Autoplay/Parallax minimieren oder abschaltbar machen ✅
+- Nur `transform` und `opacity` animieren; `will-change` nicht vorsorglich ✅
+- 100–400 ms, ab 500 ms zäh; Erscheinen = ease-out ✅ (NN/g)
+- **`prefers-reduced-motion` respektieren**; Information nie nur über Bewegung; Autoplay/Parallax minimieren ✅
 
 ## 7. Barrierefreiheit (WCAG 2.2)
-Alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Klickziele mindestens 24×24 px · Formularfelder mit `<label>`, Fehler als Text · Alt-Texte (rein dekorativ: `alt=""`) · ARIA nur wenn nötig („Keine ARIA ist besser als schlechte ARIA") ✅
+Alles per Tastatur bedienbar, keine Tastaturfalle · Fokus sichtbar (`:focus-visible`, ≥ 3:1) und nicht von Sticky-Header/Banner verdeckt · Skip-Link oder Landmarks · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` und `autocomplete`, Fehler als Text mit Korrekturvorschlag · Alt-Texte (dekorativ `alt=""`) · ARIA nur wenn nötig ✅
+Echter Screenreader-Test: ❓ nicht möglich in meiner Umgebung
 
-## 8. Performance (Zielwerte, Google)
-LCP ≤ 2,5 s · INP ≤ 200 ms · CLS ≤ 0,1 (75. Perzentil, Felddaten) ✅
-Hero-Bild nie `loading="lazy"`, `fetchpriority="high"`, AVIF/WebP, Bilder mit `width`/`height`, Platz für Einbettungen reservieren ✅
-Messen mit Lighthouse/PageSpeed Insights; Lab-Werte schwanken stark je nach Profil, Felddaten bevorzugen ✅ (eigener Test an apple.com/de)
+## 8. Performance
+- Zielwerte (Felddaten, 75. Perzentil): LCP ≤ 2,5 s · INP ≤ 200 ms · CLS ≤ 0,1 ✅
+- Hero-Bild nie lazy, `fetchpriority="high"`; Bilder mit `width`/`height`; Fotos WebP/AVIF mit Fallback, Icons SVG; `srcset`/`sizes` ✅
+- INP: lange Tasks aufteilen, kleines DOM; CDN und Caching nutzen (statisch lang, HTML `no-cache`) ✅
+- Lab (Lighthouse) und Feld (CrUX) weichen ab – **Felddaten haben Vorrang** ✅; Core Web Vitals fließen ins Ranking ein, garantieren aber keine Top-Platzierung ✅ (Google)
 
 ## 9. SEO
-Eigener `<title>` und Beschreibung je Seite · sprechende URLs · Bilder mit Alt · hilfreiche aktuelle Inhalte · Testseiten mit `noindex` (nicht `robots.txt`) · Sitemap meist automatisch ✅ · strukturierte Daten (JSON-LD) optional, kein Ranking-Versprechen ✅ · lokal: Google-Unternehmensprofil pflegen ✅
+Eigener `<title>` und Beschreibung je Seite · sprechende URLs · Alt-Texte · hilfreiche aktuelle Inhalte · Testseiten mit `noindex` (nicht `robots.txt`) · Sitemap meist automatisch · JSON-LD optional, kein Ranking-Versprechen · lokal: Google-Unternehmensprofil pflegen ✅
 
 ## 10. Recht Deutschland (Orientierung)
-- **Impressum** nach § 5 DDG (Name, Anschrift, E-Mail/Kontakt; je nach Rechtsform mehr), leicht erreichbar, am besten im Footer jeder Seite ✅
-- **Datenschutzerklärung** nach Art. 13 DSGVO: Zwecke, Rechtsgrundlagen, Empfänger, Speicherdauer, Rechte, Beschwerderecht; muss zu den **tatsächlich genutzten Diensten** passen ✅
-- **Cookies/Tracking** (§ 25 TDDDG): Einwilligung nötig, außer „unbedingt erforderlich" (z. B. Spracheinstellung ohne User-ID) ✅
-- **Cookie-Banner** (DSK-Orientierungshilfe 11/2024): Ablehnen so einfach wie Zustimmen, gleichwertig gestaltet; „Einstellungen oder Ablehnen" reicht nicht ✅
-- **Google Fonts** nicht von Google-Servern laden, lokal hosten ❓ (Urteil LG München I 2022 nur aus Berichten)
-- **BFSG** (seit 28.06.2025): betrifft Online-Shops/Verbraucher-Dienstleistungen; reine Infoseiten voraussichtlich nicht; Kleinstunternehmen bei Dienstleistungen ausgenommen ✅ Bundesfachstelle; Gesetzestext und Reichweite ❓
+- **Impressum** nach § 5 DDG (Name, Anschrift, E-Mail/Kontakt; je nach Rechtsform mehr), leicht erreichbar, im Footer jeder Seite ✅
+- **Datenschutzerklärung** nach Art. 13 DSGVO: Zwecke, Rechtsgrundlagen, Empfänger, Speicherdauer, Rechte; muss zu den **tatsächlich genutzten Diensten** passen ✅
+- **Cookies** (§ 25 TDDDG): Einwilligung nötig, außer „unbedingt erforderlich" (z. B. Spracheinstellung ohne User-ID) ✅
+- **Cookie-Banner** (DSK-OH 11/2024): Ablehnen so einfach wie Zustimmen und gleichwertig gestaltet; „Einstellungen oder Ablehnen" reicht nicht ✅ (Urteilstext VG Hannover ❓ nur aus Fachberichten)
+- **Google Fonts** lokal hosten ✅ (LG München I, 20.01.2022, 3 O 17493/20: 100 € Schadensersatz, Entscheidungstext gelesen; Einzelfall, spätere Rechtsprechung ❓)
+- **BFSG** (seit 28.06.2025): betrifft Online-Shops/Verbraucher-Dienstleistungen; reine Infoseiten voraussichtlich nicht; Kleinstunternehmen bei Dienstleistungen ausgenommen ✅ Bundesfachstelle; Gesetzestext/EU-Richtlinie im Original und Reichweite (ganze Website?) ❓
 
 ## 11. Anweisungen an KI-Website-Builder
-Ein Prompt = **Was** (kleiner Baustein) + **echter Text** + **Stil-Stichwörter** + **Ort/Verhalten** + **Grenzen** („nur dies ändern"). Eine Änderung pro Prompt, in der Vorschau prüfen, Zwischenstände speichern, Rückfragen zulassen ✅ (Lovable-Doku; andere Builder ❓)
+Ein Prompt = **Was** (kleiner Baustein) + **echter Text** + **Stil-Stichwörter** + **Ort/Verhalten** + **Grenzen**. Eine Änderung pro Prompt, in der Vorschau prüfen, Zwischenstände speichern, Rückfragen zulassen ✅ (Lovable)
+Framer: Seiten, Inhalte, Komponenten, responsives Verhalten und visuelle Richtung im ersten Prompt ✅ · Webflow: ein Prompt mit Look & Feel, Tätigkeit, Ziel; **Neu-Generieren verwirft manuelle Änderungen** ✅ · Wix, v0: ❓ nicht geprüft
 
 ## 12. Vor dem Start klären
 Zielgruppe · **eine** Hauptaktion pro Seite · Seitenbaum · echte Texte und Bilder (Nutzungsrechte!) · Impressum-/Datenschutz-Angaben bereithalten
 
-## Noch offen ❓
-Farbpaletten aus Primärquelle · Call-to-Action-Tests · BFSG-Gesetzestext und Urteilstexte · Banner/Cookies mit deutscher IP · Screenreader-Test · Builder außer Lovable
+## Noch offen ❓ (geht in dieser Umgebung nicht oder fand ich nicht)
+BFSG-Gesetzestext/EU-Richtlinie im Original · VG-Hannover-Urteilstext · Banner/Cookies mit deutscher IP · Screenreader-Test · Schriftpaarungs-Regeln, Größenskalen, Farbpsychologie, 16-px-Standard · Wix/v0 · Trends mit Aktualitätsprüfung
