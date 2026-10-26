@@ -8,17 +8,33 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | # | Bereich | Status |
 |---|---|---|
 | 1 | Aufbau/Struktur | ❓ HTML-Semantik, Überschriften, IA vs. Navigation, Startseiten-Prinzipien belegt; Seitentypen/Content-Planung nur Sekundärquelle |
-| 2 | Technik-Grundlagen | ❓ HTML-Semantik, CSS (Grid, clamp, Farben, Fonts) belegt; JavaScript, CMS, Baukästen nicht recherchiert |
+| 2 | Technik-Grundlagen | ❓ HTML-Aufbau, Rolle von JavaScript, CSS-Kaskade, Flexbox/Grid, CMS-Begriff, Webserver/Hosting belegt; offen: Baukasten-vs.-CMS-vs.-Code-Vergleich, JS-Frameworks |
 | 3 | Navigation/UX | ✅ Grundregeln belegt (NN/g, W3C APG); ❓ Hamburger-Studie von 2016, Zahlen nicht neu geprüft |
 | 4 | Layout, Typografie, Farben, Animation | ❓ Layout, Animation, Schrift, Farbwerte belegt; offen: Schriftpaarung, Größenskalen, Farbwirkung, 16-px-Standard |
 | 5 | Responsive/Mobile | ✅ Grundlagen belegt (Viewport, mobile-first, Reflow 320 px, Bilder); web.dev-Artikel von 2019 |
 | 6 | Performance | ✅ Grundlagen belegt (Core Web Vitals, LCP/CLS/INP-Maßnahmen, Caching, CDN, Bilder, Lab vs. Feld); ❓ konkrete Hosting-Wahl |
 | 7 | Barrierefreiheit | ✅ WCAG-Grundkriterien belegt; ❓ Test mit echtem Screenreader, weitere ARIA-Muster |
 | 8 | SEO | ✅ Grundlagen belegt (Starter-Guide, Sitemap, robots/noindex, strukturierte Daten, lokale Suche); ❓ Ranking-Wirkung im Einzelfall |
-| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH, LG-München-Urteil am Original; BFSG-Gesetzestext, EU-Richtlinie, VG-Hannover-Urteilstext, Banner mit deutscher IP offen |
+| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH, LG-München- und VG-Hannover-Urteil (Auszug) am Original; offen: BFSG-Gesetzestext, EU-Richtlinie 2019/882, Banner mit deutscher IP |
 | 10 | Trends | ❓ Beobachtungen aus Inspiration-Datei (Okt. 2026), nicht selbst gemessen; keine Aktualitätsprüfung |
 | 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten; an apple.com/de mit Skript und Lighthouse erprobt, ohne Screenreader und ohne deutsche IP |
 | 12 | KI-Builder-Prompts | ❓ Lovable, Framer, Webflow (Anbieter-Doku) ausgewertet; Wix, v0 u. a. nicht |
+
+---
+
+## 2. Technik-Grundlagen (Teilwissen)
+
+*Stand: 2026-10-26* — Quellen MDN/web.dev (selbst gelesen)
+
+- **Drei Schichten:** HTML = Struktur, CSS = Gestaltung, JavaScript = Verhalten/Interaktion (MDN). Beispiel: HTML-`button`, CSS-Aussehen, JS reagiert auf Klick.
+- **HTML-Dokument:** `<!doctype html>`, `<html lang="de">`, `<head>` (`<meta charset="utf-8">`, `<title>`, Metadaten, CSS), `<body>` (sichtbarer Inhalt). Attribute immer in Anführungszeichen; Bilder: `src` (Pflicht), `alt`, `width`, `height`. Elemente sauber schachteln.
+- **JavaScript einbinden:** als **externe Datei** (`<script src>`), nicht per `onclick="…"`; Skripte im `<head>` mit **`defer`** (läuft nach dem HTML-Parsen, in Reihenfolge) oder als `type="module"`; `async` läuft sofort nach dem Laden ohne Reihenfolge. Clientseitig = im Browser; serverseitig = auf dem Server (PHP, Python, Node …). Falsch platzierte Skripte blockieren das Rendern (siehe Abschnitt 6).
+- **CSS-Kaskade (web.dev, 03.07.2025):** Konflikte entscheiden Reihenfolge der Kriterien Ursprung/Wichtigkeit → Spezifität (ID > Klasse > Element, Werte addieren sich) → Reihenfolge (zuletzt deklarierte Regel gewinnt). **Selektoren einfach halten.** Doppelte Deklaration derselben Eigenschaft dient als Fallback, weil ungültige Werte ignoriert werden (z. B. Hex-Farbe vor `oklch()`).
+- **Flexbox (MDN):** **eindimensional** (Zeile oder Spalte): `display: flex`, `flex-direction`, `flex-wrap`, `justify-content` (Hauptachse), `align-items` (Querachse), `flex`-Wachstum. **Barrierefreiheit:** `order` ändert nur die visuelle, **nicht** die Tab-Reihenfolge. Grid vs. Flexbox (Faustregel: Flexbox für eine Achse – Navigationsleisten, Button-Reihen; Grid für Zeilen+Spalten – Seitenstruktur, Kachelraster): MDN-Artikel vergleicht nicht, Regel aus allgemeinem Wissen ❓.
+- **CMS** (MDN-Glossar): Software zum Veröffentlichen, Organisieren, Ändern und Entfernen von Inhalten (Text, Bild, Video …). WordPress.org beschreibt sich als Open-Source-Publishing-Plattform mit blockbasiertem Editor; ein CMS-Wechsel ist laut Forenantwort faktisch ein Neuaufbau (Forum, nur Hinweis ❓).
+- **Webserver/Hosting** (MDN): Ein Webserver (Hardware + HTTP-Server-Software) liefert Dateien aus; **statisch** (Dateien unverändert) vs. **dynamisch** (Anwendungsserver + Datenbank erzeugen Inhalte). MDN empfiehlt für eine erste Website eine **statische Seite**; Hosting reicht von kostenlos bis mehrere tausend Dollar/Monat; Dateien müssen hochgeladen werden.
+- ❓ **Offen:** sachlicher Vergleich Baukasten (Wix, Squarespace …) vs. CMS vs. Code (keine Primärquelle gefunden; Anbieter-Seiten wären Werbung); JavaScript-Frameworks, Accessibility-Prüfung von Skripten.
+- Quellen: MDN „What is JavaScript?" (https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/What_is_JavaScript) · MDN „Basic HTML syntax" (…/Core/Structuring_content/Basic_HTML_syntax) · web.dev „The cascade" (https://web.dev/learn/css/the-cascade) · MDN „Flexbox" (…/Core/CSS_layout/Flexbox) · MDN-Glossar „CMS" (https://developer.mozilla.org/en-US/docs/Glossary/CMS) · MDN „What is a web server" (…/Howto/Web_mechanics/What_is_a_web_server)
 
 ---
 
@@ -84,7 +100,7 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 - Zeilenhöhe/Abstände: WCAG 1.4.12 verlangt nur, dass der Inhalt bei Zeilenhöhe 1,5×, Absatzabstand 2×, Buchstabenabstand 0,12×, Wortabstand 0,16× (jeweils der Schriftgröße) nichts verliert → keine Pflichtwerte, aber Layout darf nicht auf feste Höhen bauen.
 - `line-height` (MDN): als **Zahl ohne Einheit** angeben (z. B. `1.5`), bleibt beim Zoom/Vererben proportional; für Fließtext **mindestens 1,5** (hilft bei Sehschwäche, Legasthenie). Das 1,7 aus dem Beispiel-CSS der Inspiration-Datei ist kein Standard, aber ≥ 1,5 passt.
 - Webfont-Best-Practices (web.dev, 04.10.2022): nur **WOFF2**; Self-Hosting spart Drittverbindung (Vorteil nicht garantiert; CDN + HTTP/2); `preload` gezielt nur für wenige kritische Fonts; `font-display: optional` am stabilsten, Kombination möglich (`swap` für Marke, `optional` für Fließtext); **Subsetting** per `unicode-range` (Lizenz muss das erlauben); `size-adjust` gegen CLS; jeder weitere Font kostet Ladezeit, `system-ui` braucht keinen Download; **Icon-Fonts durch SVG ersetzen**.
-- **Schriftgröße/Paarung (NN/g, Nielsen 15.11.2015):** „reasonably large default font size", Nutzern Größenänderung erlauben, Größen **relativ statt absolut in Pixeln** (NN/g „Top 10 Mistakes"); hoher Kontrast, schlichter Hintergrund; saubere Schrift – Serif ist auf hochauflösenden Bildschirmen ok, Schriften, die Handschrift/Gotik nachahmen, schaden der Lesbarkeit. NN/g nennt **keine feste Pixelzahl** → die **16-px-Mindestgröße ist kein belegter Standard**, sondern Praxisrichtwert (Webdesign Journal; Apple misst 17 px). Zeilenlänge behandelt der Artikel nicht.
+- **Schriftgröße/Paarung (NN/g, Nielsen 15.11.2015):** „reasonably large default font size", Nutzern Größenänderung erlauben, Größen **relativ statt absolut in Pixeln** (NN/g „Top 10 Mistakes"); hoher Kontrast, schlichter Hintergrund; saubere Schrift – Serif ist auf hochauflösenden Bildschirmen ok, Schriften, die Handschrift/Gotik nachahmen, schaden der Lesbarkeit. NN/g nennt **keine feste Pixelzahl** → die **16-px-Mindestgröße ist kein belegter Standard**, sondern Praxisrichtwert (Webdesign Journal; Apple misst 17 px). Zeilenlänge behandelt der Artikel nicht. **Ergänzung MDN („Fundamentals of text styling"):** Browser-Standardgröße im `html`-Element ist **16 px** (1rem), `h1` = 2em; **`rem` bevorzugen**, `em` verschachtelt sich unübersichtlich; Fließtext-`line-height` als Zahl ohne Einheit, **etwa 1,5 bis 2**; Font-Stack mit generischer Familie am Ende (`serif`, `sans-serif`, `monospace`; `cursive`/`fantasy` unvorhersehbar); `text-align: justify` nur sparsam. → **16 px ist der Browser-Standard, keine belegte Mindestempfehlung.**
 - ❓ Weiter offen: Schriftpaarungs-Regeln und Größenskalen aus Primärquelle (Apple-HIG- und Material-3-Seite lieferten nur den Titel, da JavaScript-Seiten).
 - Hinweis: web.dev-Artikel ist intern widersprüchlich datiert (Update 2018, Browser-Stand Mai 2020).
 
@@ -271,7 +287,7 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 - **Drittinhalte:** Einbindung (u. a. **Schriftarten**, Skripte, Karten, Videos, Fotos, Social-Media) offenbart regelmäßig personenbezogene Daten an den Drittserver und braucht eine Rechtsgrundlage; Rechenschaftspflicht, in der Datenschutzerklärung nennen (Rn. 101).
 - Quelle: DSK/BfDI, „Orientierungshilfe der Aufsichtsbehörden für Anbieter:innen von digitalen Diensten (OH Digitale Dienste) Version 1.2", Nov. 2024 – https://www.bfdi.bund.de/SharedDocs/Downloads/DE/DSK/Orientierungshilfen/OH_Digitale-Dienste.pdf?__blob=publicationFile&v=1 — Behördenauslegung, kein Gesetz; keine Rechtsberatung.
 
-**Gericht (Banner):** VG Hannover, 19.03.2025, Az. 10 A 5385/22 (laut zm-online am 19.05.2025 bekanntgegeben; **Urteilstext nicht gefunden**, nur Kanzlei-/Fachberichte: WBS.LEGAL, Dr. Datenschutz): Banner mit „Alle akzeptieren"/„Einstellungen" ohne gleichwertiges Ablehnen auf erster Ebene → Einwilligung unwirksam; vorausgewählte Felder unzulässig; Google Tag Manager einwilligungspflichtig. Deckt sich mit DSK-OH (Rn. 58–60, 137). ❓ Wortlaut/Randnummern des Urteils nicht geprüft.
+**Gericht (Banner):** VG Hannover, Urteil 19.03.2025, Az. 10 A 5385/22 — **Auszug aus dem Urteilstext gelesen** (Wolters Kluwer VORIS; Entscheidung zu § 25 TTDSG, dem früheren Namen des heutigen TDDDG). Klage der Verlagsgesellschaft gegen eine Anordnung des Landesdatenschutzbeauftragten **abgewiesen**. *Leitsätze (nach VORIS-Auszug):* (2) Ein **zweistufiges Banner**, das in der Gesamtschau gezielt zur Einwilligung lenkt, macht die Einwilligung **nicht freiwillig**; (3) ein Button **„Akzeptieren & schließen ×"** oben rechts macht die Einwilligung unwirksam (weder unmissverständlich noch freiwillig; „×" wird üblicherweise als Schließen verstanden); (4) der **Google Tag Manager** braucht Einwilligung (§ 25 Abs. 1 TTDSG, Art. 6 Abs. 1 lit. a DSGVO). *Gründe:* Ablehnen nur über „Einstellungen" mit mehreren Menüs, Banner erscheint bei jedem Aufruf erneut, kein Hinweis auf erster Ebene, dass dort verweigert werden kann → irreführend. **Wichtig: Ob eine gleichwertige Ablehnoption auf erster Ebene rechtlich zwingend ist, lässt das Gericht ausdrücklich offen** (Presseberichte „Alles-ablehnen-Button ist Pflicht" sind insoweit **überzogen**; heise und delegedata widersprachen sich genau hier). *Google Tag Manager:* schon beim Aufruf (vor Interaktion mit dem Banner) werden IP-Adresse und Gerätedaten an Google übertragen und `gtm.js` gespeichert (Tests des Beklagten); nicht „unbedingt erforderlich" (Werbefinanzierung, kein Nutzermehrwert; eigene CMP vorhanden); unverschlüsselte IP ist personenbezogen; berechtigtes Interesse abgelehnt (nicht alternativlos, nur bequemer). Der Auszug war teilweise gekürzt (Quelle liefert keine Randnummern). Die DSK-OH (Rn. 58–60, 124–125, 135–137) bleibt für die Gestaltung maßgeblich: Ablehnen ohne Mehraufwand, gleichwertig; erste Ebene erforderlich, wenn das Banner Interaktion erzwingt. ❓ Vollständiger Wortlaut und Rechtskraft (Berufung?) nicht geprüft.
 
 **Datenschutzerklärung – Art. 13 DSGVO** (Gesetzestext gelesen via dejure.org). Bei Datenerhebung mitzuteilen: Verantwortlicher + Kontakt, ggf. Datenschutzbeauftragter, **Zwecke und Rechtsgrundlage**, berechtigte Interessen (bei Art. 6 Abs. 1 lit. f), Empfänger(kategorien), Drittlandübermittlung + Garantien; zusätzlich **Speicherdauer**, Betroffenenrechte (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch, Übertragbarkeit), **Widerrufsrecht** bei Einwilligung, **Beschwerderecht** bei Aufsichtsbehörde, ob Bereitstellung vorgeschrieben/erforderlich ist, automatisierte Entscheidung/Profiling. → Die Erklärung muss zu den **tatsächlich genutzten Diensten** passen (Schriften, Formulare, Einbettungen, Analytics).
 
@@ -287,7 +303,7 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 - Quelle: Bundesfachstelle Barrierefreiheit – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · FAQ: …/Barrierefreiheitsstaerkungsgesetz/FAQ/faq_node.html (abgerufen 2026-10-26; FAQ zu ~88 % gelesen)
 
 **Praxis für KI-Builder-Seiten:** Footer-Links „Impressum"/„Datenschutz" auf jeder Seite; Impressum vollständig nach Rechtsform; Schriften lokal; keine Tracker/Einbettungen (YouTube, Maps, Analytics) ohne Einwilligungslösung; Cookie-Banner mit „Alles ablehnen" (statt „Einstellungen oder Ablehnen") gleichwertig in Größe/Farbe/Kontrast auf Ebene 1; Datenschutzerklärung an genutzte Dienste anpassen.
-**Typische Fehler:** Impressum versteckt; Vorlage ungeprüft; Google Fonts per CDN; Tracking vor Einwilligung; Banner nur mit „Akzeptieren"/„Einstellungen".
+**Typische Fehler:** Impressum versteckt; Vorlage ungeprüft; Google Fonts per CDN; Tracking vor Einwilligung; Banner lenkt zur Zustimmung (nur „Akzeptieren"/„Einstellungen", Schließen-Button = Zustimmung).
 
 **Quellen:** Gesetze: DDG § 5 – https://www.gesetze-im-internet.de/ddg/__5.html · TDDDG § 25 – https://dejure.org/gesetze/TDDDG/25.html · DSGVO Art. 13 – https://dejure.org/gesetze/DSGVO/13.html · Bundesfachstelle Barrierefreiheit (BFSG) – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · Sekundär: IHK München Merkblatt 05/2024 (https://ihk-muenchen.de/ihk/Merkblätter-WettbewerbsR/Pflichtangaben-Internetimpressum_Stand05_2024.pdf) · DSK/BfDI OH Digitale Dienste (s. o.) · WBS.LEGAL zu VG Hannover (https://www.wbs.legal/it-und-internet-recht/datenschutzrecht/vg-hannover-zu-einwilligungsbutton-cookie-banner-brauchen-alles-ablehnen-schaltflaeche-82973/) · IHK Bergische zu Google Fonts (https://www.ihk.de/bergische/recht-und-steuern/wettbewerbsrecht/google-fonts-5646176)
 
@@ -417,13 +433,13 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 ---
 
 ## Offene Lücken (Reihenfolge)
-1. ❓ Recht: BFSG-Gesetzestext und EU-Richtlinie 2019/882 im Original (Abruf scheiterte); VG-Hannover-Urteilstext; Banner/Cookies mit **deutscher IP** (hier nicht prüfbar); nur Orientierung, keine Rechtsberatung
+1. ❓ Recht: BFSG-Gesetzestext und EU-Richtlinie 2019/882 im Original (Abruf scheiterte mehrfach: gesetze-im-internet 503, EUR-Lex leer); Banner/Cookies mit **deutscher IP** (hier nicht prüfbar); nur Orientierung, keine Rechtsberatung
 2. ❓ Test mit **echtem Screenreader** (hier nicht möglich); weitere ARIA-Muster (Tabs, Dialog, Akkordeon)
-3. ❓ Schriftpaarungs-Regeln, Größenskalen (Apple HIG/Material 3 nicht lesbar), Farbwirkung/Psychologie, 16-px-Standard, Conversion-Zahlen für CTAs
-4. ❓ KI-Builder: Wix, v0 u. a.; Trends (10) mit Aktualitätsprüfung; konkrete Hosting-Wahl
+3. ❓ Schriftpaarungs-Regeln (Google-Fonts-Wissen und Apple/Material-Seiten nicht lesbar), Farbwirkung/Psychologie, Mindestgröße-Empfehlung (16 px = Browser-Standard, kein belegtes Minimum), Conversion-Zahlen für CTAs
+4. ❓ KI-Builder: Wix, v0 u. a.; Baukasten-vs.-CMS-vs.-Code-Vergleich; Trends (10) mit Aktualitätsprüfung; konkrete Hosting-Wahl
 
 ## Selbsttest
-**Sitzungen 1–4:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner ✅ · Banner-Buttons (OH Rn. 124/125/137) ✅ · Sprache ohne Banner (Rn. 81) ✅ · Hero-Prompt ✅
+**Sitzungen 1–4:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner ✅ · Banner-Buttons (OH Rn. 124/125/137; VG Hannover ließ Pflicht zur Ablehnoption offen, bewertete aber die konkrete lenkende Gestaltung) ✅ · Sprache ohne Banner (Rn. 81) ✅ · Hero-Prompt ✅
 **Sitzung 5 (nur anhand der Datei):**
 1. *Meine Test-Unterseite soll nicht bei Google erscheinen – robots.txt?* → nein, `noindex` oder Passwortschutz; robots.txt steuert nur Crawling ✅
 2. *Formular zeigt Fehler nur mit roter Umrandung – ok?* → nein, Text nötig (3.3.1), Farbe nur zusätzlich (1.4.1) ✅
@@ -432,3 +448,8 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 1. *Mein Button heißt „Jetzt starten" und führt zu einem Anmeldeformular – Problem?* → ja: generische Labels führen in der NN/g-Studie in Anmeldestrecken; konkret benennen und erst informieren ✅
 2. *Darf ich den Fokusrahmen per `outline: none` entfernen?* → nein; mit `:focus-visible` gestalten, ≥ 3:1 Kontrast ✅
 3. *Was entschied das LG München I zu Google Fonts und was folgt daraus?* → 100 € Schadensersatz + Unterlassung, weil die IP ohne Einwilligung an Google ging; lokal hosten ✅ (Einzelfall-Urteil, spätere Rechtsprechung ❓)
+
+**Sitzung 7 (nur anhand der Datei):**
+1. *Skript im `<head>` blockiert das Rendern – was tun?* → `defer` oder `type="module"`, externe Datei statt `onclick` ✅
+2. *Zwei Regeln mit gleicher Spezifität widersprechen sich – welche gilt?* → die zuletzt deklarierte; Selektoren einfach halten ✅
+3. *Hat das VG Hannover einen „Alles ablehnen"-Button für Pflicht erklärt?* → nein, die Pflicht ließ es offen; unwirksam war das lenkende zweistufige Banner mit „Akzeptieren & schließen ×"; GTM braucht Einwilligung ✅

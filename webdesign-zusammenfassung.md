@@ -18,6 +18,11 @@ Stand: 2026-10-26 (Sitzung 6) · Grundlage: `webdesign-wissen.md` (dort Quellen,
 - Touch-Ziele mindestens ca. 1 cm × 1 cm ✅ (NN/g); WCAG: mindestens 24×24 px ✅
 - Zahlenbasierte CTA-Tests (Farbe/Position/Conversion): ❓ nicht gefunden
 
+## Technik (Kurz)
+- HTML = Struktur, CSS = Gestaltung, JavaScript = Verhalten ✅; Skripte als externe Datei mit `defer`, nicht per `onclick` ✅
+- CSS: bei Konflikten gewinnen Spezifität, dann Reihenfolge; Selektoren einfach halten ✅; Flexbox = eine Achse, Grid = Zeilen+Spalten ✅ (Faustregel ❓); `order` ändert nicht die Tab-Reihenfolge ✅
+- Webserver: statisch (Dateien) vs. dynamisch (mit Datenbank); für die erste Seite empfiehlt MDN eine statische Seite ✅; Baukasten-vs.-CMS-vs.-Code-Vergleich ❓ keine Primärquelle
+
 ## 3. Layout & Responsive
 - Viewport-Tag setzen, Zoom nie sperren ✅; mobile-first, Breakpoints nach Inhalt ✅
 - Bei 320 px kein horizontales Scrollen ✅ (WCAG Reflow); Zeilen höchstens ca. 80 Zeichen ✅
@@ -26,7 +31,7 @@ Stand: 2026-10-26 (Sitzung 6) · Grundlage: `webdesign-wissen.md` (dort Quellen,
 
 ## 4. Schrift
 - Größen **relativ** (`rem`), nicht fest in Pixeln; Nutzern Größenänderung erlauben ✅ (NN/g)
-- Fließtext ca. 16 px: ❓ Richtwert – NN/g nennt keine Zahl, nur „reasonably large"
+- Fließtext: 16 px ist der **Browser-Standard** ✅ (MDN), als Mindestempfehlung ❓ nicht belegt (NN/g: „reasonably large", relativ); Zeilenhöhe 1,5–2 als Zahl ohne Einheit ✅ (MDN)
 - Zeilenhöhe als Zahl ohne Einheit, mindestens 1,5 ✅ (MDN)
 - `clamp(min, bevorzugt, max)` mit Max mindestens doppelt so groß wie Min (200 % Zoom) ✅
 - Saubere Schrift; Serif ist auf modernen Bildschirmen ok; keine Handschrift-/Gotik-Imitate ✅ (Nielsen 2015); höchstens 1–2 Familien ❓ Beobachtung
@@ -62,7 +67,7 @@ Eigener `<title>` und Beschreibung je Seite · sprechende URLs · Alt-Texte · h
 - **Impressum** nach § 5 DDG (Name, Anschrift, E-Mail/Kontakt; je nach Rechtsform mehr), leicht erreichbar, im Footer jeder Seite ✅
 - **Datenschutzerklärung** nach Art. 13 DSGVO: Zwecke, Rechtsgrundlagen, Empfänger, Speicherdauer, Rechte; muss zu den **tatsächlich genutzten Diensten** passen ✅
 - **Cookies** (§ 25 TDDDG): Einwilligung nötig, außer „unbedingt erforderlich" (z. B. Spracheinstellung ohne User-ID) ✅
-- **Cookie-Banner** (DSK-OH 11/2024): Ablehnen so einfach wie Zustimmen und gleichwertig gestaltet; „Einstellungen oder Ablehnen" reicht nicht ✅ (Urteilstext VG Hannover ❓ nur aus Fachberichten)
+- **Cookie-Banner** (DSK-OH 11/2024): Ablehnen so einfach wie Zustimmen und gleichwertig; „Einstellungen oder Ablehnen" reicht nicht ✅. **VG Hannover 19.03.2025** (Urteilsauszug gelesen): lenkendes zweistufiges Banner und „Akzeptieren & schließen ×" machen die Einwilligung unwirksam; Google Tag Manager braucht Einwilligung; ob ein „Alles ablehnen"-Button Pflicht ist, ließ das Gericht **offen** ✅
 - **Google Fonts** lokal hosten ✅ (LG München I, 20.01.2022, 3 O 17493/20: 100 € Schadensersatz, Entscheidungstext gelesen; Einzelfall, spätere Rechtsprechung ❓)
 - **BFSG** (seit 28.06.2025): betrifft Online-Shops/Verbraucher-Dienstleistungen; reine Infoseiten voraussichtlich nicht; Kleinstunternehmen bei Dienstleistungen ausgenommen ✅ Bundesfachstelle; Gesetzestext/EU-Richtlinie im Original und Reichweite (ganze Website?) ❓
 
@@ -74,4 +79,4 @@ Framer: Seiten, Inhalte, Komponenten, responsives Verhalten und visuelle Richtun
 Zielgruppe · **eine** Hauptaktion pro Seite · Seitenbaum · echte Texte und Bilder (Nutzungsrechte!) · Impressum-/Datenschutz-Angaben bereithalten
 
 ## Noch offen ❓ (geht in dieser Umgebung nicht oder fand ich nicht)
-BFSG-Gesetzestext/EU-Richtlinie im Original · VG-Hannover-Urteilstext · Banner/Cookies mit deutscher IP · Screenreader-Test · Schriftpaarungs-Regeln, Größenskalen, Farbpsychologie, 16-px-Standard · Wix/v0 · Trends mit Aktualitätsprüfung
+BFSG-Gesetzestext/EU-Richtlinie im Original · Banner/Cookies mit deutscher IP · Screenreader-Test · Schriftpaarungs-Regeln, Farbpsychologie, Mindestschriftgröße · Wix/v0 · Baukasten-vs.-CMS-Vergleich · Trends mit Aktualitätsprüfung
