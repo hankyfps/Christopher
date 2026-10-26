@@ -295,25 +295,27 @@ Methode: Seite mit Chromium (Playwright) geladen, Desktop 1280 px und 320 px, We
 | Landmarks | `main` 1×, `nav` 2×, `footer` ja, **`header`-Element nicht gefunden** | ❓ (kein Fehler, nur andere Umsetzung) |
 | Überschriften | eine `h1` („Apple"), **visuell versteckt** (`visuallyhidden`), danach h2/h3 | ✅ Struktur / ❓ h1 unsichtbar |
 | Bilder | 54 Bilder, 0 ohne `alt`, 37 mit `alt=""` (dekorativ) | ✅ |
-| Bilder `width`/`height` | bei allen 54 **nicht** als Attribute gesetzt (Platz evtl. per CSS reserviert, nicht geprüft) | ❓ |
-| Lazy Loading | 8 Bilder `loading="lazy"` (ob eines das LCP-Bild ist: nicht geprüft) | ❓ |
+| Bilder `width`/`height` | bei 54 Bildern nicht als Attribute gesetzt; **gemessener CLS 0,057** (Lab, Cloud-Container, ≤ 0,1) → kein Layoutsprung beobachtet | ✅ Lab / ❓ Felddaten |
+| LCP-Bild | LCP-Element = Hero-Bild (`<img>` iPad mini), **nicht lazy**, kein `fetchpriority`-Attribut; **LCP ≈ 1,7 s** (Lab, Cloud, ohne Drosselung; ≤ 2,5 s) | ✅ Lab / ❓ Felddaten |
 | Fließtext | 17 px, Zeilenhöhe 25 px (≈1,47), Farbe rgb(29,29,31) auf Weiß, Schrift SF Pro Text/Display | ✅ Größe; Zeilenhöhe knapp < 1,5 (Richtwert aus MDN/WCAG-AAA) |
 | Schriftfamilien | 2 (SF Pro Text, SF Pro Display) | ✅ passt zu „1–2 Familien" |
 | Kontrast Buttons | „Weitere Infos" weiß auf rgb(0,113,227): **4,70:1**; „Preise ansehen" rgb(0,102,204) auf rgb(245,245,247): **5,11:1** (eigene Berechnung nach WCAG-Formel) | ✅ ≥ 4,5:1 |
-| Kontrast Gesamttext | Skript fand bei 381 geprüften Textelementen 0 unter Schwelle; **hellgrauer Hero-Untertitel wurde vom Skript nicht erfasst** | ❓ nicht abschließend |
+| Kontrast Hero-Untertitel | nachgemessen: rgb(110,110,115) auf rgb(245,245,247), 19 px → **4,66:1** (≥ 4,5:1); übriger Text: 0 von 381 Elementen unter Schwelle | ✅ (knapp) |
 | Fokus | beim Tab-Test `outline: solid 2px` auf allen 6 geprüften Elementen; keine `outline:none`-Regel auf `:focus` gefunden | ✅ (nur 6 Elemente geprüft) |
 | Reduced Motion | 4 `prefers-reduced-motion`-Regeln im CSS | ✅ |
 | Dark Mode | keine `prefers-color-scheme`-Regel im CSS | ❓ nicht vorhanden (kein Muss) |
 | Reflow 320 px | `scrollWidth` = 320 = Viewport → kein horizontales Scrollen | ✅ |
 | Navigation | Desktop: 11 Kategorien + Suche + Tasche sichtbar; 320 px: Logo, Suche, Tasche, **Hamburger** | ✅ passt zur NN/g-Empfehlung (Desktop sichtbar; mobil Kompromiss bei vielen Punkten) |
-| Skip-Link | per Text („Hauptinhalt/Skip/überspringen") **nicht gefunden** | ❓ unbestätigt |
-| Klickziele ≥ 24×24 | z. B. Menüeinträge 22×44 px, Schließen-Button des Länder-Banners 18×18; WCAG-Abstandsausnahme nicht geprüft | ❓ |
+| Skip-Link | kein Link mit Sprungziel gefunden; beim Tab-Test war der **erste Fokus der Apple-Logo-Link** (danach Store, Mac, iPad …) → **kein Skip-Link beobachtet**. WCAG 2.4.1 lässt Landmarks/Überschriften als Alternative zu (Landmarks `main`/`nav` vorhanden) | ❓ kein klarer Verstoß |
+| Klickziele ≥ 24×24 | 11 Menü-Schaltflächen je 22×44 px (Breite < 24); bei 6 davon liegt ein weiteres Ziel mit Mittelpunkt < 24 px entfernt (vereinfachter Test, kein exakter 24-px-Kreis-Test; der Link und die „Menü“-Schaltfläche überlagern sich evtl.); Schließen-Button des Länder-Banners 18×18 | ❓ möglicher Grenzfall, nicht abschließend |
 | Ladezeit (einzelne Messung) | TTFB ≈ 527 ms, DCL ≈ 2,6 s, Load ≈ 2,6 s (Cloud-Container, kein Feldwert, **keine CWV-Aussage**) | ❓ |
 | Caching HTML | `cache-control: max-age=294` | ❓ keine Bewertung möglich |
 | Drittanbieter | nur `apple.com`-Hosts + `securemetrics.apple.com` | ✅ keine fremden Fonts/Tracker beobachtet (Momentaufnahme) |
-| Cookie-Banner / Recht | **nicht prüfbar** (Länder-Banner statt Consent-Banner angezeigt; Impressum/Datenschutz nicht geprüft) | ❓ |
+| Footer-Rechtslinks | vorhanden: Datenschutz, Datenschutzrichtlinie, Verwendung von Cookies, Nutzungsbedingungen, Rechtliche Hinweise, Barrierefreiheit | ✅ |
+| Impressum (§ 5 DDG) | Link „Impressum“ im Footer nicht gefunden; Seite „Rechtliche Hinweise“ (`/de/legal/`) enthält das Wort „Impressum“/„Anbieterkennzeichnung“ nicht | ❓ nicht belegt, ob Angaben anderswo stehen; keine Rechtsbewertung |
+| Cookies/Consent | ohne Interaktion wurden 11 Cookies (u. a. `geo`, `ac_bnd`, `s_fid`, `s_vi`, `s_cc`, `dssid2`, `dssf`) und localStorage-Einträge gesetzt; **kein Consent-Banner angezeigt** (nur Länderauswahl, Abruf aus anderem Land). Wofür die Cookies dienen und ob § 25 TDDDG gilt, habe ich nicht geprüft | ❓ keine Bewertung |
 
-**Erkenntnisse für die Checkliste:** (1) Automatik-Skripte übersehen Texte, die in mehrere Elemente zerlegt sind → Kontrast zusätzlich mit Auge/Werkzeug prüfen. (2) Standort/Region kann Banner und Reihenfolge verändern → für Recht/Banner mit deutscher IP prüfen. (3) `width`/`height` fehlt bei Apple als Attribut – kein Beweis für CLS-Problem; erst messen. (4) Eine versteckte `h1` ist eine Designentscheidung, die Struktur bleibt zugänglich.
+**Erkenntnisse für die Checkliste:** (1) Automatik-Skripte übersehen Texte, die in mehrere Elemente zerlegt sind → gezielt nachmessen (hier gelungen). (2) Standort/Region kann Banner und Reihenfolge verändern → für Recht/Banner mit deutscher IP prüfen. (3) `width`/`height` fehlt bei Apple als Attribut, gemessener CLS war trotzdem 0,057 → erst messen, dann urteilen. (4) Consent-/Cookie-Befund hängt vom Abrufland ab und ist ohne deutsche IP nicht aussagekräftig. (5) Eine versteckte `h1` ist eine Designentscheidung, die Struktur bleibt zugänglich.
 
 ---
 
