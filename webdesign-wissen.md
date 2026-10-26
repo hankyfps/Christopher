@@ -1,6 +1,6 @@
 # Webdesign-Wissensbasis
 
-Stand der Datei: 2026-10-26 (Sitzung 4)
+Stand der Datei: 2026-10-26 (Sitzung 5)
 Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 ## Kompetenz-Status
@@ -12,10 +12,10 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 3 | Navigation/UX | ❓ (Hamburger-Studie, IA vs. Navigation, Startseiten-Prinzipien) |
 | 4 | Layout, Typografie, Farben, Animation | ❓ (Layout/Animation/Schrift teilweise; Farben ❌) |
 | 5 | Responsive/Mobile | ❓ |
-| 6 | Performance | ❓ (alle 3 Core Web Vitals inkl. INP-Schwellen; Hosting/Caching offen) |
+| 6 | Performance | ❓ (Core Web Vitals, Caching-Grundlagen, Lighthouse; Hosting/CDN-Wahl offen) |
 | 7 | Barrierefreiheit | ✅ für WCAG-Grundkriterien (Kontrast, Text, Tastatur, Fokus, Alt, Zielgröße, Motion); ❓ ARIA/Formulare/Screenreader-Test |
-| 8 | SEO | ❓ (Google-Starter-Guide) |
-| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO und DSK-OH (Banner) am Original geprüft; BFSG-Gesetzestext, Urteilstexte offen (siehe 9) |
+| 8 | SEO | ❓ (Starter-Guide, Sitemap, robots.txt/noindex; strukturierte Daten, lokale SEO offen) |
+| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH am Original; BFSG über Bundesfachstelle-FAQ; BFSG-Gesetzestext und Urteilstexte offen (siehe 9) |
 | 10 | Trends | ❓ (Beobachtungen aus Inspiration-Datei, 2026-10; nicht selbst gemessen) |
 | 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten (Abschnitt 11); in Praxis nicht getestet |
 | 12 | KI-Builder-Prompts | ❓ offizielle Lovable-Doku ausgewertet; andere Builder nicht |
@@ -87,8 +87,11 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 ### Farben / Dark Mode (Teilwissen)
 - `prefers-color-scheme: light|dark` (Baseline seit Jan. 2020): helles Standard-Theme, per Media Query für Dunkel überschreiben. `color-scheme` (CSS/Meta) lässt den Browser Formularelemente/Scrollbars automatisch anpassen.
 - Beide Themes müssen die Kontrastwerte aus Abschnitt 7 einhalten.
+- Farbwerte in CSS (MDN „Applying color"): benannte Farben, Hex, `rgb()`, `hsl()`, `hwb()`; **im Team/Projekt eine einzige Schreibweise** verwenden. `oklch()` wurde dort nur verwiesen, nicht erklärt (❓).
+- Kontrast bewusst prüfen (MDN verweist auf den WebAIM Color Contrast Checker); hoher Kontrast hilft auch bei Blendung (Smartphone in der Sonne). Pflichtfelder z. B. mit Sternchen **und** Farbe kennzeichnen (MDN „CSS and JavaScript accessibility best practices").
+- Hover/Fokus: Cursor und Fokus-Outline nicht entfernen; Mauszustände (`mouseover`) brauchen Tastatur-Gegenstück (`focus`). (`:focus-visible` steht nicht in der MDN-Seite; Hinweis aus meinem Vorwissen, ❓ nicht belegt.)
 - Quelle: MDN „prefers-color-scheme" (abgerufen 2026-10-26; zu ~77 % gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
-- ❓ Offen aus Primärquellen: Farbharmonien/Palettenaufbau (nur Sekundärquelle Webdesign Journal, siehe 10), Wirkung von Farben (kulturabhängig, nicht belegt).
+- ❓ Weiter offen: Farbharmonien/Palettenaufbau und Farbwirkung – MDN behandelt sie nicht, Material-Design-Seite lieferte nur den Titel; bisher nur Sekundärquelle Webdesign Journal (siehe 10). Keine Primärquelle gefunden.
 
 **Quellen**
 - MDN: „Basic concepts of grid layout" (teilweise gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout
@@ -156,7 +159,11 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 **INP** (web.dev, veröffentlicht 06.05.2022, aktualisiert 02.09.2025): misst die Latenz aller Klicks/Taps/Tastatureingaben über den ganzen Besuch (nicht Scrollen/Hover/Zoom), bis zum nächsten gemalten Frame. **gut ≤ 200 ms · verbesserungswürdig 200–500 ms · schlecht > 500 ms** (75. Perzentil, getrennt nach Mobil/Desktop). https://web.dev/articles/inp
 
-❓ Offen: INP-Maßnahmen im Detail, Hosting/Caching, Bildformate-Praxis, Messwerkzeuge (PageSpeed/Lighthouse).
+**HTTP-Caching** (web.dev, 05.11.2018): Dateien mit Versionsnamen/Hash (`style.x234dff.css`) → `Cache-Control: max-age=31536000` (1 Jahr), optional `immutable`. HTML ist nicht versionierbar → `no-cache` (Browser fragt vor Nutzung nach) plus `ETag` (Antwort `304 Not Modified` spart den Download). `no-store` = nirgends speichern, `private` = nur Browser, `public` = auch CDN. Fehlender Header deaktiviert Caching nicht, Browser raten → explizit setzen. Bei Baukästen/KI-Hostern meist automatisch, ❓ nicht prüfbar ohne Messung. https://web.dev/articles/http-cache
+
+**Lighthouse** (Chrome, aktualisiert 02.06.2025): Open-Source-Audit mit Kategorien Performance (u. a. FCP, LCP, TBT), Accessibility, Best Practices, SEO. Start: Chrome-DevTools → Reiter „Lighthouse", per `npm install -g lighthouse` + `lighthouse <url>`, oder **PageSpeed Insights** ohne Installation. Fehlgeschlagene Audits sind Hinweise mit Erklärung. Lab-/Felddaten-Unterschied erklärte die Seite nicht (❓). https://developer.chrome.com/docs/lighthouse/overview
+
+❓ Offen: Bildformate-Praxis im Detail, CDN-/Hosting-Auswahl, INP-Maßnahmen im Detail.
 
 ---
 
@@ -179,6 +186,7 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 | 1.4.1 Farbe nicht allein | A | Farbe darf nicht das einzige Mittel sein (Pflichtfeld nicht nur rot, gültig/ungültig nicht nur grün/rot); Helligkeitsunterschied ≥ 3:1 gilt als zusätzliches Merkmal. |
 | 2.4.1 Blöcke umgehen | A | Mechanismus zum Überspringen wiederkehrender Blöcke: **Skip-Link** zum Hauptinhalt, Landmarks (`nav`, `main`), Überschriften pro Abschnitt. |
+| 3.3.1 Fehler erkennen | A | Automatisch erkannte Eingabefehler: Feld identifizieren und Fehler **als Text** beschreiben (Farbe/Symbol nur zusätzlich); Techniken: `aria-invalid`, `role="alert"`/Live-Region; empfohlen: Sprung zu Fehlern, Erfolgsmeldung. Native Browser-Validierung zeigt oft generische Meldungen, nur den ersten Fehler, nicht zoomfest → prüfen. |
 | 3.3.2 Labels/Anweisungen | A | Jedes Eingabefeld hat Label/Anweisung (`<label>`, `fieldset`+`legend` für Gruppen); Formathinweise (z. B. Datum). |
 
 **ARIA** (W3C APG „Read Me First"): *„No ARIA is better than Bad ARIA"*; eine Rolle ist ein Versprechen (`role="button"` auf `div` verlangt auch Tastaturverhalten per JS); ARIA kann Semantik überdecken. Folgerung: zuerst natives HTML (`button`, `a`, `nav`, `label`), ARIA nur ergänzend, mit Assistenztechnik testen. (Die Seite nennt „natives HTML zuerst" nicht wörtlich.)
@@ -189,8 +197,8 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 Außerdem: `prefers-reduced-motion` beachten, Zoom nie sperren (siehe 4/5).
 **Typische Fehler:** hellgraue Schrift auf Weiß (#999 ≈ 2,85:1, eigene Rechnung); Fokus-Outline per CSS entfernt; Sticky-Header/Cookie-Banner verdecken Fokus; winzige Icon-Buttons; feste Höhen, die bei größerem Text Inhalt abschneiden; Deko-Bilder mit Alt-Text.
-❓ Offen: Fehlermeldungen in Formularen (3.3.1 – Seite erläuterte es nicht), 1.3.5 Autocomplete, 2.1.2 Tastaturfalle, konkrete ARIA-Muster, Test mit echtem Screenreader.
-Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimum.html · …/contrast-enhanced.html · …/visual-presentation.html · …/text-spacing.html · …/reflow.html · …/keyboard.html · …/bypass-blocks.html · …/labels-or-instructions.html · …/use-of-color.html · …/focus-visible.html · …/focus-not-obscured-minimum.html · …/target-size-minimum.html (alle unter https://www.w3.org/WAI/WCAG22/Understanding/) · Alt-Texte: https://www.w3.org/WAI/tutorials/images/decision-tree/ · ARIA: https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/
+❓ Offen: 1.3.5 Autocomplete, 3.3.3 Fehlervorschläge, 2.1.2 Tastaturfalle, konkrete ARIA-Muster, Test mit echtem Screenreader.
+Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimum.html · …/contrast-enhanced.html · …/visual-presentation.html · …/text-spacing.html · …/reflow.html · …/keyboard.html · …/bypass-blocks.html · …/labels-or-instructions.html · …/use-of-color.html · …/error-identification.html · …/focus-visible.html · …/focus-not-obscured-minimum.html · …/target-size-minimum.html (alle unter https://www.w3.org/WAI/WCAG22/Understanding/) · Alt-Texte: https://www.w3.org/WAI/tutorials/images/decision-tree/ · ARIA: https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/
 
 ---
 
@@ -206,7 +214,10 @@ Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimu
 - Bilder: scharf, nah am passenden Text, kurzer sinnvoller `alt`-Text.
 - Inhalte: hilfreich, lesbar, aktuell, für Menschen geschrieben; Keywords nicht überladen.
 - Typische Fehler: gleiche Titel auf allen Seiten, „Klick hier"-Links, Bilder ohne Alt, Keyword-Stuffing.
-- ❓ Offen: Indexierung (robots/sitemap), strukturierte Daten, lokale SEO, Ranking-Einfluss der Core Web Vitals.
+- **Sitemap** (Google, 10.12.2025): Datei mit Seiten/Medien der Website; hilfreich bei großen oder neuen Seiten mit wenigen externen Links; bei kleinen Seiten (~≤500 Seiten) mit guter interner Verlinkung oft nicht nötig. Garantiert kein Crawling/Indexieren; Wix/WordPress/Blogger erzeugen sie meist automatisch. https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview
+- **robots.txt** (Google, 10.12.2025): steuert **Crawling** (Serverlast), ist **kein** Mittel gegen Indexierung – blockierte URL kann ohne Beschreibung trotzdem in den Ergebnissen erscheinen. Aus der Suche heraushalten: `noindex` (Meta-Tag/Header), Passwortschutz oder löschen. Kein Sicherheitsmechanismus. Skripte/Stylesheets nur blockieren, wenn die Seite ohne sie nicht leidet. https://developers.google.com/search/docs/crawling-indexing/robots/intro
+- Typischer Fehler: Seite mit `robots.txt` „verstecken" statt `noindex`; Test-/Entwurfsseiten öffentlich lassen.
+- ❓ Offen: strukturierte Daten, lokale SEO, Ranking-Einfluss der Core Web Vitals.
 
 ---
 
@@ -241,7 +252,14 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 
 **Google Fonts:** LG München I, 20.01.2022, Az. 3 O 17493/20 (laut IHK-/Kanzleibericht, Urteilstext nicht gelesen): dynamische Einbindung überträgt IP-Adresse an Google; 100 € Schadensersatz + Unterlassung; Lösung: Schriften **lokal hosten**. ❓ Spätere Rechtsprechung nicht geprüft.
 
-**BFSG (Barrierefreiheit):** Laut Bundesfachstelle Barrierefreiheit (Bund) gilt das BFSG für Produkte/Dienstleistungen, die **seit 28.06.2025** hergestellt bzw. erbracht werden. Betroffen u. a. **elektronischer Geschäftsverkehr (Online-Shops)**. **Kleinstunternehmen** (< 10 Beschäftigte und ≤ 2 Mio. € Jahresumsatz) sind bei **Dienstleistungen** ausgenommen, bei **Produkten** nicht. Quelle nennt Websites allgemein nicht ausdrücklich. ❓ Gesetzestext (§§ 1, 3) nicht abrufbar (gesetze-im-internet 503, buzer 403); IHK Berlin und e-recht24 widersprechen sich zur Frage „Shop eines Kleinstunternehmens" → im Zweifel Rechtsberatung. Damit ist die Angabe „ab 2025" aus der Inspiration-Datei bestätigt.
+**BFSG (Barrierefreiheit)** — Quelle: Bundesfachstelle Barrierefreiheit (Bund), Startseite BFSG + FAQ (selbst gelesen; Gesetzestext gesetze-im-internet 503, nicht abrufbar):
+- Gilt für Produkte/Dienstleistungen, die **seit 28.06.2025** hergestellt bzw. erbracht werden.
+- **Websites/Online-Shops:** betroffen, wenn darüber **Dienstleistungen für Verbraucher** angeboten werden (Online-Banking, elektronischer Geschäftsverkehr – z. B. Online-Kauf, Online-Terminbuchung). **Reine Informations-/Werbeseiten fallen voraussichtlich nicht darunter** (fehlende „individuelle Anfrage" des Verbrauchers). Für Shops gelten Informationspflichten zur Barrierefreiheit und barrierefreie Identifizierungs-, Authentifizierungs-, Signatur- und Zahlungsfunktionen.
+- **Kleinstunternehmen** (< 10 Beschäftigte und ≤ 2 Mio. € Jahresumsatz): bei **Dienstleistungen** ausgenommen; wer **Produkte** in Verkehr bringt, nicht. Kostenlose Beratung durch die Bundesfachstelle.
+- **Standard:** Für Websites gilt EN 301 549, die auf **WCAG 2.1 Level A und AA** verweist; eine aktualisierte Fassung soll auf WCAG 2.2 verweisen. → Die WCAG-2.2-Kriterien in Abschnitt 7 sind eine Obermenge/Annäherung; maßgeblich für die Pflicht ist die Norm.
+- **Aufsicht:** Seit 26.09.2025 Marktüberwachungsstelle der Länder (MLBF) in Magdeburg; bei Dienstleistungen stichprobenartig; bei Verstoß Aufforderung zur Herstellung der Konformität, dann Bußgelder bis zur Untersagung. (Bußgeldhöhe „bis 100.000 €" nur aus Sekundärquellen/IHK, ❓ nicht am Gesetz geprüft.)
+- Offen/Streit: Betrifft die Anforderung die ganze Website oder nur den Bestellprozess? Sekundärquelle (Kanzlei) sagt: ganze Website; ❓ ungeklärt. IHK Berlin und e-recht24 widersprachen sich zum Shop eines Kleinstunternehmens → die Bundesfachstelle-FAQ deckt sich mit IHK Berlin nur für Dienstleistungen; **Rechtsrat einholen**.
+- Quelle: Bundesfachstelle Barrierefreiheit – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · FAQ: …/Barrierefreiheitsstaerkungsgesetz/FAQ/faq_node.html (abgerufen 2026-10-26; FAQ zu ~88 % gelesen)
 
 **Praxis für KI-Builder-Seiten:** Footer-Links „Impressum"/„Datenschutz" auf jeder Seite; Impressum vollständig nach Rechtsform; Schriften lokal; keine Tracker/Einbettungen (YouTube, Maps, Analytics) ohne Einwilligungslösung; Cookie-Banner mit „Alles ablehnen" (statt „Einstellungen oder Ablehnen") gleichwertig in Größe/Farbe/Kontrast auf Ebene 1; Datenschutzerklärung an genutzte Dienste anpassen.
 **Typische Fehler:** Impressum versteckt; Vorlage ungeprüft; Google Fonts per CDN; Tracking vor Einwilligung; Banner nur mit „Akzeptieren"/„Einstellungen".
@@ -259,11 +277,11 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 **Schrift:** Fließtext `line-height` ≥ 1,5 (Zahl ohne Einheit) · `rem`-Größen, `clamp()` mit Max ≥ 2× Min · WOFF2, lokal gehostet, wenige Schnitte, `font-display` bewusst gesetzt · Icon-Fonts durch SVG ersetzt.
 **Farben & Kontrast:** Text 4,5:1 (groß 3:1) · Information nie nur über Farbe · Dark Mode (falls vorhanden) mit gleichen Kontrastwerten.
 **Animation:** nur `transform`/`opacity` · 100–400 ms, ease-out beim Erscheinen · `prefers-reduced-motion` respektiert · kein Autoplay/Parallax ohne Kontrolle · keine Info nur über Bewegung.
-**Barrierefreiheit:** alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Skip-Link · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` · Alt-Texte (dekorativ = `alt=""`) · ARIA nur wenn nötig.
+**Barrierefreiheit:** Formularfehler als Text beschrieben · alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Skip-Link · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` · Alt-Texte (dekorativ = `alt=""`) · ARIA nur wenn nötig.
 **Performance:** LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 · LCP-Bild nicht lazy, mit `fetchpriority="high"` · Bilder mit `width`/`height` · AVIF/WebP · Platz für Einbettungen reserviert.
-**SEO:** eigener `<title>` je Seite · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
-**Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen.
-**Prüfmethode:** ❓ Werkzeuge (Lighthouse/PageSpeed, WAVE usw.) nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
+**SEO:** eigener `<title>` je Seite · Testseiten mit `noindex`, nicht mit robots.txt · Sitemap vorhanden (meist automatisch) · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
+**Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen (Verbraucher-Dienstleistung/Shop? Kleinstunternehmen?).
+**Prüfwerkzeuge (belegt):** Lighthouse/PageSpeed Insights (Performance, Accessibility, Best Practices, SEO; Hinweise zu Fehlern); WebAIM Color Contrast Checker (laut MDN genannt, selbst nicht geöffnet); BIK BITV-Test und barrierefreies-webdesign.de (laut Bundesfachstelle für Prüfschritte empfohlen). ❓ WAVE, axe, Screenreader-Test nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
 
 ---
 
@@ -325,15 +343,15 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 ---
 
 ## Offene Lücken (Reihenfolge)
-1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3) und Urteilstexte (LG München I, VG Hannover) im Original; aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
-2. Farben: Palettenaufbau/Harmonien aus Primär-/Fachquelle (bisher nur Webdesign Journal); Schriftpaarung, Größenskalen, Mindestgröße 16 px
-3. Prüfwerkzeuge (Lighthouse, WAVE, Kontrastprüfer) und Praxistest der Checkliste (11)
-4. Barrierefreiheit: Formular-Fehlermeldungen, ARIA-Muster, Screenreader-Test; Performance: Hosting/Caching
-5. Weitere KI-Builder (neben Lovable), Call-to-Action mit belegten Tests, Trends (10) mit Aktualitätsprüfung
+1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3, BFSGV) und Urteilstexte (LG München I, VG Hannover) im Original; Reichweite BFSG (ganze Website?); aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
+2. Farben: Palettenaufbau/Harmonien und Farbwirkung aus Primär-/Fachquelle (keine gefunden); Schriftpaarung, Größenskalen, Mindestgröße 16 px
+3. Call-to-Action mit belegten Tests (NN/g-Artikel nicht auffindbar; Suche lieferte nur Sekundärquellen)
+4. Praxistest der Checkliste (11) an einer echten Seite; WAVE/axe/Screenreader
+5. Weitere KI-Builder (neben Lovable), strukturierte Daten/lokale SEO, Trends (10) mit Aktualitätsprüfung
 
 ## Selbsttest
-**Sitzungen 1–3:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner (2.4.11) ✅ · Banner nur „Akzeptieren"/„Einstellungen" nicht ok ✅ · Kleiner Shop/BFSG ✅/❓
-**Sitzung 4 (nur anhand der Datei):**
-1. *Banner verdeckt nichts, nur „Akzeptieren"-Button – Pflicht zum Ablehnen-Button?* → OH Rn. 124: nicht generell, nur bei nötiger Interaktion; Rn. 125: bei gängigen Bannern „sehr häufig" erforderlich; „Einstellungen oder Ablehnen" reicht nicht (Rn. 137) ✅
-2. *Darf die Seite Sprache/Dark-Mode ohne Banner speichern?* → ja, ohne eindeutige User-ID, nur nicht identifizierende Angabe (OH Rn. 81) ✅
-3. *Wie prompte ich einen Hero-Bereich?* → 5 Bausteine (Was, echter Text, Stil, Ort/Verhalten, Grenzen), ein Schritt pro Prompt, Rückfragen zulassen ✅
+**Sitzungen 1–4:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner ✅ · Banner-Buttons (OH Rn. 124/125/137) ✅ · Sprache ohne Banner (Rn. 81) ✅ · Hero-Prompt ✅
+**Sitzung 5 (nur anhand der Datei):**
+1. *Meine Test-Unterseite soll nicht bei Google erscheinen – robots.txt?* → nein, `noindex` oder Passwortschutz; robots.txt steuert nur Crawling ✅
+2. *Formular zeigt Fehler nur mit roter Umrandung – ok?* → nein, Text nötig (3.3.1), Farbe nur zusätzlich (1.4.1) ✅
+3. *Reine Info-Seite einer Einzelunternehmerin (Dienstleistung, 1 Person) – BFSG?* → Info-/Werbeseite voraussichtlich nicht erfasst; Kleinstunternehmen bei Dienstleistungen ausgenommen; Detail ❓ → Rechtsrat ✅/❓
