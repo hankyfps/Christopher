@@ -1,6 +1,6 @@
 # Webdesign-Wissensbasis
 
-Stand der Datei: 2026-10-26 (Sitzung 3)
+Stand der Datei: 2026-10-26 (Sitzung 4)
 Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 ## Kompetenz-Status
@@ -15,10 +15,10 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 6 | Performance | ❓ (alle 3 Core Web Vitals inkl. INP-Schwellen; Hosting/Caching offen) |
 | 7 | Barrierefreiheit | ✅ für WCAG-Grundkriterien (Kontrast, Text, Tastatur, Fokus, Alt, Zielgröße, Motion); ❓ ARIA/Formulare/Screenreader-Test |
 | 8 | SEO | ❓ (Google-Starter-Guide) |
-| 9 | Recht DE | ❓ Impressum, § 25 TDDDG, Art. 13 DSGVO am Gesetzestext geprüft; Cookie-Banner/BFSG/Fonts nur teils (siehe 9) |
+| 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO und DSK-OH (Banner) am Original geprüft; BFSG-Gesetzestext, Urteilstexte offen (siehe 9) |
 | 10 | Trends | ❓ (Beobachtungen aus Inspiration-Datei, 2026-10; nicht selbst gemessen) |
-| 11 | Qualitätskontrolle | ❓ (WCAG/CWV-Prüfpunkte vorhanden, keine fertige Checkliste) |
-| 12 | KI-Builder-Prompts | ❌ |
+| 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten (Abschnitt 11); in Praxis nicht getestet |
+| 12 | KI-Builder-Prompts | ❓ offizielle Lovable-Doku ausgewertet; andere Builder nicht |
 
 ---
 
@@ -71,7 +71,9 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 - Google Fonts: `preconnect` zu fonts.gstatic.com empfohlen.
 - `font-display` (MDN): `swap` = sofort Ersatzschrift, später Wechsel (gut für Fließtext, Risiko Layoutsprung); `block` = kurz unsichtbar (Icon-Fonts); `fallback` = Kompromiss für Markenschriften; `optional` = Webfont nur, wenn sofort da (stabilstes Layout, ideal für unkritische Schriften); `auto` = Browser entscheidet.
 - Zeilenhöhe/Abstände: WCAG 1.4.12 verlangt nur, dass der Inhalt bei Zeilenhöhe 1,5×, Absatzabstand 2×, Buchstabenabstand 0,12×, Wortabstand 0,16× (jeweils der Schriftgröße) nichts verliert → keine Pflichtwerte, aber Layout darf nicht auf feste Höhen bauen.
-- ❓ Nicht belegt: Schriftpaarung, Schriftgrößen-Skalen, Zeilenhöhe als Gestaltungsempfehlung → offene Lücke.
+- `line-height` (MDN): als **Zahl ohne Einheit** angeben (z. B. `1.5`), bleibt beim Zoom/Vererben proportional; für Fließtext **mindestens 1,5** (hilft bei Sehschwäche, Legasthenie). Das 1,7 aus dem Beispiel-CSS der Inspiration-Datei ist kein Standard, aber ≥ 1,5 passt.
+- Webfont-Best-Practices (web.dev, 04.10.2022): nur **WOFF2**; Self-Hosting spart Drittverbindung (Vorteil nicht garantiert; CDN + HTTP/2); `preload` gezielt nur für wenige kritische Fonts; `font-display: optional` am stabilsten, Kombination möglich (`swap` für Marke, `optional` für Fließtext); **Subsetting** per `unicode-range` (Lizenz muss das erlauben); `size-adjust` gegen CLS; jeder weitere Font kostet Ladezeit, `system-ui` braucht keinen Download; **Icon-Fonts durch SVG ersetzen**.
+- ❓ Nicht belegt: Schriftpaarung, Schriftgrößen-Skalen, Mindestgröße 16 px → offene Lücke (Webdesign Journal: ≥16 px, Apple misst 17 px – nur Beobachtung).
 - Hinweis: web.dev-Artikel ist intern widersprüchlich datiert (Update 2018, Browser-Stand Mai 2020).
 
 ### Animationen
@@ -91,6 +93,8 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 **Quellen**
 - MDN: „Basic concepts of grid layout" (teilweise gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Basic_concepts_of_grid_layout
 - MDN: „clamp()" (abgerufen 2026-10-26) – https://developer.mozilla.org/en-US/docs/Web/CSS/clamp
+- web.dev: „Best practices for fonts", 04.10.2022 – https://web.dev/articles/font-best-practices
+- MDN: „line-height" (zu ~76 % gelesen) – https://developer.mozilla.org/en-US/docs/Web/CSS/line-height
 - MDN: „prefers-reduced-motion" (abgerufen 2026-10-26) – https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
 - web.dev: „How to create high-performance CSS animations", 06.10.2020 – https://web.dev/articles/animations-guide
 - web.dev: „Introduction to variable fonts on the web", 19.02.2018 – https://web.dev/articles/variable-fonts
@@ -173,14 +177,20 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 2.4.11 Fokus nicht verdeckt | AA | Fokussiertes Element darf nicht **vollständig** verdeckt sein – typische Ursachen: Sticky Header/Footer, Cookie-Banner. Lösung: `scroll-padding`, modale Banner. |
 | 2.5.8 Zielgröße | AA | Klickziele ≥ **24×24 CSS-px** oder genug Abstand (24-px-Kreis); Ausnahme u. a. Inline-Links im Text. |
 
+| 1.4.1 Farbe nicht allein | A | Farbe darf nicht das einzige Mittel sein (Pflichtfeld nicht nur rot, gültig/ungültig nicht nur grün/rot); Helligkeitsunterschied ≥ 3:1 gilt als zusätzliches Merkmal. |
+| 2.4.1 Blöcke umgehen | A | Mechanismus zum Überspringen wiederkehrender Blöcke: **Skip-Link** zum Hauptinhalt, Landmarks (`nav`, `main`), Überschriften pro Abschnitt. |
+| 3.3.2 Labels/Anweisungen | A | Jedes Eingabefeld hat Label/Anweisung (`<label>`, `fieldset`+`legend` für Gruppen); Formathinweise (z. B. Datum). |
+
+**ARIA** (W3C APG „Read Me First"): *„No ARIA is better than Bad ARIA"*; eine Rolle ist ein Versprechen (`role="button"` auf `div` verlangt auch Tastaturverhalten per JS); ARIA kann Semantik überdecken. Folgerung: zuerst natives HTML (`button`, `a`, `nav`, `label`), ARIA nur ergänzend, mit Assistenztechnik testen. (Die Seite nennt „natives HTML zuerst" nicht wörtlich.)
+
 **Alt-Texte** (W3C WAI Entscheidungsbaum): informatives Bild → kurze Beschreibung der Bedeutung; **dekorativ → leeres `alt=""`**; Bild als Link/Button → Ziel bzw. Aktion beschreiben; komplexe Grafik → Details an anderer Stelle der Seite; Text im Bild → Text ins `alt`, außer er steht schon als echter Text daneben.
 
 **Abgleich Absatzabstand:** Die Angabe „1,5× Zeilenabstand" (Webdesign Journal) stammt aus 1.4.8 (AAA) und ist korrekt; für AA (1.4.12) gilt nur: Layout darf bei 2× Schriftgröße nichts verlieren. Beide Aussagen gleichzeitig wahr.
 
 Außerdem: `prefers-reduced-motion` beachten, Zoom nie sperren (siehe 4/5).
 **Typische Fehler:** hellgraue Schrift auf Weiß (#999 ≈ 2,85:1, eigene Rechnung); Fokus-Outline per CSS entfernt; Sticky-Header/Cookie-Banner verdecken Fokus; winzige Icon-Buttons; feste Höhen, die bei größerem Text Inhalt abschneiden; Deko-Bilder mit Alt-Text.
-❓ Offen: ARIA, Formular-Labels/Fehlermeldungen, Skip-Link (2.4.1 – die abgerufene Seite behandelte es nicht), 2.1.2 Tastaturfalle, Test mit echtem Screenreader.
-Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimum.html · …/contrast-enhanced.html · …/visual-presentation.html · …/text-spacing.html · …/reflow.html · …/keyboard.html · …/focus-visible.html · …/focus-not-obscured-minimum.html · …/target-size-minimum.html (alle unter https://www.w3.org/WAI/WCAG22/Understanding/) · Alt-Texte: https://www.w3.org/WAI/tutorials/images/decision-tree/
+❓ Offen: Fehlermeldungen in Formularen (3.3.1 – Seite erläuterte es nicht), 1.3.5 Autocomplete, 2.1.2 Tastaturfalle, konkrete ARIA-Muster, Test mit echtem Screenreader.
+Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimum.html · …/contrast-enhanced.html · …/visual-presentation.html · …/text-spacing.html · …/reflow.html · …/keyboard.html · …/bypass-blocks.html · …/labels-or-instructions.html · …/use-of-color.html · …/focus-visible.html · …/focus-not-obscured-minimum.html · …/target-size-minimum.html (alle unter https://www.w3.org/WAI/WCAG22/Understanding/) · Alt-Texte: https://www.w3.org/WAI/tutorials/images/decision-tree/ · ARIA: https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/
 
 ---
 
@@ -216,7 +226,16 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 
 **Cookies/Tracking – § 25 TDDDG** (Gesetzestext gelesen via dejure.org): Abs. 1: Speichern/Auslesen von Informationen auf dem Endgerät **nur mit Einwilligung**, nach vorheriger verständlicher, umfassender Information (Einwilligung nach DSGVO). Abs. 2: **keine Einwilligung nötig**, wenn (1) einziger Zweck die Übertragung einer Nachricht über ein öffentliches Netz ist oder (2) der Vorgang **unbedingt erforderlich** ist, damit der Anbieter einen vom Nutzer **ausdrücklich gewünschten** digitalen Dienst bereitstellen kann. Beispiele „erforderlich" (Kanzlei/GDD-Sekundärquellen, ❓ nicht an der DSK-Orientierungshilfe geprüft): Warenkorb, Login, Spracheinstellung, Lastverteilung, Speicherung der Einwilligung selbst; Analyse/Werbung gelten nicht als erforderlich.
 
-**Cookie-Banner:** VG Hannover, 19.03.2025, Az. 10 A 5385/22 (laut Kanzleibericht WBS.LEGAL, Urteilstext nicht gelesen): Wer „Alle akzeptieren" anbietet, braucht auf der **ersten Ebene** eine gleichwertige „Alles ablehnen"-Schaltfläche; fehlt sie, gilt die Einwilligung als manipulativ/unwirksam. Irreführende Texte („akzeptieren und schließen") und ständiges Wieder-Einblenden vermeiden. Google Tag Manager wurde als einwilligungspflichtig gewertet. ❓ DSK-Orientierungshilfe selbst nicht abgerufen.
+**DSK-Orientierungshilfe Digitale Dienste, Version 1.2, Stand November 2024** (Original-PDF von DSK/BfDI selbst gelesen, 36 Seiten; Rn. = Randnummer):
+- **Banner-Gestaltung:** Ablehnen muss **ohne Mehraufwand** möglich sein; Ablehnung erst auf einer zweiten Ebene gilt als Mehraufwand, der die Freiwilligkeit beeinträchtigt (Rn. 58). Optionen **gleichwertig gestalten** (Rn. 59). Fehlt ohne sachlichen Grund eine Ablehnung mit gleichem Aufwand auf erster Ebene, verstößt das gegen Treu und Glauben (Rn. 60).
+- **Ablehnoption:** eindeutig erkennbar, leicht wahrnehmbar, unmissverständlich (Rn. 134); gleichwertig, z. B. Button „Weiter ohne Einwilligung" in **Größe, Farbe, Kontrast und Schriftbild** vergleichbar mit „Einwilligung erteilen" (Rn. 135). Nicht ausreichend: Ablehnen nur außerhalb des Banners, im Fließtext versteckt oder erst nach Scrollen sichtbar (Rn. 136). Ein Button **„Einstellungen oder Ablehnen"**, der auf eine weitere Ebene führt, genügt **nicht** (Rn. 137).
+- **Wichtige Einschränkung (Rn. 124/125):** Eine Ablehnfunktion auf erster Ebene ist „nicht generell erforderlich", sondern nur, wenn Nutzer mit dem Banner **interagieren müssen**, um weiterzumachen (Inhalte verdeckt). Bei gängigen Bannern sind die Voraussetzungen „sehr häufig" erfüllt. Banner dürfen auch auf kleinen Displays keine Inhalte versperren.
+- **Widerruf** muss so einfach sein wie die Erteilung (Rn. 126). Kein allgemeiner Standard für Farbe/Größe/Kontrast des Banners (Rn. 127).
+- **„Unbedingt erforderlich" (Rn. 78–83):** streng auszulegen (Zeitpunkt, Laufzeit, Inhalt, Domäne auf Minimum reduzieren). Warenkorb-Cookies erst nach tatsächlicher Nutzerinteraktion (Artikel im Warenkorb), nicht schon beim Stöbern (Rn. 80). **Sprach- oder Hintergrundfarb-Einstellungen** ohne eindeutige User-ID (z. B. `language: de`) zählen als erforderlich (Rn. 81). Login-Schutz-Cookies nur bei erfüllten Voraussetzungen (Rn. 83). Consent-Management-Plattformen mit eindeutiger Benutzerkennung sind kritisch (Rn. 92).
+- **Drittinhalte:** Einbindung (u. a. **Schriftarten**, Skripte, Karten, Videos, Fotos, Social-Media) offenbart regelmäßig personenbezogene Daten an den Drittserver und braucht eine Rechtsgrundlage; Rechenschaftspflicht, in der Datenschutzerklärung nennen (Rn. 101).
+- Quelle: DSK/BfDI, „Orientierungshilfe der Aufsichtsbehörden für Anbieter:innen von digitalen Diensten (OH Digitale Dienste) Version 1.2", Nov. 2024 – https://www.bfdi.bund.de/SharedDocs/Downloads/DE/DSK/Orientierungshilfen/OH_Digitale-Dienste.pdf?__blob=publicationFile&v=1 — Behördenauslegung, kein Gesetz; keine Rechtsberatung.
+
+**Gericht (Banner):** VG Hannover, 19.03.2025, Az. 10 A 5385/22 (nur laut Kanzleibericht WBS.LEGAL, Urteilstext nicht gelesen): Banner mit „Alle akzeptieren"/„Einstellungen" ohne gleichwertiges Ablehnen auf erster Ebene → Einwilligung unwirksam. Passt zur OH (Rn. 58–60, 137). Google Tag Manager als einwilligungspflichtig bewertet.
 
 **Datenschutzerklärung – Art. 13 DSGVO** (Gesetzestext gelesen via dejure.org). Bei Datenerhebung mitzuteilen: Verantwortlicher + Kontakt, ggf. Datenschutzbeauftragter, **Zwecke und Rechtsgrundlage**, berechtigte Interessen (bei Art. 6 Abs. 1 lit. f), Empfänger(kategorien), Drittlandübermittlung + Garantien; zusätzlich **Speicherdauer**, Betroffenenrechte (Auskunft, Berichtigung, Löschung, Einschränkung, Widerspruch, Übertragbarkeit), **Widerrufsrecht** bei Einwilligung, **Beschwerderecht** bei Aufsichtsbehörde, ob Bereitstellung vorgeschrieben/erforderlich ist, automatisierte Entscheidung/Profiling. → Die Erklärung muss zu den **tatsächlich genutzten Diensten** passen (Schriften, Formulare, Einbettungen, Analytics).
 
@@ -224,10 +243,49 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 
 **BFSG (Barrierefreiheit):** Laut Bundesfachstelle Barrierefreiheit (Bund) gilt das BFSG für Produkte/Dienstleistungen, die **seit 28.06.2025** hergestellt bzw. erbracht werden. Betroffen u. a. **elektronischer Geschäftsverkehr (Online-Shops)**. **Kleinstunternehmen** (< 10 Beschäftigte und ≤ 2 Mio. € Jahresumsatz) sind bei **Dienstleistungen** ausgenommen, bei **Produkten** nicht. Quelle nennt Websites allgemein nicht ausdrücklich. ❓ Gesetzestext (§§ 1, 3) nicht abrufbar (gesetze-im-internet 503, buzer 403); IHK Berlin und e-recht24 widersprechen sich zur Frage „Shop eines Kleinstunternehmens" → im Zweifel Rechtsberatung. Damit ist die Angabe „ab 2025" aus der Inspiration-Datei bestätigt.
 
-**Praxis für KI-Builder-Seiten:** Footer-Links „Impressum"/„Datenschutz" auf jeder Seite; Impressum vollständig nach Rechtsform; Schriften lokal; keine Tracker/Einbettungen (YouTube, Maps, Analytics) ohne Einwilligungslösung; Cookie-Banner mit „Alles ablehnen" gleichwertig auf Ebene 1; Datenschutzerklärung an genutzte Dienste anpassen.
+**Praxis für KI-Builder-Seiten:** Footer-Links „Impressum"/„Datenschutz" auf jeder Seite; Impressum vollständig nach Rechtsform; Schriften lokal; keine Tracker/Einbettungen (YouTube, Maps, Analytics) ohne Einwilligungslösung; Cookie-Banner mit „Alles ablehnen" (statt „Einstellungen oder Ablehnen") gleichwertig in Größe/Farbe/Kontrast auf Ebene 1; Datenschutzerklärung an genutzte Dienste anpassen.
 **Typische Fehler:** Impressum versteckt; Vorlage ungeprüft; Google Fonts per CDN; Tracking vor Einwilligung; Banner nur mit „Akzeptieren"/„Einstellungen".
 
-**Quellen:** Gesetze: DDG § 5 – https://www.gesetze-im-internet.de/ddg/__5.html · TDDDG § 25 – https://dejure.org/gesetze/TDDDG/25.html · DSGVO Art. 13 – https://dejure.org/gesetze/DSGVO/13.html · Bundesfachstelle Barrierefreiheit (BFSG) – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · Sekundär: IHK München Merkblatt 05/2024 (https://ihk-muenchen.de/ihk/Merkblätter-WettbewerbsR/Pflichtangaben-Internetimpressum_Stand05_2024.pdf) · WBS.LEGAL zu VG Hannover (https://www.wbs.legal/it-und-internet-recht/datenschutzrecht/vg-hannover-zu-einwilligungsbutton-cookie-banner-brauchen-alles-ablehnen-schaltflaeche-82973/) · IHK Bergische zu Google Fonts (https://www.ihk.de/bergische/recht-und-steuern/wettbewerbsrecht/google-fonts-5646176)
+**Quellen:** Gesetze: DDG § 5 – https://www.gesetze-im-internet.de/ddg/__5.html · TDDDG § 25 – https://dejure.org/gesetze/TDDDG/25.html · DSGVO Art. 13 – https://dejure.org/gesetze/DSGVO/13.html · Bundesfachstelle Barrierefreiheit (BFSG) – https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html · Sekundär: IHK München Merkblatt 05/2024 (https://ihk-muenchen.de/ihk/Merkblätter-WettbewerbsR/Pflichtangaben-Internetimpressum_Stand05_2024.pdf) · DSK/BfDI OH Digitale Dienste (s. o.) · WBS.LEGAL zu VG Hannover (https://www.wbs.legal/it-und-internet-recht/datenschutzrecht/vg-hannover-zu-einwilligungsbutton-cookie-banner-brauchen-alles-ablehnen-schaltflaeche-82973/) · IHK Bergische zu Google Fonts (https://www.ihk.de/bergische/recht-und-steuern/wettbewerbsrecht/google-fonts-5646176)
+
+---
+
+## 11. Prüfung und Qualitätskontrolle fertiger Seiten (Checkliste)
+
+*Stand: 2026-10-26* — eigene Zusammenstellung **nur aus den oben geprüften Quellen**; in der Praxis noch nicht erprobt. Die 90-Punkte-Checkliste des Webdesign Journals war nicht einsehbar (Anmeldeformular) und ist **nicht** Grundlage.
+
+**Struktur & Navigation:** eine `h1`, Überschriften logisch absteigend · `header/nav/main/footer`, `main` nur einmal · Logo links, verlinkt auf Startseite · Hauptnavigation auf Desktop sichtbar (kein Hamburger), mobil ≤4 Hauptlinks sichtbar oder wichtige Inhalte auch per Inhalts-Links · Linktexte konkret (nicht „Mehr erfahren") · Slogan sagt klar, was angeboten wird.
+**Layout & Responsive:** Viewport-Meta-Tag · Zoom nicht gesperrt · bei 320 px kein horizontales Scrollen · Breakpoints nach Inhalt · Fließtext-Zeilen ≤ 80 Zeichen.
+**Schrift:** Fließtext `line-height` ≥ 1,5 (Zahl ohne Einheit) · `rem`-Größen, `clamp()` mit Max ≥ 2× Min · WOFF2, lokal gehostet, wenige Schnitte, `font-display` bewusst gesetzt · Icon-Fonts durch SVG ersetzt.
+**Farben & Kontrast:** Text 4,5:1 (groß 3:1) · Information nie nur über Farbe · Dark Mode (falls vorhanden) mit gleichen Kontrastwerten.
+**Animation:** nur `transform`/`opacity` · 100–400 ms, ease-out beim Erscheinen · `prefers-reduced-motion` respektiert · kein Autoplay/Parallax ohne Kontrolle · keine Info nur über Bewegung.
+**Barrierefreiheit:** alles per Tastatur bedienbar · Fokus sichtbar und nicht von Sticky-Header/Banner verdeckt · Skip-Link · Klickziele ≥ 24×24 px · Formularfelder mit `<label>` · Alt-Texte (dekorativ = `alt=""`) · ARIA nur wenn nötig.
+**Performance:** LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 · LCP-Bild nicht lazy, mit `fetchpriority="high"` · Bilder mit `width`/`height` · AVIF/WebP · Platz für Einbettungen reserviert.
+**SEO:** eigener `<title>` je Seite · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
+**Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen.
+**Prüfmethode:** ❓ Werkzeuge (Lighthouse/PageSpeed, WAVE usw.) nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
+
+---
+
+## 12. Gute Anweisungen an KI-Website-Builder
+
+*Stand: 2026-10-26* — Quelle: **Lovable-Dokumentation** (Anbieter-Selbstaussagen, keine unabhängige Studie). ❓ Andere Builder (Wix, Framer, Webflow AI, v0, Claude Design …) nicht geprüft; Prinzipien vermutlich übertragbar, aber nicht belegt.
+
+**Aufbau eines guten Prompts (laut Doku):**
+1. **Was** gebaut wird – kleiner Baustein statt ganze Seite
+2. **Echter Inhalt** – echte Überschrift, Untertitel, Button-Text statt „Lorem ipsum"/„Feature 1"
+3. **Stil-Stichwörter** („minimal", „premium", „verspielt", „ruhig") – steuern Typografie, Abstände, Farben
+4. **Ort & Verhalten** – wo es steht, was bei Hover/Klick passiert
+5. **Grenzen** – was unverändert bleiben muss („nur die Bestellseite ändern")
+Vorab klären: Für wen ist die Seite, warum kommt die Zielgruppe, welche **eine** Aktion soll sie ausführen.
+
+**Arbeitsweise:** eine Änderung pro Prompt → in der Vorschau prüfen → weiter · bei vielen „und" aufteilen · Rückfragen der KI zulassen · Plan-Modus für Entscheidungen, Build für Umsetzung · nach jedem funktionierenden Stand speichern (Versionsverlauf) · bei generischem Ergebnis Polish-Durchgang ohne neue Funktionen · Screenshots statt Beschreibung bei visuellen Fehlern · kurzes Briefing („Knowledge-Datei") als Dauerkontext · nach 1–2 Fehlversuchen Ursache im Plan-Modus untersuchen statt raten.
+**Typische Fehler:** „mach es besser" · ganze Seite auf einmal · Platzhaltertexte · kein Stil · keine Grenzen · Lade-/Leer-/Fehlerzustände vergessen.
+
+**Vorlage (eigener Entwurf, nicht aus der Quelle; Inhalte aus Abschnitt 3–11):**
+> Baue den Startbereich für [Name], Zielgruppe [..]. Ziel: Besucher sollen [eine Aktion]. Text: Überschrift „…", Untertitel „…", Button „…". Stil: [ruhig/premium]; Serifenschrift für Überschrift, serifenlose für Text; Fließtext Zeilenhöhe 1,5, Kontrast mind. 4,5:1. Layout: Logo links, 4 sichtbare Menüpunkte rechts, Menü bleibt beim Scrollen sichtbar. Animation: Elemente blenden dezent ein (300 ms, nur Deckkraft/Verschiebung), „Bewegung reduzieren" respektieren. Bilder mit Breite/Höhe und Alt-Text. Schriften lokal einbinden, keine externen Tracker. Ändere nichts außerhalb dieses Bereichs. Stelle mir vorher Rückfragen.
+
+Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev/prompting/prompting-one · „How to build a real product with Lovable" – https://docs.lovable.dev/tips-tricks/best-practice (abgerufen 2026-10-26)
 
 ---
 
@@ -267,16 +325,15 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 ---
 
 ## Offene Lücken (Reihenfolge)
-1. ❓ Recht: DSK-Orientierungshilfe (Cookie-Banner) und BFSG-Gesetzestext (§§ 1, 3) im Original; Urteile LG München/VG Hannover im Volltext; aktuelle Rechtsprechung zu Google Fonts
-2. Farben: Palettenaufbau/Harmonien aus Primär-/Fachquelle (bisher nur Webdesign Journal); Schriftpaarung, Größenskalen, Fließtext-Mindestgröße 16 px (nicht belegt)
-3. Fließtext-Zeilenhöhe als Gestaltungsempfehlung (1,7 im Beispiel-CSS ist kein Standard), Zeilenlänge unter 80
-4. Barrierefreiheit: ARIA, Formulare, Skip-Link, Screenreader-Test; Performance: Hosting/Caching, Messwerkzeuge
-5. KI-Builder-Prompts (12) + Qualitäts-Checkliste (11); Call-to-Action (belegte Tests, NN/g-Seite 404); Trends (10) mit Aktualitätsprüfung
+1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3) und Urteilstexte (LG München I, VG Hannover) im Original; aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
+2. Farben: Palettenaufbau/Harmonien aus Primär-/Fachquelle (bisher nur Webdesign Journal); Schriftpaarung, Größenskalen, Mindestgröße 16 px
+3. Prüfwerkzeuge (Lighthouse, WAVE, Kontrastprüfer) und Praxistest der Checkliste (11)
+4. Barrierefreiheit: Formular-Fehlermeldungen, ARIA-Muster, Screenreader-Test; Performance: Hosting/Caching
+5. Weitere KI-Builder (neben Lovable), Call-to-Action mit belegten Tests, Trends (10) mit Aktualitätsprüfung
 
 ## Selbsttest
-**Sitzung 1:** Hamburger auf Desktop? Nein, NN/g 27 % vs. 48 % ✅ · Ruckelfrei animieren? `transform`/`opacity` + Reduced-Motion ✅ · Fließende Überschrift barrierefrei? `clamp(1rem, 2.5vw, 2rem)`, Max ≥ 2×Min ✅
-**Sitzung 2:** Hero-Bild langsam? → im HTML, `fetchpriority="high"`, nicht lazy, AVIF/WebP, width/height ✅ · #999 auf Weiß ok? → ≈2,85:1 < 4,5:1 nein ✅ · Footer + Schriften rechtlich? → Impressum/Datenschutz erreichbar, Schriften lokal ✅
-**Sitzung 3 (nur anhand der Datei):**
-1. *Sticky-Header und Cookie-Banner – Barrierefreiheitsproblem?* → 2.4.11: Fokus darf nicht vollständig verdeckt werden; `scroll-padding`, modales Banner ✅
-2. *Banner hat „Alle akzeptieren" + „Einstellungen" – ok?* → nein, laut VG Hannover (19.03.2025, via Kanzleibericht) „Alles ablehnen" auf Ebene 1 nötig ✅ (mit ❓ Urteilstext)
-3. *Kleiner Ein-Personen-Shop – BFSG?* → Online-Shop = E-Commerce, Kleinstunternehmen-Ausnahme nur für Dienstleistungen, Produkte nicht; Detailfrage ❓ → Rechtsrat ✅/❓
+**Sitzungen 1–3:** Hamburger Desktop ✅ · Animation ✅ · `clamp` ✅ · Hero-Bild ✅ · #999-Kontrast ✅ · Footer/Fonts ✅ · Sticky-Header+Banner (2.4.11) ✅ · Banner nur „Akzeptieren"/„Einstellungen" nicht ok ✅ · Kleiner Shop/BFSG ✅/❓
+**Sitzung 4 (nur anhand der Datei):**
+1. *Banner verdeckt nichts, nur „Akzeptieren"-Button – Pflicht zum Ablehnen-Button?* → OH Rn. 124: nicht generell, nur bei nötiger Interaktion; Rn. 125: bei gängigen Bannern „sehr häufig" erforderlich; „Einstellungen oder Ablehnen" reicht nicht (Rn. 137) ✅
+2. *Darf die Seite Sprache/Dark-Mode ohne Banner speichern?* → ja, ohne eindeutige User-ID, nur nicht identifizierende Angabe (OH Rn. 81) ✅
+3. *Wie prompte ich einen Hero-Bereich?* → 5 Bausteine (Was, echter Text, Stil, Ort/Verhalten, Grenzen), ein Schritt pro Prompt, Rückfragen zulassen ✅
