@@ -217,7 +217,9 @@ Quellen (WCAG 2.2 Understanding, W3C, abgerufen 2026-10-26): …/contrast-minimu
 - **Sitemap** (Google, 10.12.2025): Datei mit Seiten/Medien der Website; hilfreich bei großen oder neuen Seiten mit wenigen externen Links; bei kleinen Seiten (~≤500 Seiten) mit guter interner Verlinkung oft nicht nötig. Garantiert kein Crawling/Indexieren; Wix/WordPress/Blogger erzeugen sie meist automatisch. https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview
 - **robots.txt** (Google, 10.12.2025): steuert **Crawling** (Serverlast), ist **kein** Mittel gegen Indexierung – blockierte URL kann ohne Beschreibung trotzdem in den Ergebnissen erscheinen. Aus der Suche heraushalten: `noindex` (Meta-Tag/Header), Passwortschutz oder löschen. Kein Sicherheitsmechanismus. Skripte/Stylesheets nur blockieren, wenn die Seite ohne sie nicht leidet. https://developers.google.com/search/docs/crawling-indexing/robots/intro
 - Typischer Fehler: Seite mit `robots.txt` „verstecken" statt `noindex`; Test-/Entwurfsseiten öffentlich lassen.
-- ❓ Offen: strukturierte Daten, lokale SEO, Ranking-Einfluss der Core Web Vitals.
+- **Strukturierte Daten** (Google, 10.12.2025): standardisierte Beschreibung von Seiteninhalt (z. B. Rezept, Produkt); **JSON-LD empfohlen** (Skript-Tag, getrennt vom Text), Microdata/RDFa gleichwertig. Nur Sichtbares markieren, Seiten nicht nur dafür bauen. Ermöglichen **Rich Results**, **versprechen aber kein besseres Ranking**. Tests: Rich-Results-Test, Status-Berichte, URL-Prüftool. https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
+- **Lokale Suche** (Google-Unternehmensprofil-Hilfe): Profil **verifizieren**, Adresse/Öffnungszeiten/Branche aktuell halten, Bewertungen beantworten, Fotos hinzufügen. Ranking-Faktoren: **Relevanz, Entfernung, Bekanntheit** (Links, Anzahl/Bewertung der Rezensionen); Ranking lässt sich weder anfordern noch bezahlen. https://support.google.com/business/answer/7091
+- ❓ Offen: Ranking-Einfluss der Core Web Vitals (nicht belegt).
 
 ---
 
@@ -281,7 +283,7 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 **Performance:** LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1 · LCP-Bild nicht lazy, mit `fetchpriority="high"` · Bilder mit `width`/`height` · AVIF/WebP · Platz für Einbettungen reserviert.
 **SEO:** eigener `<title>` je Seite · Testseiten mit `noindex`, nicht mit robots.txt · Sitemap vorhanden (meist automatisch) · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
 **Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen (Verbraucher-Dienstleistung/Shop? Kleinstunternehmen?).
-**Prüfwerkzeuge (belegt):** Lighthouse/PageSpeed Insights (Performance, Accessibility, Best Practices, SEO; Hinweise zu Fehlern); WebAIM Color Contrast Checker (laut MDN genannt, selbst nicht geöffnet); BIK BITV-Test und barrierefreies-webdesign.de (laut Bundesfachstelle für Prüfschritte empfohlen). ❓ WAVE, axe, Screenreader-Test nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
+**Prüfwerkzeuge (belegt; Lighthouse 13.5.0 selbst im Container ausgeführt):** Lighthouse/PageSpeed Insights (Performance, Accessibility, Best Practices, SEO; Hinweise zu Fehlern); WebAIM Color Contrast Checker (laut MDN genannt, selbst nicht geöffnet); BIK BITV-Test und barrierefreies-webdesign.de (laut Bundesfachstelle für Prüfschritte empfohlen). ❓ WAVE, axe, Screenreader-Test nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
 
 ### Praxistest der Checkliste: apple.com/de (aufgerufen über apple.de, 2026-10-26)
 
@@ -307,7 +309,7 @@ Methode: Seite mit Chromium (Playwright) geladen, Desktop 1280 px und 320 px, We
 | Reflow 320 px | `scrollWidth` = 320 = Viewport → kein horizontales Scrollen | ✅ |
 | Navigation | Desktop: 11 Kategorien + Suche + Tasche sichtbar; 320 px: Logo, Suche, Tasche, **Hamburger** | ✅ passt zur NN/g-Empfehlung (Desktop sichtbar; mobil Kompromiss bei vielen Punkten) |
 | Skip-Link | kein Link mit Sprungziel gefunden; beim Tab-Test war der **erste Fokus der Apple-Logo-Link** (danach Store, Mac, iPad …) → **kein Skip-Link beobachtet**. WCAG 2.4.1 lässt Landmarks/Überschriften als Alternative zu (Landmarks `main`/`nav` vorhanden) | ❓ kein klarer Verstoß |
-| Klickziele ≥ 24×24 | 11 Menü-Schaltflächen je 22×44 px (Breite < 24); bei 6 davon liegt ein weiteres Ziel mit Mittelpunkt < 24 px entfernt (vereinfachter Test, kein exakter 24-px-Kreis-Test; der Link und die „Menü“-Schaltfläche überlagern sich evtl.); Schließen-Button des Länder-Banners 18×18 | ❓ möglicher Grenzfall, nicht abschließend |
+| Klickziele ≥ 24×24 (Lighthouse/axe bestätigt) | **Lighthouse meldet Verstoß:** Footer-Rechtslinks nur 16 px hoch (z. B. Datenschutzrichtlinie 135×16, Nutzungsbedingungen 144×16, Rechtliche Hinweise 129×16), Sicherheitsabstand nur 19–20,6 px statt 24 px. Eigener Vortest: 11 Menü-Schaltflächen je 22×44 px (Breite < 24); bei 6 davon liegt ein weiteres Ziel mit Mittelpunkt < 24 px entfernt (vereinfachter Test, kein exakter 24-px-Kreis-Test; der Link und die „Menü“-Schaltfläche überlagern sich evtl.); Schließen-Button des Länder-Banners 18×18 | ❌ Footer-Links (Lab, Lighthouse); ❓ Menüleiste unklar |
 | Ladezeit (einzelne Messung) | TTFB ≈ 527 ms, DCL ≈ 2,6 s, Load ≈ 2,6 s (Cloud-Container, kein Feldwert, **keine CWV-Aussage**) | ❓ |
 | Caching HTML | `cache-control: max-age=294` | ❓ keine Bewertung möglich |
 | Drittanbieter | nur `apple.com`-Hosts + `securemetrics.apple.com` | ✅ keine fremden Fonts/Tracker beobachtet (Momentaufnahme) |
@@ -315,7 +317,20 @@ Methode: Seite mit Chromium (Playwright) geladen, Desktop 1280 px und 320 px, We
 | Impressum (§ 5 DDG) | Link „Impressum“ im Footer nicht gefunden; Seite „Rechtliche Hinweise“ (`/de/legal/`) enthält das Wort „Impressum“/„Anbieterkennzeichnung“ nicht | ❓ nicht belegt, ob Angaben anderswo stehen; keine Rechtsbewertung |
 | Cookies/Consent | ohne Interaktion wurden 11 Cookies (u. a. `geo`, `ac_bnd`, `s_fid`, `s_vi`, `s_cc`, `dssid2`, `dssf`) und localStorage-Einträge gesetzt; **kein Consent-Banner angezeigt** (nur Länderauswahl, Abruf aus anderem Land). Wofür die Cookies dienen und ob § 25 TDDDG gilt, habe ich nicht geprüft | ❓ keine Bewertung |
 
-**Erkenntnisse für die Checkliste:** (1) Automatik-Skripte übersehen Texte, die in mehrere Elemente zerlegt sind → gezielt nachmessen (hier gelungen). (2) Standort/Region kann Banner und Reihenfolge verändern → für Recht/Banner mit deutscher IP prüfen. (3) `width`/`height` fehlt bei Apple als Attribut, gemessener CLS war trotzdem 0,057 → erst messen, dann urteilen. (4) Consent-/Cookie-Befund hängt vom Abrufland ab und ist ohne deutsche IP nicht aussagekräftig. (5) Eine versteckte `h1` ist eine Designentscheidung, die Struktur bleibt zugänglich.
+**Lighthouse 13.5.0 (Mobil, simulierte Drosselung, aus Cloud-Container über Proxy, 2026-10-26 14:15 UTC) – Lab-Werte, keine Felddaten, nicht mit Desktop-Messung oben vergleichbar:**
+
+| Kategorie | Wert |
+|---|---|
+| Performance | **0,31** (FCP 3,6 s · **LCP 9,1 s** · TBT 1.680 ms · **CLS 0,164** · Speed Index 4,9 s) |
+| Accessibility | **0,89** |
+| Best Practices | 1,00 |
+| SEO | 1,00 |
+
+- **Barrierefreiheit – 4 fehlgeschlagene Audits:** (1) `color-contrast`: Element `button button-neutral media-gallery-button` mit `aria-hidden="true"`, Kontrast **1,64:1** (#383839 auf #585859, 14 px) – vermutlich inaktive/versteckte Galerie-Pfeile, ❓ nicht geklärt; (2) `target-size`: Footer-Links (s. o.); (3) `label-content-name-mismatch`: sichtbarer Text steckt nicht im zugänglichen Namen (z. B. Einkaufstasche, Galerie-Links); (4) `aria-required-children`: Liste mit `role="list"` enthält nicht erlaubte `tabpanel`-Kinder.
+- **Performance-Befunde:** LCP-Element = Hero-Bild iPad mini, im HTML auffindbar und nicht lazy, aber ohne `fetchpriority="high"`; LCP-Aufschlüsselung: TTFB 504 ms, Ladeverzögerung 39 ms, Ladedauer 116 ms, **Render-Verzögerung 708 ms** → Hauptproblem ist das Rendern, nicht das Bild selbst. Render-blockierend: `ac-analytics.js` (104 KB), `globalheader.umd.js` (167 KB) u. a. (geschätzt 1.900 ms). CLS 0,164 (1 Verschiebung im Hero-Bereich der Startseite); 54 Bilder ohne explizite `width`/`height` (Lighthouse: 0,5). Schriften: `font-display`-Hinweis (SF Pro, geschätzt 50–70 ms je Datei); Cache-Lebensdauern der Schriften nur 12–53 Minuten (Lighthouse: Einsparung ≈ 1.635 KiB bei Wiederbesuch); ungenutztes JS ≈ 173 KiB.
+- **Einordnung:** Die Werte weichen stark von meiner Desktop-Messung ab (LCP 1,7 s, CLS 0,057, ungedrosselt). Ursache: Mobil-Profil mit simulierter Drosselung + Container/Proxy → **nicht als Aussage über echte Apple-Besucher verwenden** (dafür CrUX/PageSpeed-Felddaten nötig, nicht abgerufen). Als Methode zeigt der Test: Lab-Werte schwanken je nach Profil; immer Profil und Gerät dazuschreiben, Felddaten bevorzugen.
+
+**Erkenntnisse für die Checkliste:** (1) Automatik-Skripte übersehen Texte, die in mehrere Elemente zerlegt sind → gezielt nachmessen (hier gelungen). (2) Standort/Region kann Banner und Reihenfolge verändern → für Recht/Banner mit deutscher IP prüfen. (3) `width`/`height` fehlt bei Apple als Attribut, gemessener CLS war trotzdem 0,057 → erst messen, dann urteilen. (4) Consent-/Cookie-Befund hängt vom Abrufland ab und ist ohne deutsche IP nicht aussagekräftig. (5) Lighthouse findet Dinge, die mein Skript nicht fand (Zielgröße Footer, Namen/Labels, ARIA-Struktur) – beide Methoden kombinieren. (6) Eine versteckte `h1` ist eine Designentscheidung, die Struktur bleibt zugänglich.
 
 ---
 
@@ -380,7 +395,7 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3, BFSGV) und Urteilstexte (LG München I, VG Hannover) im Original; Reichweite BFSG (ganze Website?); aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
 2. Farben: Palettenaufbau/Harmonien und Farbwirkung aus Primär-/Fachquelle (keine gefunden); Schriftpaarung, Größenskalen, Mindestgröße 16 px
 3. Call-to-Action mit belegten Tests (NN/g-Artikel nicht auffindbar; Suche lieferte nur Sekundärquellen)
-4. Praxistest der Checkliste (11): einmal an apple.com/de erprobt (siehe dort); weiter: deutsche IP/Banner, Lighthouse, WAVE/axe/Screenreader, eigene Seite
+4. Praxistest der Checkliste (11): apple.com/de mit Skript + Lighthouse erprobt; weiter: deutsche IP/Banner, Felddaten (CrUX), Screenreader, eigene Seite
 5. Weitere KI-Builder (neben Lovable), strukturierte Daten/lokale SEO, Trends (10) mit Aktualitätsprüfung
 
 ## Selbsttest
