@@ -1,6 +1,6 @@
 # Webdesign-Wissensbasis
 
-Stand der Datei: 2026-10-26 (Sitzung 2)
+Stand der Datei: 2026-10-26 (Sitzung 2, inkl. Abgleich Inspiration-Datei)
 Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 
 ## Kompetenz-Status
@@ -16,8 +16,8 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 7 | Barrierefreiheit | ❓ (Kontrast, Textabstand, Zielgröße, Reflow, Zoom, Reduced Motion; Tastatur/Fokus/Alt offen) |
 | 8 | SEO | ❓ (Google-Starter-Guide) |
 | 9 | Recht DE | ❓ (nur Sekundärquellen, Gesetzestext nicht abrufbar) |
-| 10 | Trends | ❌ |
-| 11 | Qualitätskontrolle | ❌ |
+| 10 | Trends | ❓ (Beobachtungen aus Inspiration-Datei, 2026-10; nicht selbst gemessen) |
+| 11 | Qualitätskontrolle | ❓ (WCAG/CWV-Prüfpunkte vorhanden, keine fertige Checkliste) |
 | 12 | KI-Builder-Prompts | ❌ |
 
 ---
@@ -190,10 +190,45 @@ Quellen: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html · �
 
 ---
 
+## 10. Trends und Praxisbeobachtungen (aus "Webdesign-Inspiration.md")
+
+*Stand: 2026-10-26* — Quelle: von dir hochgeladene Datei "Webdesign-Inspiration" (22.–26.10.2026, Autor: Christopher Hanke / früherer Lauf). **Ich habe die Messungen nicht selbst wiederholt**; Zahlen gelten als Beobachtung dieser Datei. Ratgeber-Aussagen stammen vom Webdesign Journal (Sekundärquelle) und sind unten gegen meine Primärquellen abgeglichen.
+
+**Muster (Stichprobe: 6 + 16 + 26 Seiten, nur Startseiten, per Code gemessen)**
+- Erster Bildschirm: großes Foto/Video, sehr große Überschrift (typ. 60–145 px, oft normale oder dünne Stärke), 1 Button. Darunter oft 3 Spalten (Symbol, Titel, Text).
+- Hauptmenü: 3–7 sichtbare Punkte, Logo links, Menü rechts (oder Logo mittig bei Shops); bei vielen Seiten fixiert (10 von 16; 12 von 26 Squarespace-Demos).
+- Schrift: meist 1–2 Familien (Überschrift + Text, oft Serif + Grotesk-Kombi); Fließtext 16–18 px (12 von 16 Seiten; Apple 17 px).
+- Animation: meist dezente Einblendung beim Scrollen; Show-Effekte (Custom-Cursor, Scroll-Spektakel) selten, bei Agenturen. Hover-Linie per CSS: `::before/::after` mit `transform: scale3d`, ca. 0,3 s, nur CSS — passt zu meiner Regel "nur transform/opacity" und NN/g (100–400 ms).
+- Squarespace-Demos: 15 von 23 gemessenen Hauptüberschriften ≥100 px (bis 355 px); Hintergründe überwiegend weiß/creme; nur 1 von 26 mit Video.
+- Apple: Menüleiste 44 px, halbtransparent + Blur; pro Block immer gleiches Button-Paar (primär gefüllt, sekundär umrandet) → klare Klick-Hierarchie.
+- ❓ Zeitlos oder Trend? Große Überschrift + wenig Menüpunkte + dezente Animation passen zu belegten Prinzipien (sichtbare Navigation, Performance); "riesige Schmuckschriften" ist eher Stilmode (Einschätzung, nicht belegt).
+
+**Ratgeber-Aussagen (Webdesign Journal) — Abgleich mit Primärquellen**
+
+| Aussage Inspiration-Datei | Primärquelle / Abgleich | Status |
+|---|---|---|
+| Kontrast 4,5:1 / 3:1 bei großem Text (18 pt bzw. 14 pt fett) | WCAG 1.4.3 identisch | ✅ bestätigt |
+| AAA: 7:1 bzw. 4,5:1 | nicht in meiner abgerufenen Seite (1.4.3 = AA) | ❓ nicht selbst geprüft |
+| Zeilenabstand ≥ 1,5 | WCAG 1.4.12 gleich | ✅ |
+| Absatzabstand "1,5-fach des Zeilenabstands" | WCAG 1.4.12 sagt **2× Schriftgröße** (bei Zeilenhöhe 1,5 ≈ 1,33× Zeilenabstand) | ❌ weicht ab → WCAG gilt |
+| Zeilenlänge Desktop 45–80, mobil 30–40 Zeichen | web.dev nennt 70–80 Zeichen | ❓ unterschiedliche Spannen; 45–75 ist verbreitete Typografie-Faustregel (hier nicht belegt) |
+| Fließtext mindestens 16 px | in meinen Primärquellen nicht belegt | ❓ plausibel, als Praxisrichtwert führen |
+| Zeilenhöhe Fließtext 1,7, Überschriften 1,3 | Beispiel-CSS eines Artikels, keine Norm | ❓ Richtwert |
+| BFSG "ab 2025" für Onlineshops | Gesetzestext nicht geprüft | ❓ vor Nutzung verifizieren |
+| Stats "10 % brauchen Hilfsmittel, 30 % Einschränkungen" | Herkunft nicht nachvollziehbar | ❓ nicht zitieren |
+| Farbschemata analog/komplementär/triadisch; Rot=Signal, Gelb=Aufmerksamkeit, Blau=Business/Vertrauen | Gestaltungslehre, Sekundärquelle | ❓ Faustregeln, kulturabhängig |
+| Landingpage: 1 Ziel, auffälliger CTA-Button mit Mikrotext (z. B. "dauert nur 1 Minute") | Sekundärquelle | ❓ Praxisregel, nicht belegt/getestet |
+| Informationsarchitektur zuerst, Navigation danach; Begriffe der Nutzer statt Fachsprache; Baumstruktur | deckt sich mit NN/g-Hinweis "Information Scent" (Labels) | ✅ konsistent |
+
+**Weitere Hinweise aus der Datei (nicht geprüft):** 6 Qualitätsbereiche einer guten Seite (Design, Content, UX, Informationsarchitektur, Technik, Interaktion) · Website-Typen (Corporate, Landingpage, Microsite, Portfolio, Nische, E-Commerce, E-Learning, Blog) · Webdesign-Checkliste (90+ Punkte) war nicht einsehbar · Farbkontrast-Prüfer und Google-Fonts-Mixer nicht ausgelesen.
+**Wichtig für Recht:** Fast alle gemessenen Schriften sind lizenzpflichtig/eigen (Adobe Fonts, SF Pro); freie Alternativen bei Google Fonts (Inter, Barlow, Lora) — **lokal hosten** (siehe Abschnitt 9).
+
+---
+
 ## Offene Lücken (Reihenfolge)
 1. Recht: Primärquellen prüfen (§ 5 DDG, § 25 TDDDG, DSK-OH), Cookie-Banner-Gestaltung, Datenschutzerklärung
-2. Farben (Paletten, Harmonie, Dark Mode), Schriftpaarung, Größenskalen
-3. Informationsarchitektur, Startseiten-Aufbau, Call-to-Action
+2. Farben (Paletten aus Primärquelle statt nur Sekundär, Dark Mode), Schriftpaarung, Größenskalen; offene ❓ aus Abschnitt 10 gegen Primärquellen prüfen (AAA-Kontrast, 16 px, BFSG)
+3. Informationsarchitektur (NN/g), Startseiten-Aufbau, Call-to-Action (belegte Tests)
 4. Barrierefreiheit: Tastatur/Fokus/Alt/ARIA; Performance: INP, Hosting
 5. KI-Builder-Prompts + Qualitäts-Checkliste (11, 12); Trends (10) mit Aktualitätsprüfung
 
