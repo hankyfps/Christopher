@@ -17,7 +17,7 @@ Legende: ✅ solide · ❓ lückenhaft/unbestätigt · ❌ fehlt
 | 8 | SEO | ❓ (Starter-Guide, Sitemap, robots.txt/noindex; strukturierte Daten, lokale SEO offen) |
 | 9 | Recht DE | ❓ Impressum, TDDDG, Art. 13 DSGVO, DSK-OH am Original; BFSG über Bundesfachstelle-FAQ; BFSG-Gesetzestext und Urteilstexte offen (siehe 9) |
 | 10 | Trends | ❓ (Beobachtungen aus Inspiration-Datei, 2026-10; nicht selbst gemessen) |
-| 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten (Abschnitt 11); in Praxis nicht getestet |
+| 11 | Qualitätskontrolle | ❓ Checkliste aus geprüften Punkten (Abschnitt 11); einmal an apple.com/de erprobt, ohne Lighthouse/Screenreader |
 | 12 | KI-Builder-Prompts | ❓ offizielle Lovable-Doku ausgewertet; andere Builder nicht |
 
 ---
@@ -270,7 +270,7 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 
 ## 11. Prüfung und Qualitätskontrolle fertiger Seiten (Checkliste)
 
-*Stand: 2026-10-26* — eigene Zusammenstellung **nur aus den oben geprüften Quellen**; in der Praxis noch nicht erprobt. Die 90-Punkte-Checkliste des Webdesign Journals war nicht einsehbar (Anmeldeformular) und ist **nicht** Grundlage.
+*Stand: 2026-10-26* — eigene Zusammenstellung **nur aus den oben geprüften Quellen**; erster Praxistest siehe unten (apple.com/de). Die 90-Punkte-Checkliste des Webdesign Journals war nicht einsehbar (Anmeldeformular) und ist **nicht** Grundlage.
 
 **Struktur & Navigation:** eine `h1`, Überschriften logisch absteigend · `header/nav/main/footer`, `main` nur einmal · Logo links, verlinkt auf Startseite · Hauptnavigation auf Desktop sichtbar (kein Hamburger), mobil ≤4 Hauptlinks sichtbar oder wichtige Inhalte auch per Inhalts-Links · Linktexte konkret (nicht „Mehr erfahren") · Slogan sagt klar, was angeboten wird.
 **Layout & Responsive:** Viewport-Meta-Tag · Zoom nicht gesperrt · bei 320 px kein horizontales Scrollen · Breakpoints nach Inhalt · Fließtext-Zeilen ≤ 80 Zeichen.
@@ -282,6 +282,38 @@ Form: leicht erkennbar, unmittelbar erreichbar, ständig verfügbar (IHK; „Pos
 **SEO:** eigener `<title>` je Seite · Testseiten mit `noindex`, nicht mit robots.txt · Sitemap vorhanden (meist automatisch) · aussagekräftige Meta-Description · sprechende URLs · Bilder mit Alt · hilfreiche, aktuelle Inhalte.
 **Recht:** Impressum und Datenschutz im Footer jeder Seite · Impressum nach § 5 DDG vollständig (inkl. E-Mail) · Datenschutzerklärung nennt alle genutzten Dienste (Art. 13 DSGVO) · Schriften lokal · Banner mit gleichwertigem „Alles ablehnen" · keine Tracker vor Einwilligung · BFSG-Pflicht prüfen (Verbraucher-Dienstleistung/Shop? Kleinstunternehmen?).
 **Prüfwerkzeuge (belegt):** Lighthouse/PageSpeed Insights (Performance, Accessibility, Best Practices, SEO; Hinweise zu Fehlern); WebAIM Color Contrast Checker (laut MDN genannt, selbst nicht geöffnet); BIK BITV-Test und barrierefreies-webdesign.de (laut Bundesfachstelle für Prüfschritte empfohlen). ❓ WAVE, axe, Screenreader-Test nicht recherchiert. Handprüfung: nur mit Tab-Taste durchklicken, auf 200 %/400 % zoomen, Browser-Schriftgröße erhöhen, „Bewegung reduzieren" im Betriebssystem einschalten.
+
+### Praxistest der Checkliste: apple.com/de (aufgerufen über apple.de, 2026-10-26)
+
+Methode: Seite mit Chromium (Playwright) geladen, Desktop 1280 px und 320 px, Werte per Skript aus dem gerenderten Dokument gelesen, zwei Screenshots angesehen. **Nur Startseite, nur Momentaufnahme, kein Lighthouse, kein Screenreader.** Standort des Abrufs war nicht Deutschland (Apple blendete ein Länder-Banner „Choose another country…" ein) → Tab-Reihenfolge und Banner-Befund dadurch verfälscht.
+
+| Prüfpunkt | Messung | Status |
+|---|---|---|
+| Viewport-Tag | `width=device-width, initial-scale=1, viewport-fit=cover`, kein Zoom-Sperren | ✅ |
+| Sprache | `lang="de-DE"` | ✅ |
+| `<title>` / Description | „Apple (Deutschland)"; Description (og:description) vorhanden | ✅ |
+| Landmarks | `main` 1×, `nav` 2×, `footer` ja, **`header`-Element nicht gefunden** | ❓ (kein Fehler, nur andere Umsetzung) |
+| Überschriften | eine `h1` („Apple"), **visuell versteckt** (`visuallyhidden`), danach h2/h3 | ✅ Struktur / ❓ h1 unsichtbar |
+| Bilder | 54 Bilder, 0 ohne `alt`, 37 mit `alt=""` (dekorativ) | ✅ |
+| Bilder `width`/`height` | bei allen 54 **nicht** als Attribute gesetzt (Platz evtl. per CSS reserviert, nicht geprüft) | ❓ |
+| Lazy Loading | 8 Bilder `loading="lazy"` (ob eines das LCP-Bild ist: nicht geprüft) | ❓ |
+| Fließtext | 17 px, Zeilenhöhe 25 px (≈1,47), Farbe rgb(29,29,31) auf Weiß, Schrift SF Pro Text/Display | ✅ Größe; Zeilenhöhe knapp < 1,5 (Richtwert aus MDN/WCAG-AAA) |
+| Schriftfamilien | 2 (SF Pro Text, SF Pro Display) | ✅ passt zu „1–2 Familien" |
+| Kontrast Buttons | „Weitere Infos" weiß auf rgb(0,113,227): **4,70:1**; „Preise ansehen" rgb(0,102,204) auf rgb(245,245,247): **5,11:1** (eigene Berechnung nach WCAG-Formel) | ✅ ≥ 4,5:1 |
+| Kontrast Gesamttext | Skript fand bei 381 geprüften Textelementen 0 unter Schwelle; **hellgrauer Hero-Untertitel wurde vom Skript nicht erfasst** | ❓ nicht abschließend |
+| Fokus | beim Tab-Test `outline: solid 2px` auf allen 6 geprüften Elementen; keine `outline:none`-Regel auf `:focus` gefunden | ✅ (nur 6 Elemente geprüft) |
+| Reduced Motion | 4 `prefers-reduced-motion`-Regeln im CSS | ✅ |
+| Dark Mode | keine `prefers-color-scheme`-Regel im CSS | ❓ nicht vorhanden (kein Muss) |
+| Reflow 320 px | `scrollWidth` = 320 = Viewport → kein horizontales Scrollen | ✅ |
+| Navigation | Desktop: 11 Kategorien + Suche + Tasche sichtbar; 320 px: Logo, Suche, Tasche, **Hamburger** | ✅ passt zur NN/g-Empfehlung (Desktop sichtbar; mobil Kompromiss bei vielen Punkten) |
+| Skip-Link | per Text („Hauptinhalt/Skip/überspringen") **nicht gefunden** | ❓ unbestätigt |
+| Klickziele ≥ 24×24 | z. B. Menüeinträge 22×44 px, Schließen-Button des Länder-Banners 18×18; WCAG-Abstandsausnahme nicht geprüft | ❓ |
+| Ladezeit (einzelne Messung) | TTFB ≈ 527 ms, DCL ≈ 2,6 s, Load ≈ 2,6 s (Cloud-Container, kein Feldwert, **keine CWV-Aussage**) | ❓ |
+| Caching HTML | `cache-control: max-age=294` | ❓ keine Bewertung möglich |
+| Drittanbieter | nur `apple.com`-Hosts + `securemetrics.apple.com` | ✅ keine fremden Fonts/Tracker beobachtet (Momentaufnahme) |
+| Cookie-Banner / Recht | **nicht prüfbar** (Länder-Banner statt Consent-Banner angezeigt; Impressum/Datenschutz nicht geprüft) | ❓ |
+
+**Erkenntnisse für die Checkliste:** (1) Automatik-Skripte übersehen Texte, die in mehrere Elemente zerlegt sind → Kontrast zusätzlich mit Auge/Werkzeug prüfen. (2) Standort/Region kann Banner und Reihenfolge verändern → für Recht/Banner mit deutscher IP prüfen. (3) `width`/`height` fehlt bei Apple als Attribut – kein Beweis für CLS-Problem; erst messen. (4) Eine versteckte `h1` ist eine Designentscheidung, die Struktur bleibt zugänglich.
 
 ---
 
@@ -346,7 +378,7 @@ Quellen: Lovable Docs, „Prompting best practices" – https://docs.lovable.dev
 1. ❓ Recht: BFSG-Gesetzestext (§§ 1, 3, BFSGV) und Urteilstexte (LG München I, VG Hannover) im Original; Reichweite BFSG (ganze Website?); aktuelle Rechtsprechung Google Fonts; nur Orientierung, keine Rechtsberatung
 2. Farben: Palettenaufbau/Harmonien und Farbwirkung aus Primär-/Fachquelle (keine gefunden); Schriftpaarung, Größenskalen, Mindestgröße 16 px
 3. Call-to-Action mit belegten Tests (NN/g-Artikel nicht auffindbar; Suche lieferte nur Sekundärquellen)
-4. Praxistest der Checkliste (11) an einer echten Seite; WAVE/axe/Screenreader
+4. Praxistest der Checkliste (11): einmal an apple.com/de erprobt (siehe dort); weiter: deutsche IP/Banner, Lighthouse, WAVE/axe/Screenreader, eigene Seite
 5. Weitere KI-Builder (neben Lovable), strukturierte Daten/lokale SEO, Trends (10) mit Aktualitätsprüfung
 
 ## Selbsttest
