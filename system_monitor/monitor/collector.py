@@ -68,9 +68,11 @@ class SystemCollector:
         """Prozessliste bei der nächsten Messung neu erstellen."""
         self._processes_at = float("-inf")
 
-    def snapshot(self, force_processes: bool = False) -> Snapshot:
+    def snapshot(self, force_processes: bool = False, skip_processes: bool = False) -> Snapshot:
+        """skip_processes=True: Prozessliste nicht neu erstellen (z. B. Fenster minimiert oder Übersicht
+        nicht sichtbar). Sie ist unter Windows der teuerste Teil (gemessen: ~7 ms je Prozess)."""
         now = self._clock()
-        if force_processes or now - self._processes_at >= self.process_interval_s:
+        if not skip_processes and (force_processes or now - self._processes_at >= self.process_interval_s):
             self._processes = self._top_processes()
             self._processes_at = now
         mem = psutil.virtual_memory()

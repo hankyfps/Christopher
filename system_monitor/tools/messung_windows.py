@@ -96,11 +96,11 @@ def install_probes() -> None:
 
     orig_step = Monitor.step
 
-    def step(self, force_processes=False):
+    def step(self, *args, **kwargs):
         before = self.collector._processes_at
         t0 = time.perf_counter()
         try:
-            return orig_step(self, force_processes)
+            return orig_step(self, *args, **kwargs)
         finally:
             ms = (time.perf_counter() - t0) * 1000
             record("step[mit Prozessliste]" if self.collector._processes_at != before

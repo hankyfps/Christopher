@@ -7,6 +7,8 @@ import os
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 
+from .overlay_logic import POSITIONS, parse_hotkey
+
 log = logging.getLogger(__name__)
 
 
@@ -25,7 +27,7 @@ class Config:
     disk_path: str = ""              # leer = Systemlaufwerk automatisch
     alert_cooldown_s: int = 60       # Mindestabstand zwischen gleichen Warnungen
     top_processes: int = 10          # Anzahl angezeigter Prozesse
-    process_interval_s: float = 5.0  # Prozessliste neu erstellen alle n s (teuerster Teil)
+    process_interval_s: float = 15.0  # Prozessliste neu erstellen alle n s (teuerster Teil, nur wenn sichtbar)
     csv_logging: bool = True         # Messwerte zusätzlich in CSV schreiben
     csv_flush_s: int = 30            # CSV gebündelt alle n s schreiben (0 = sofort)
     log_dir: str = "logs"            # Ordner für Log- und CSV-Dateien
@@ -34,6 +36,12 @@ class Config:
     wlan_refresh_s: int = 15         # WLAN-Status neu abfragen alle n s
     bt_refresh_s: int = 60           # Bluetooth neu abfragen alle n s (nur bei offenem Tab)
     check_updates_on_start: bool = False  # winget sofort beim Start (sonst beim 1. Öffnen des Tabs)
+    overlay_enabled: bool = False    # Overlay beim Start anzeigen
+    overlay_position: str = "top-center"   # top-/bottom- + left/center/right
+    overlay_alpha: float = 0.7       # Deckkraft des Overlays (0,2 = fast durchsichtig ... 1 = deckend)
+    overlay_click_through: bool = True     # Mausklicks gehen durch das Overlay hindurch
+    overlay_hotkey: str = "ctrl+alt+o"     # globales Tastenkürzel zum Ein-/Ausschalten (wirkt nach Neustart)
+    overlay_hide_main: bool = True   # Hauptfenster verstecken, solange das Overlay an ist
 
     # ------------------------------------------------------------------
     def validate(self) -> None:
@@ -54,6 +62,11 @@ class Config:
             raise ValueError("process_interval_s muss zwischen 1 und 3600 liegen")
         if not 0 <= self.csv_flush_s <= 3600:
             raise ValueError("csv_flush_s muss zwischen 0 und 3600 liegen")
+        if self.overlay_position not in POSITIONS:
+            raise ValueError(f"overlay_position muss eines von {', '.join(POSITIONS)} sein (ist {self.overlay_position!r})")
+        if not 0.2 <= self.overlay_alpha <= 1.0:
+            raise ValueError(f"overlay_alpha muss zwischen 0,2 und 1 liegen (ist {self.overlay_alpha})")
+        parse_hotkey(self.overlay_hotkey)               # wirft ValueError bei ungültigem Kürzel
         for name in ("drive_refresh_s", "wlan_refresh_s", "bt_refresh_s"):
             if not 2 <= getattr(self, name) <= 3600:
                 raise ValueError(f"{name} muss zwischen 2 und 3600 liegen")

@@ -34,10 +34,11 @@ class Monitor:
             self.csv.flush_s = config.csv_flush_s
         self.alerts.update_settings(config.thresholds(), config.alert_cooldown_s, config.hysteresis)
 
-    def step(self, force_processes: bool = False) -> tuple[Snapshot, list[Alert]]:
-        """Ein Zyklus: messen -> Grenzwerte prüfen -> protokollieren."""
+    def step(self, force_processes: bool = False, skip_processes: bool = False) -> tuple[Snapshot, list[Alert]]:
+        """Ein Zyklus: messen -> Grenzwerte prüfen -> protokollieren.
+        skip_processes=True spart den teuren Prozess-Scan; Grenzwertprüfung und CSV laufen trotzdem."""
         t0 = time.perf_counter()
-        snap = self.collector.snapshot(force_processes)
+        snap = self.collector.snapshot(force_processes, skip_processes)
         new_alerts = self.alerts.check(snap.metrics(), snap.timestamp)
         for a in new_alerts:
             (log.warning if a.level is Level.WARNUNG else log.info)(a.message())
