@@ -3,11 +3,13 @@
 Stand: 2026-11-05 · Phase 1 (Analyse): Läufe Übersicht und Netzwerk gemessen, Zusatzmessung (A/B ohne Prozessliste) gemessen, Phase 2 Vorschläge gemacht, Auswahl des Nutzers ausstehend
 
 ## Aktueller Stand
-- Phase 1: Code gelesen, Messskript `tools/messung_windows.py` geschrieben und unter Linux/Xvfb auf Funktion geprüft (Python 3.12, Tk 8.6.14).
-- Programmcode (`monitor/`, `main.py`, Doku): **unverändert**. Version weiter 2.1.1.
-- Windows-Messwerte kommen vom Nutzer (Claude-Umgebung ist Linux). Läufe liegen vor, siehe unten. Tests nur unter Python 3.12/3.13 geprüft, Nutzer hat Python 3.14.6.
-- `../system_monitor` (v1.1, Cyberpunk-Look) lag der ZIP **nicht** bei. Für Phase 2/3 (Look, Sparmodus-Vorlage) wird sie gebraucht.
-- Tests: `pytest` 51/51 grün, **nur unter Linux** (Python 3.12 und 3.13) geprüft.
+- Version **2.2.0** umgesetzt (Phase 3), Branch `claude/epic-cannon-mzki1z`. Phase 1/2 abgeschlossen, Messwerte unten.
+- Umgesetzt: Prozessliste nur bei sichtbarer Übersicht (`skip_processes`), Intervall 15 s; Netzwerkzähler im Mess-Thread; Meldungsliste max. 500; Overlay Variante **A (kompakte Leiste)** mit Position/Deckkraft/Klick-Durchlässigkeit/Tastenkürzel (`overlay.py`, `overlay_logic.py`); Layout **L3** (Kopfzeile mit Kennzahlen auf allen Tabs, Netzrate in Statuszeile); Design: Farbpalette der Cyberpunk-Version auf ttk-Styles übertragen (kein NeonButton/NeonBar).
+- Annahmen (Nutzer hatte bei "umsetzen" nichts gewählt): Overlay-Variante A statt B/C; hell/dunkel -> dunkel mit Palette aus `system_monitor_v2_2_cyberpunk.zip`. Änderbar.
+- Cyberpunk-ZIP des Nutzers hat Mindestgröße 1020×640 (Seitenleiste) und passt nicht zur Vorgabe 720×560; ihr `skip_processes`-Name wurde übernommen.
+- Tests: 84 grün unter Linux mit Bildschirm (Xvfb, Python 3.12), 80 grün + 4 übersprungen ohne Bildschirm. Windows/Python 3.14: **nicht ausgeführt**.
+- **Nicht auf Windows getestet:** Klick-Durchlässigkeit, globales Tastenkürzel, Overlay über Spiel, Verhalten von 2.2.0 insgesamt, Messwerte "nachher". Checkliste: `docs/checkliste_test_windows.md`.
+- Backup: `../system_monitor_v2.1.1_backup` (lokal in der Claude-Umgebung, nicht im Repo), Git-Stand `8efb310` / Tag `v2.1.1-vor-2.2.0` (Tag-Push scheiterte am Proxy, nur lokal). Beim Nutzer: der alte entpackte Ordner `system_monitor_komplett_neu` ist der 2.1.1-Stand.
 
 ## Messwerte (vorher/nachher)
 Windows 11 (10.0.26300), Python 3.14.6, Tk 8.6, psutil 7.2.2, 14 logische CPUs. Quelle: Nutzer-Läufe `tools/messung_windows.py`, Label `vorher`. Übersicht wurde zweimal gemessen (13:51 und 14:00), Netzwerk einmal (14:04).
@@ -61,18 +63,22 @@ Hauptthread-Aufrufe ruhig vs. während Prozessliste läuft: net_io_counters 6,2 
 Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptthread-Aufrufe und das zu seltene Messen (9-10 statt 30 Messungen/min). Restkosten ohne Liste: `_update_traffic` 11 ms, Fenstergröße ändern 72-111 ms/Schritt (Tk-Layout, Diagramm nur ~1 ms).
 
 ## Entscheidungen des Nutzers
-- noch keine (Phase 2 steht aus: Performance-Maßnahmen, Overlay-Variante, Layout, Design hell/Cyberpunk)
+- "umsetzen" ohne Einzelwahl -> Empfehlungen aus Phase 2 umgesetzt (siehe Annahmen oben).
+- Cyberpunk-Version geschickt mit Hinweis "vielleicht können wir die Farben entnehmen" -> nur Farben/Schriften übernommen.
 
 ## Geänderte Dateien
-- neu: `tools/messung_windows.py`, `tools/messung_starten.bat`, `tools/prozess_diagnose.py`, `tools/zusatzmessung_starten.bat` (temporär, nicht Teil des Programms)
-- neu: `HANDOFF.md`
+- geändert: `monitor/gui.py` (komplett neu aufgebaut), `monitor/config.py` (overlay_*, process_interval_s 15), `monitor/core.py`, `monitor/collector.py` (skip_processes), `monitor/__init__.py` (2.2.0), `config.json`
+- neu: `monitor/overlay.py`, `monitor/overlay_logic.py`, `tests/test_overlay.py`, `tests/test_gui_smoke.py`, `docs/checkliste_test_windows.md`, `docs/screenshots/overlay.png`
+- Doku: `README.md`, `docs/src/klassendiagramm.dot` (+png/svg), `docs/src/pap_hauptprogramm.dot` (+png/svg), `docs/Diagramme.pdf` (Seiten 1 und 4 neu)
+- temporär: `tools/messung_windows.py`, `tools/messung_starten.bat` (Label jetzt `nachher`), `tools/prozess_diagnose.py`, `tools/zusatzmessung_starten.bat`
 
 ## Offene Punkte
-- Antworten des Nutzers auf die 4 Phase-2-Fragen (Prozessliste, Overlay-Variante, Layout, Design).
-- Ursache für ~7 ms je Prozess unbekannt; schneller Weg per ctypes (eine Abfrage für alle Prozesse) ist Hypothese, ungemessen, nur als Prototyp mit Messung.
-- v1.1-Ordner (`system_monitor` mit Cyberpunk-Look) als ZIP nachreichen, falls Look/Sparmodus daraus übernommen werden sollen.
-- Ursachen-Tabelle (Phase 1) mit Messwerten füllen; ohne Messung gilt keine Ursache als belegt.
+- Nutzer: Windows-Test per Checkliste und `tools\messung_starten.bat` (nachher), Ergebnis schicken -> README-Abschnitt "Performance" mit 2.2.0-Werten ergänzen.
+- Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
+- Overlay B/C, Cyberpunk-Komplettumbau (NeonButton/NeonBar, Seitenleiste) nicht umgesetzt.
+- Screenshots der Tabs Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design.
+- Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf.
+- Python 3.14 (Nutzer) bisher nur dort gelaufen, Tests nicht.
 
 ## Nächster Schritt
-1. Auf Auswahl des Nutzers warten (nichts am Programmcode ändern bis dahin).
-2. Dann Phase 3 (vorher Backup `../system_monitor_v2.1.1_backup`).
+Ergebnisse des Windows-Tests auswerten, Fehler beheben, Performance-Abschnitt in README mit echten 2.2.0-Zahlen füllen.

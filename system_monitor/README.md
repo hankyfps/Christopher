@@ -1,4 +1,4 @@
-# System-Monitor (Python) – Version 2.1.1
+# System-Monitor (Python) – Version 2.2.0
 
 Überwacht **CPU, Arbeitsspeicher und Festplatten**, zeigt die Prozesse mit der höchsten Last und warnt, wenn ein Schwellwert überschritten wird. Version 2 ergänzt:
 
@@ -7,17 +7,20 @@
 - **WLAN-Verbindung** und **Bluetooth-Geräte**
 - **Datenverkehr (Up & Down)** mit Verlaufsdiagramm
 
+Version 2.2 ergänzt ein **Overlay** (kleine, immer sichtbare Leiste mit CPU, RAM und Netzwerk), ein dunkles Design (Farbpalette aus der Cyberpunk-Version), eine **Kopfzeile mit den Kennzahlen auf jedem Tab** und deutlich weniger CPU-Last (siehe „Performance“).
+
 Das Programm läuft mit Fenster (tkinter, 5 Tabs) oder im Terminal.
 
 ![Übersicht](docs/screenshots/tab_uebersicht.png)
 
-> Die Screenshots in `docs/screenshots/` stammen aus einem Testlauf unter Linux. Die Windows-Ausgaben (netsh, Bluetooth, winget) wurden dafür aus Beispieltexten nachgestellt.
+> Die Screenshots in `docs/screenshots/` stammen aus Testläufen unter Linux. `tab_uebersicht.png` und `overlay.png` zeigen das neue dunkle Design (2.2, Linux-Schrift). Die Bilder der übrigen Tabs zeigen noch das helle Design von 2.1; ihre Windows-Ausgaben (netsh, Bluetooth, winget) waren aus Beispieltexten nachgestellt.
 
 ## Funktionen
 
 | Tab | Inhalt | Datenquelle |
 |---|---|---|
-| **Übersicht** | CPU, RAM, Systemlaufwerk als farbige Balken, Top-Prozesse, Meldungen | `psutil` |
+| **Kopfzeile** (immer sichtbar) | CPU, RAM, Systemlaufwerk als farbige Balken mit Prozentwert; Knöpfe Pause, Einstellungen, Overlay, Beenden. Die Netzwerkrate steht rechts in der Statuszeile. | `psutil` |
+| **Übersicht** | Details (Kerne, GB, Laufzeit, Schwellen), Top-Prozesse (nur hier erstellt), Meldungen (höchstens 500) | `psutil` |
 | **Laufwerke** | alle Laufwerke mit belegtem, freiem und gesamtem Speicher; externe Medien blau markiert; Meldung beim Anstecken und Entfernen | `psutil.disk_partitions`, Bus-Typ über PowerShell `Get-Disk` |
 | **Netzwerk / WLAN** | Adapter, Status, SSID, Signalstärke, Standard, Band, Kanal, Datenrate, Sicherheit | `netsh wlan show interfaces`, ersatzweise `Get-NetAdapter` |
 | | Download/Upload je Sekunde, Summen seit Start, Diagramm der letzten 60 Messungen, Netzwerkkarte wählbar | `psutil.net_io_counters` |
@@ -30,6 +33,36 @@ Weitere Funktionen:
 - **Protokolle:** Warnungen und Ereignisse stehen in `logs/monitor.log` (rotierend), die Messwerte in `logs/messwerte.csv` (für Excel).
 - **Flüssige Bedienung:** Messung und Abfragen laufen im Hintergrund (Details unter „Performance“).
 
+## Overlay
+
+Eine kleine, randlose Leiste ganz oben auf dem Bildschirm, z. B. über einem Spiel im randlosen Fenstermodus:
+
+```
+CPU  23%  RAM  61%  ↓ 1.20 MB/s  ↑ 0.10 MB/s  14:32
+```
+
+![Overlay über der Übersicht (Testbild unter Linux)](docs/screenshots/overlay.png)
+
+- **Ein-/Ausschalten:** Knopf **Overlay** in der Kopfzeile oder das globale Tastenkürzel (Standard `Strg+Alt+O`, funktioniert auch, wenn ein Spiel im Vordergrund ist). Das Kürzel ist nur unter Windows verfügbar und ändert sich erst nach einem Neustart.
+- **Farbe:** Cyan = normal, gelb = innerhalb von 10 Punkten unter einer Schwelle, rot = Schwelle erreicht.
+- **Kein Prozess-Scan:** Das Overlay zeigt nie die Prozessliste. Ist es an und das Hauptfenster versteckt, wird nichts im Hauptfenster gezeichnet.
+- **Hauptfenster verstecken** (`overlay_hide_main`): nur, wenn das Tastenkürzel wirklich registriert werden konnte. Sonst bleibt das Hauptfenster sichtbar, weil man sonst nicht mehr zurückkäme.
+- **Klick-Durchlässigkeit** (`overlay_click_through`): Mausklicks gehen durch das Overlay hindurch (`WS_EX_LAYERED` + `WS_EX_TRANSPARENT`); außerdem kein Fokusklau und kein Eintrag in Taskleiste/Alt+Tab (`WS_EX_NOACTIVATE`, `WS_EX_TOOLWINDOW`).
+- **Einstellungen:** Position (6 Ecken/Mitten), Deckkraft 0,2–1, Tastenkürzel, „beim Start anzeigen“ – im Einstellungsdialog und in `config.json`.
+
+**Grenzen (nicht verschweigen):**
+
+| Punkt | Stand | Quelle |
+|---|---|---|
+| Spiele im **exklusiven Vollbild** | Ein normales Fenster liegt dort nicht darüber. Laufen Spiele mit „Fullscreen Optimizations“ (randlos-ähnlich), können Overlays gezeichnet werden. Welcher Modus bei einem Spiel gilt, hängt vom Spiel ab. | [DirectX Developer Blog, 17.12.2019](https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/) |
+| `-topmost` | „über allen Nicht-Topmost-Fenstern“; ein anderes Topmost-Fenster kann darüber liegen. | [Microsoft Learn: Extended Window Styles](https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles) |
+| Klick-Durchlässigkeit | Bei einem Layered Window mit `WS_EX_TRANSPARENT` gehen Mausereignisse an die Fenster darunter. | [Microsoft Learn: Window Features](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features) |
+| `-alpha`, `-topmost` | in Tk auf allen Plattformen vorgesehen, `-transparentcolor` nur Windows. | [Tk-Handbuch `wm`](https://www.tcl-lang.org/man/tcl8.6/TkCmd/wm.htm) |
+| Anti-Cheat | Das Overlay ist ein normales Fenster und hakt sich nicht in das Spiel ein. Ob ein bestimmtes Spiel/Anti-Cheat es toleriert, ist **nicht geprüft**. | – |
+| Für exklusiven Vollbild | Nur Tools, die sich in die Grafikausgabe einklinken (z. B. RTSS/MSI Afterburner). Das ist Fremdsoftware mit eigenem Risiko; manche Spiele blockieren sie (z. B. [Roblox](https://devforum.roblox.com/t/rtss-msi-afterburner-blocked-by-hyperion/3274953)). | – |
+
+**Getestet:** Überlagerung, Texte, Position und Ein-/Ausschalten unter Linux (Xvfb) per Test. **Nicht getestet** (nur unter Windows prüfbar): Klick-Durchlässigkeit, Tastenkürzel, Verhalten über einem echten Spiel.
+
 ## Wichtige Hinweise (Windows)
 
 | Thema | Hinweis |
@@ -40,31 +73,41 @@ Weitere Funktionen:
 | **Updates installieren** | Die Installation läuft über winget in einem eigenen Konsolenfenster. Vorher kommt eine Sicherheitsabfrage. Manche Installer fragen per **Benutzerkontensteuerung nach Admin-Rechten**. Auf verwalteten Rechnern (Schule, Firma) kann die Installation durch Richtlinien blockiert sein. |
 | **winget fehlt** | winget gehört zum „App-Installer“ aus dem Microsoft Store. Ohne winget zeigt der Tab einen Hinweis, der Rest funktioniert normal. |
 
-## Performance (ab Version 2.1)
+## Performance
 
-In Version 2 lief die Messung im Fenster-Thread. Unter Windows ist die Prozessliste der teuerste Teil: Ohne Admin-Rechte muss psutil für geschützte Systemprozesse einen langsamen Ersatzweg nutzen, einmal pro Prozess (siehe `psutil/_pswindows.py`, „fallback (slower)“). Dadurch fror das Fenster bei jeder Messung kurz ein.
+Gemessen auf Windows 11 (Build 10.0.26300), Python 3.14.6, 14 logische CPUs, 500 laufende Prozesse, mit `tools/messung_windows.py` (Messdauer 60 s je Lauf, Fenster 880×680, nichts bedient). Quelle: eigene Läufe am 05.11.2026, Rohdaten als JSON im Ordner `messungen/` (nicht im Projekt enthalten).
+
+**Befund in Version 2.1.1:** Die Prozessliste war die dominante Last. Jede Abfrage pro Prozess (CPU-Zeit oder Speicher) kostet auf diesem Rechner ca. 7 ms, bei 500 Prozessen **3,7 bis 5,5 s** je Aufbau. Warum es 7 ms je Prozess sind, wurde nicht untersucht. Dadurch rechnete das Programm fast dauernd, und der Hauptthread wurde ausgebremst (auch sonst schnelle Aufrufe wie `disk_usage` stiegen von 0,0 auf 19 ms).
+
+| Messwert (Tab Übersicht / Netzwerk) | 2.1.1 mit Prozessliste | Prozessliste aus (A/B-Test) |
+|---|---|---|
+| CPU des Programms (% eines Kerns) | 84 / 75 | **1,0 / 0,9** |
+| Timer-Verspätung, Maximum | 713 / 1204 ms | **26 / 25 ms** |
+| Timer über 100 ms (in 60 s) | 177 / 143 | **0 / 0** |
+| Messungen in 60 s (Soll bei 2 s: 30) | 9 / 10 | **30 / 29** |
+| `_tick` im Hauptthread, Median | 213 / 610 ms | **13 / 13 ms** |
+| Tab-Wechsel, Median | 33–653 ms | **24–41 ms** |
+| RAM (Working Set) | 42 MB | 42 MB |
+
+Nicht ursächlich (gemessen, jeweils unter 2 ms): Prozesstabelle neu füllen, Labels und Balken setzen, Meldungsliste (auch nach 5000 Einträgen), neuer Thread je Messung (0,1–0,2 ms), `root.bell()`, Diagramm neu zeichnen (ca. 1 ms, wenn die Prozessliste nicht stört).
+
+**Maßnahmen in 2.2.0:**
 
 | Maßnahme | Wirkung |
 |---|---|
-| Messung im **Hintergrund-Thread** | Das Fenster wartet nicht mehr auf psutil. Ist eine Messung noch nicht fertig, wird die nächste übersprungen statt gestapelt. |
-| **Prozessliste nur alle 5 s** (`process_interval_s`) | Der teuerste Teil läuft 2,5-mal seltener. CPU, RAM und Festplatte werden weiter alle 2 s gemessen. |
-| `memory_percent` selbst berechnen | psutil hätte den Speicher jedes Prozesses doppelt abgefragt. |
-| **Python-Threadwechsel 1 ms** statt 5 ms (`sys.setswitchinterval`) | Während der Mess-Thread rechnet, kommt das Fenster schneller wieder an die Reihe. |
-| WLAN (netsh) und Bluetooth (PowerShell) **nur bei geöffnetem Tab** | Keine unnötigen PowerShell-Starts im Hintergrund. Bluetooth zusätzlich nur alle 60 s. |
-| winget **erst beim Öffnen des Updates-Tabs** | Der Programmstart wird nicht mehr durch winget ausgebremst. |
-| CSV **gebündelt alle 30 s** schreiben (`csv_flush_s`) | Weniger Schreibzugriffe. Liegt der Ordner in OneDrive, wird die Datei nicht mehr alle 2 s neu synchronisiert. |
-| Tabellen und Diagramm nur bei Änderung bzw. Sichtbarkeit neu zeichnen | Weniger Arbeit im Fenster-Thread. |
+| Prozessliste nur, wenn das Fenster sichtbar und der Tab **Übersicht** offen ist (`skip_processes`); Standardintervall 15 s statt 5 s | Erwartung aus den Messwerten: ca. 4 s je Aufbau alle 15 s, also ca. 25 % eines Kerns nur solange man die Liste sieht, sonst ca. 1 %. **Auf Windows noch nicht gemessen.** |
+| Netzwerkzähler werden im Mess-Thread gelesen | ca. 6–11 ms weniger im Hauptthread je Messung |
+| Minimiert oder Overlay-Modus: nichts zeichnen | Messung, Warnungen und CSV laufen weiter |
+| Meldungsliste auf 500 Einträge begrenzt | begrenzt den Speicher im Dauerbetrieb |
+| Texte und Balken nur bei Änderung setzen | spart Neuzeichnen |
 
-**Messung (Linux, simulierte Windows-Last).** Gemessen wurde, wie stark sich ein 20-ms-Timer im Fenster verspätet. Die Prozessliste wurde dafür um 400 ms CPU-Arbeit verlängert; das ist eine Annahme für die Windows-Last. Testdauer je 25 s:
+**Status der 2.2.0-Messung:** ❓ Eine Windows-Messung der neuen Version steht noch aus. Starten mit `tools\messung_starten.bat`; danach Vergleich mit `py tools\messung_windows.py --vergleich messungen\vorher_….json messungen\nachher_….json`.
 
-| | Version 2 | Version 2.1 |
-|---|---|---|
-| längster Hänger | 406 ms | 28 ms |
-| Hänger über 100 ms | 10 | 0 |
+Früher eingebaut (ab 2.1, weiter aktiv): Messung im Hintergrund-Thread, Threadwechsel 1 ms (`sys.setswitchinterval`), WLAN/Bluetooth nur bei geöffnetem Tab, winget erst beim Öffnen des Updates-Tabs, CSV gebündelt alle 30 s, `memory_percent` selbst berechnet.
 
-**Korrektur in 2.1.1:** In 2.1 zeigte die CPU-Anzeige dauerhaft 0 %. Ursache: `psutil.cpu_percent()` merkt sich seinen Vergleichswert pro Thread, und jede Messung läuft in einem neuen Hintergrund-Thread. Die Auslastung wird jetzt selbst aus den CPU-Zeiten berechnet (`collector.cpu_percent_between`), unabhängig vom Thread. Ein Regressionstest prüft das mit wechselnden Threads unter Last.
+**Korrektur in 2.1.1:** In 2.1 zeigte die CPU-Anzeige dauerhaft 0 %. Ursache: `psutil.cpu_percent()` merkt sich seinen Vergleichswert pro Thread, und jede Messung läuft in einem neuen Hintergrund-Thread. Die Auslastung wird jetzt selbst aus den CPU-Zeiten berechnet (`collector.cpu_percent_between`).
 
-**Auf deinem Rechner prüfen:** In der Statusleiste steht die **Messdauer** jedes Zyklus. Dauert ein Zyklus länger als 1 s, steht zusätzlich eine Warnung in `logs/monitor.log`. Ruckelt es trotzdem noch, `process_interval_s` erhöhen, z. B. auf 10.
+**Auf deinem Rechner prüfen:** In der Statusleiste steht die **Messdauer** jedes Zyklus. Dauert ein Zyklus länger als 1 s, steht zusätzlich eine Warnung in `logs/monitor.log`. Wenn die Prozessliste weiter stört, `process_interval_s` erhöhen.
 
 ## Voraussetzungen
 
@@ -103,7 +146,7 @@ py main.py --updates      :: verfügbare winget-Updates auflisten
 | `disk_path` | `""` | Laufwerk für die Übersicht; leer = Systemlaufwerk |
 | `alert_cooldown_s` | 60 | Mindestabstand gleicher Warnungen in s |
 | `top_processes` | 10 | Anzahl angezeigter Prozesse |
-| `process_interval_s` | 5 | Prozessliste neu erstellen alle n s (teuerster Teil der Messung) |
+| `process_interval_s` | 15 | Prozessliste neu erstellen alle n s (teuerster Teil der Messung, nur bei sichtbarer Übersicht) |
 | `csv_logging` | true | Messwerte in CSV schreiben |
 | `csv_flush_s` | 30 | CSV gebündelt alle n s schreiben (0 = sofort) |
 | `log_dir` | `"logs"` | Ordner für Log und CSV |
@@ -112,6 +155,12 @@ py main.py --updates      :: verfügbare winget-Updates auflisten
 | `wlan_refresh_s` | 15 | WLAN-Status neu abfragen alle n s |
 | `bt_refresh_s` | 60 | Bluetooth neu abfragen alle n s (nur bei geöffnetem Tab) |
 | `check_updates_on_start` | false | sofort beim Start nach Updates suchen; sonst beim ersten Öffnen des Tabs |
+| `overlay_enabled` | false | Overlay beim Start anzeigen |
+| `overlay_position` | `"top-center"` | `top-`/`bottom-` + `left`/`center`/`right` |
+| `overlay_alpha` | 0.7 | Deckkraft 0,2 – 1 |
+| `overlay_click_through` | true | Mausklicks gehen durch das Overlay |
+| `overlay_hotkey` | `"ctrl+alt+o"` | globales Kürzel (mind. ein Modifikator + A–Z, 0–9 oder F1–F12); wirkt nach Neustart |
+| `overlay_hide_main` | true | Hauptfenster verstecken, solange das Overlay an ist (nur bei funktionierendem Kürzel) |
 
 Die meisten Werte lassen sich auch im Programm unter **Einstellungen** ändern.
 
@@ -126,16 +175,19 @@ system_monitor/
 │   ├── collector.py     SystemCollector: CPU, RAM, Festplatte, Prozesse → Snapshot
 │   ├── alerts.py        AlertManager: Grenzwerte mit Cooldown und Hysterese
 │   ├── storage.py       Logdatei und CsvWriter
-│   ├── core.py          Monitor: ein Messzyklus
+│   ├── core.py          Monitor: ein Messzyklus (step mit skip_processes)
 │   ├── drives.py        NEU: DriveScanner – alle Laufwerke, extern/intern
 │   ├── network.py       NEU: WLAN (netsh-Parser) und TrafficMeter
 │   ├── bluetooth.py     NEU: Bluetooth-Adapter und -Geräte
 │   ├── updates.py       NEU: winget-Parser und Update-Start
 │   ├── winutil.py       NEU: Befehle ausführen, Codepage, PowerShell-JSON
 │   ├── tasks.py         NEU: BackgroundRunner (Threads + Queue)
-│   ├── gui.py           Fenster mit 5 Tabs
+│   ├── gui.py           Fenster mit Kopfzeile und 5 Tabs (dunkles Design)
+│   ├── overlay.py       NEU 2.2: OverlayWindow, HotkeyListener (nur Windows)
+│   ├── overlay_logic.py NEU 2.2: Position, Text, Tastenkürzel (ohne tkinter testbar)
 │   └── cli.py           Terminal-Ausgabe
-├── tests/               pytest (51 Tests)
+├── tests/               pytest (84 Tests, 4 davon brauchen einen Bildschirm)
+├── tools/               temporäre Messskripte für Windows (nicht Teil des Programms)
 └── docs/
     ├── pap_hauptprogramm.*   PAP 1: Hauptprogramm
     ├── pap_grenzwerte.*      PAP 2: Unterprogramm „Grenzwerte prüfen“
@@ -165,9 +217,9 @@ py -m pip install pytest
 py -m pytest -v
 ```
 
-Getestet werden die Parser (netsh deutsch/englisch inkl. cp850, winget deutsch/englisch inkl. Fortschrittsanzeige, Bluetooth-JSON), die Traffic-Berechnung mit simulierten Zählern, die Laufwerkserkennung, die Hintergrund-Threads, die Grenzwertlogik und die Konfiguration.
+Getestet werden außerdem das Overlay (Position, Text, Tastenkürzel), die neuen Einstellungen, das Überspringen der Prozessliste und ein Rauchtest der Oberfläche (übersprungen ohne Bildschirm). Getestet werden die Parser (netsh deutsch/englisch inkl. cp850, winget deutsch/englisch inkl. Fortschrittsanzeige, Bluetooth-JSON), die Traffic-Berechnung mit simulierten Zählern, die Laufwerkserkennung, die Hintergrund-Threads, die Grenzwertlogik und die Konfiguration.
 
-**Nicht getestet:** Die Tests liefen unter Linux. Die echten Windows-Befehle (netsh, PowerShell, winget) und die Update-Installation konnten dort nicht ausgeführt werden. Die Parser sind nur gegen nachgestellte Beispielausgaben geprüft.
+**Nicht getestet:** Die Tests liefen unter Linux (Python 3.12/3.13), die Messungen unter Windows (Python 3.14). Die echten Windows-Befehle (netsh, PowerShell, winget) und die Update-Installation konnten dort nicht ausgeführt werden. Die Parser sind nur gegen nachgestellte Beispielausgaben geprüft.
 
 ## Erweiterungsideen
 

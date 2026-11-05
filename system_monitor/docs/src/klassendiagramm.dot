@@ -1,14 +1,14 @@
 // UML-Klassendiagramm System-Monitor
 digraph UML {
-    graph [label="UML-Klassendiagramm System-Monitor (Version 2)", labelloc=t, fontsize=18, fontname="DejaVu Sans Bold",
+    graph [label="UML-Klassendiagramm System-Monitor (Version 2.2)", labelloc=t, fontsize=18, fontname="DejaVu Sans Bold",
            rankdir=TB, nodesep=0.5, ranksep=0.7, bgcolor=white, pad=0.4];
     node  [shape=plain, fontname="DejaVu Sans", fontsize=10];
     edge  [fontname="DejaVu Sans", fontsize=9, arrowsize=0.8];
 
     MonitorApp [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#e8eef7"><B>MonitorApp</B> (gui.py)</TD></TR><HR/>
-      <TR><TD ALIGN="LEFT">- monitor: Monitor<BR ALIGN="LEFT"/>- config_path: Path<BR ALIGN="LEFT"/>- paused: bool<BR ALIGN="LEFT"/>- _last_run: dict[str, float]<BR ALIGN="LEFT"/>- _external: set[str]<BR ALIGN="LEFT"/></TD></TR><HR/>
-      <TR><TD ALIGN="LEFT">- _tick()<BR ALIGN="LEFT"/>- _show_snapshot(s: Snapshot)<BR ALIGN="LEFT"/>+ toggle_pause()<BR ALIGN="LEFT"/>- _refresh(key, force)<BR ALIGN="LEFT"/>- _update_traffic()<BR ALIGN="LEFT"/>- _show_drives / _show_wlan / _show_bluetooth<BR ALIGN="LEFT"/>+ check_updates()<BR ALIGN="LEFT"/>+ install_updates(all_)<BR ALIGN="LEFT"/>+ open_settings()<BR ALIGN="LEFT"/>+ quit()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+      <TR><TD ALIGN="LEFT">- monitor: Monitor<BR ALIGN="LEFT"/>- config_path: Path<BR ALIGN="LEFT"/>- paused: bool<BR ALIGN="LEFT"/>- _last_run: dict[str, float]<BR ALIGN="LEFT"/>- _external: set[str]<BR ALIGN="LEFT"/>- overlay: OverlayWindow | None<BR ALIGN="LEFT"/>- hotkeys: HotkeyListener<BR ALIGN="LEFT"/></TD></TR><HR/>
+      <TR><TD ALIGN="LEFT">- _tick()<BR ALIGN="LEFT"/>- _measure(skip_processes)<BR ALIGN="LEFT"/>- _show_snapshot(s: Snapshot)<BR ALIGN="LEFT"/>+ toggle_pause()<BR ALIGN="LEFT"/>+ toggle_overlay()<BR ALIGN="LEFT"/>- _refresh(key, force)<BR ALIGN="LEFT"/>- _update_traffic(counters)<BR ALIGN="LEFT"/>- _show_drives / _show_wlan / _show_bluetooth<BR ALIGN="LEFT"/>+ check_updates()<BR ALIGN="LEFT"/>+ install_updates(all_)<BR ALIGN="LEFT"/>+ open_settings()<BR ALIGN="LEFT"/>+ quit()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 
     SettingsDialog [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#e8eef7"><B>SettingsDialog</B> (gui.py)</TD></TR><HR/>
@@ -22,17 +22,17 @@ digraph UML {
     Monitor [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#e8eef7"><B>Monitor</B> (core.py)</TD></TR><HR/>
       <TR><TD ALIGN="LEFT">+ config: Config<BR ALIGN="LEFT"/>+ collector: SystemCollector<BR ALIGN="LEFT"/>+ alerts: AlertManager<BR ALIGN="LEFT"/>+ csv: CsvWriter | None<BR ALIGN="LEFT"/></TD></TR><HR/>
-      <TR><TD ALIGN="LEFT">+ step(): (Snapshot, list[Alert])<BR ALIGN="LEFT"/>+ apply_config(config: Config)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+      <TR><TD ALIGN="LEFT">+ step(force_processes, skip_processes):<BR ALIGN="LEFT"/>   (Snapshot, list[Alert])<BR ALIGN="LEFT"/>+ apply_config(config: Config)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 
     Config [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#fff4d6"><I>«dataclass»</I> <B>Config</B></TD></TR><HR/>
-      <TR><TD ALIGN="LEFT">+ interval_s: float<BR ALIGN="LEFT"/>+ cpu/ram/disk_threshold: float<BR ALIGN="LEFT"/>+ hysteresis: float<BR ALIGN="LEFT"/>+ disk_path: str<BR ALIGN="LEFT"/>+ alert_cooldown_s: int<BR ALIGN="LEFT"/>+ top_processes: int<BR ALIGN="LEFT"/>+ csv_logging: bool<BR ALIGN="LEFT"/>+ log_dir: str<BR ALIGN="LEFT"/>+ net_interface: str<BR ALIGN="LEFT"/>+ drive/wlan/bt_refresh_s: int<BR ALIGN="LEFT"/>+ check_updates_on_start: bool<BR ALIGN="LEFT"/></TD></TR><HR/>
+      <TR><TD ALIGN="LEFT">+ interval_s: float<BR ALIGN="LEFT"/>+ cpu/ram/disk_threshold: float<BR ALIGN="LEFT"/>+ hysteresis: float<BR ALIGN="LEFT"/>+ disk_path: str<BR ALIGN="LEFT"/>+ alert_cooldown_s: int<BR ALIGN="LEFT"/>+ top_processes: int<BR ALIGN="LEFT"/>+ csv_logging: bool<BR ALIGN="LEFT"/>+ log_dir: str<BR ALIGN="LEFT"/>+ net_interface: str<BR ALIGN="LEFT"/>+ drive/wlan/bt_refresh_s: int<BR ALIGN="LEFT"/>+ check_updates_on_start: bool<BR ALIGN="LEFT"/>+ process_interval_s: float<BR ALIGN="LEFT"/>+ overlay_enabled/_click_through/<BR ALIGN="LEFT"/>   _hide_main: bool<BR ALIGN="LEFT"/>+ overlay_position, _hotkey: str<BR ALIGN="LEFT"/>+ overlay_alpha: float<BR ALIGN="LEFT"/></TD></TR><HR/>
       <TR><TD ALIGN="LEFT">+ load(path): Config  <I>{static}</I><BR ALIGN="LEFT"/>+ save(path)<BR ALIGN="LEFT"/>+ validate()<BR ALIGN="LEFT"/>+ thresholds(): dict<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 
     SystemCollector [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#e8eef7"><B>SystemCollector</B></TD></TR><HR/>
       <TR><TD ALIGN="LEFT">+ disk_path: str<BR ALIGN="LEFT"/>+ top_n: int<BR ALIGN="LEFT"/>+ cpu_cores: int<BR ALIGN="LEFT"/></TD></TR><HR/>
-      <TR><TD ALIGN="LEFT">+ snapshot(): Snapshot<BR ALIGN="LEFT"/>- _top_processes(): tuple<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+      <TR><TD ALIGN="LEFT">+ snapshot(force_processes,<BR ALIGN="LEFT"/>   skip_processes): Snapshot<BR ALIGN="LEFT"/>- _top_processes(): tuple<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
 
     AlertManager [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
       <TR><TD BGCOLOR="#e8eef7"><B>AlertManager</B></TD></TR><HR/>
@@ -114,4 +114,16 @@ digraph UML {
     Abfragefunktionen -> UpdateResult [label=" «erzeugt»"];
     Abfragefunktionen -> winutil   [label=" «nutzt»"];
     DriveScanner -> winutil        [label=" «nutzt»"];
+
+    // ---------------- Overlay (Version 2.2)
+    OverlayWindow [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8eef7"><B>OverlayWindow</B> (overlay.py)</TD></TR><HR/><TR><TD ALIGN="LEFT">+ visible: bool<BR ALIGN="LEFT"/>- top: Toplevel<BR ALIGN="LEFT"/>- label: Label<BR ALIGN="LEFT"/></TD></TR><HR/><TR><TD ALIGN="LEFT">+ show() / hide()<BR ALIGN="LEFT"/>+ update(text, color)<BR ALIGN="LEFT"/>+ apply_config(config)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    HotkeyListener [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8eef7"><B>HotkeyListener</B> (overlay.py)</TD></TR><HR/><TR><TD ALIGN="LEFT">+ hotkey: str<BR ALIGN="LEFT"/>+ registered: bool<BR ALIGN="LEFT"/>- events: Queue<BR ALIGN="LEFT"/></TD></TR><HR/><TR><TD ALIGN="LEFT">+ start(): bool<BR ALIGN="LEFT"/>+ stop()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    overlay_logic [label=<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#eeeeee"><I>«Modul»</I> <B>overlay_logic</B></TD></TR><HR/><TR><TD ALIGN="LEFT">+ overlay_geometry(...): (x, y)<BR ALIGN="LEFT"/>+ format_overlay_text(...): str<BR ALIGN="LEFT"/>+ level_for(value, threshold): str<BR ALIGN="LEFT"/>+ parse_hotkey(text): (mods, vk)<BR ALIGN="LEFT"/>+ normalize_hotkey(text): str<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    edge [dir=back, arrowtail=diamond, style=solid, arrowhead=none];
+    MonitorApp -> OverlayWindow    [label=" 0..1"];
+    MonitorApp -> HotkeyListener   [label=" 1"];
+    edge [dir=forward, arrowhead=vee, arrowtail=none, style=dashed];
+    OverlayWindow -> overlay_logic [label=" «nutzt»"];
+    HotkeyListener -> overlay_logic [label=" «nutzt»"];
+    Config -> overlay_logic        [label=" «prüft mit»"];
 }

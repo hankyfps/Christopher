@@ -19,7 +19,7 @@ digraph PAP {
     gui     [group=main, label="GUI gewünscht und\ntkinter verfügbar?", shape=diamond, width=2.6, height=1.1];
     m2      [group=main, shape=point, width=0.06];
     loop    [group=main, shape=point, width=0.06];
-    measure [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Messwerte erfassen (Hintergrund-Thread)<BR/>CPU, RAM, Platte; Prozesse alle 5 s</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    measure [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Messwerte erfassen (Hintergrund-Thread)<BR/>CPU, RAM, Platte, Netz; Prozesse nur bei<BR/>sichtbarer Übersicht, alle 15 s</TD><TD WIDTH="6"></TD></TR></TABLE>>];
     check   [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Grenzwerte prüfen<BR/>(siehe PAP 2)</TD><TD WIDTH="6"></TD></TR></TABLE>>];
     newal   [group=main, label="Neue Meldungen?", shape=diamond, width=2.6, height=1.0];
     m3      [group=main, shape=point, width=0.06];
