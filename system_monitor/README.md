@@ -66,7 +66,7 @@ Eine kleine, randlose Anzeige ganz oben auf dem Bildschirm, z. B. über einem Sp
 | Anti-Cheat | Das Overlay ist ein normales Fenster und hakt sich nicht in das Spiel ein. Ob ein bestimmtes Spiel/Anti-Cheat es toleriert, ist **nicht geprüft**. | – |
 | Für exklusiven Vollbild | Nur Tools, die sich in die Grafikausgabe einklinken (z. B. RTSS/MSI Afterburner). Das ist Fremdsoftware mit eigenem Risiko; manche Spiele blockieren sie (z. B. [Roblox](https://devforum.roblox.com/t/rtss-msi-afterburner-blocked-by-hyperion/3274953)). | – |
 
-**Getestet:** Anzeige aller drei Stile, Texte, Position und Ein-/Ausschalten unter Linux (Xvfb) per Test. **Nicht getestet** (nur unter Windows prüfbar): Klick-Durchlässigkeit, durchsichtiger Hintergrund im Stil `numbers`, Tastenkürzel, Verhalten über einem echten Spiel.
+**Getestet:** Anzeige aller drei Stile, Texte, Position und Ein-/Ausschalten unter Linux (Xvfb) per Test. **Auf Windows vom Nutzer gemeldet (Handtest 05.11.2026, siehe `docs/handtest_ergebnis_2026-11-05.md`):** Tastenkürzel, Klick-Durchlässigkeit, kein Fokusklau, durchsichtiger Hintergrund im Stil `numbers` und Overlay über einem Spiel im randlosen Fenster funktionieren. **Offen:** Welches Spiel und welcher Anti-Cheat getestet wurden, ist nicht dokumentiert; das Ergebnis im exklusiven Vollbild ist unklar; Lesbarkeit des Stils `numbers` ist nicht geprüft (Punkt 17b).
 
 ## Wichtige Hinweise (Windows)
 

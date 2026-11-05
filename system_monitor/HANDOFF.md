@@ -8,7 +8,7 @@ Stand: 2026-11-05 · Phase 1 (Analyse): Läufe Übersicht und Netzwerk gemessen,
 - Aus meinem Teil in die Cyberpunk-GUI übernommen: Prozessliste nur bei sichtbarer Ansicht Übersicht (`skip_processes`, Intervall jetzt 30 s, Knopf JETZT AKTUALISIEREN mit "Stand"-Anzeige; die Messung unten lief noch mit 15 s), Netzwerkzähler im Mess-Thread (`_measure`), Overlay-Knopf + globales Tastenkürzel, Overlay-Einstellungen (zweispaltiger Dialog), Overlay-Daten (`OverlayData`).
 - **Mindestgröße jetzt 1020×640** (Vorgabe 720×560 gilt nicht mehr; Seitenleiste + rechte Spalte).
 - Tests: 96 grün unter Linux mit Bildschirm (Xvfb, Python 3.12), 88 grün + 8 übersprungen ohne Bildschirm. Windows/Python 3.14: **nicht ausgeführt**.
-- **Auf Windows gemessen:** Performance von 2.2.0 (siehe unten). **Nicht auf Windows getestet:** Klick-Durchlässigkeit, durchsichtiger Hintergrund im Stil `numbers` (`-transparentcolor`), globales Tastenkürzel, Overlay über einem Spiel. Checkliste: `docs/checkliste_test_windows.md`.
+- **Auf Windows gemessen:** Performance von 2.2.0 (siehe unten). **Handtest vom Nutzer gemeldet (05.11.2026, `docs/handtest_ergebnis_2026-11-05.md`):** alle Punkte ✅ außer 17b (Lesbarkeit `numbers`, nicht geprüft). Unklar: Punkt 16 (exklusiver Vollbild, ✅ gemeldet, erwartet war "nicht sichtbar"), welches Spiel/Anti-Cheat, welche ZIP-Version (Checkliste mit "15 s" -> vermutlich vor Option A).
 - Backup 2.1.1: `../system_monitor_v2.1.1_backup` (nur lokal in der Claude-Umgebung), Git-Stand `8efb310`. Beim Nutzer: Ordner `system_monitor_komplett_neu` = 2.1.1.
 
 ## Messwerte (vorher/nachher)
@@ -66,7 +66,7 @@ Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptt
 - temporär: `tools/messung_windows.py` (läuft mit beiden Oberflächen), `tools/messung_starten.bat` (Label `nachher`), `tools/prozess_diagnose.py`, `tools/zusatzmessung_starten.bat`
 
 ## Offene Punkte
-- Nutzer: Checkliste `docs/checkliste_test_windows.md` von Hand (Overlay, Tastenkürzel, Klick-Durchlässigkeit, `numbers`).
+- Nutzer: Punkt 16 (exklusiver Vollbild: war das Overlay sichtbar?), Spiel/Anti-Cheat nennen, 17b nachholen, Version bestätigen.
 - Option A umgesetzt und gemessen (siehe Nachmessung). Entscheidung offen: B (Scan in eigenem Prozess, beseitigt Stocker, CPU bleibt), C (ctypes-Prototyp mit Selbsttest/Rückfall auf psutil, Hypothese: Millisekunden), oder so lassen.
 - Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
 - Screenshots der Ansichten Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design von 2.1.
