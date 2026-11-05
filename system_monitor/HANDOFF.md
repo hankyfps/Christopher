@@ -31,6 +31,9 @@ Windows 11 (10.0.26300), Python 3.14.6, Tk 8.6, psutil 7.2.2, 14 logische CPUs, 
 
 Befund 2.2.0: Außer in der Übersicht alles im grünen Bereich. In der Übersicht läuft die Prozessliste ca. 35 % der Zeit (4 x 5,3 s je 60 s); dabei stockt die GUI (Timer bis 376 ms, `_show_drives` P95 140 ms) und es entfallen Messungen (21 statt 30). Ursache der Stocker nicht bewiesen. Minimiert 6,4 % vermutlich Rest eines Scans aus der Phase davor (nicht belegt; Messskript wartet nicht darauf). Fenstergröße ändern ist auch ohne Scan träge (135-144 ms je Schritt, Neon-Oberfläche, nicht untersucht).
 
+## Nachmessung Option A (Intervall 30 s, 15:12, nur Übersicht, Label `optionA`)
+CPU sichtbar 16,6 % (vorher 15 s: 34,4 %; 2.1.1: 84 %), minimiert 0,6 %, Timer Max 285 ms (>50 ms: 63, >100 ms: 34), Messungen 25/60 s, 2 Scans je 5,1 s (= 17 % der Zeit, passt zu 16,6 % CPU), Tab-Wechsel 22-40 ms, Fenstergröße ändern 143 ms (P95 181), RAM 43 MB. Ruckeln nur noch während eines Scans (`_show_drives` bis 83 ms statt 0,3 ms -> Hauptthread wartet; GIL-Festhalten durch psutil-Aufrufe wahrscheinlich, nicht bewiesen).
+
 ## Zusatzmessung (14:11-14:17): Prozessliste-Diagnose und A/B ohne Prozessliste
 Diagnose (500 Prozesse, `tools/prozess_diagnose.py`): process_iter nur pid/name: 2,2-2,5 ms. Jeder Wert, der pro Prozess etwas abfragt (cpu_percent, cpu_times, memory_info): 3,7-3,9 s. memory_info einzeln: Summe 3680 ms bei 496 Prozessen, also ~7 ms je Prozess gleichmäßig (langsamster 69 ms). Kein Prozess ohne Zugriff. Ursache der 7 ms je Prozess: NICHT ermittelt.
 Hauptthread-Aufrufe ruhig vs. während Prozessliste läuft: net_io_counters 6,2 -> 24,7 ms; disk_usage 0,0 -> 19,1 ms.
@@ -64,7 +67,7 @@ Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptt
 
 ## Offene Punkte
 - Nutzer: Checkliste `docs/checkliste_test_windows.md` von Hand (Overlay, Tastenkürzel, Klick-Durchlässigkeit, `numbers`).
-- Option A umgesetzt (Intervall 30 s + Knopf). Nächste Messung nötig: `tools\messung_starten.bat` (Übersicht), Erwartung Scan-Anteil ca. 18 % statt 35 %. Danach entscheiden: B (Scan in eigenem Prozess) oder C (ctypes-Prototyp).
+- Option A umgesetzt und gemessen (siehe Nachmessung). Entscheidung offen: B (Scan in eigenem Prozess, beseitigt Stocker, CPU bleibt), C (ctypes-Prototyp mit Selbsttest/Rückfall auf psutil, Hypothese: Millisekunden), oder so lassen.
 - Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
 - Screenshots der Ansichten Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design von 2.1.
 - Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf.

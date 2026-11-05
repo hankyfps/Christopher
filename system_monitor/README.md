@@ -121,10 +121,25 @@ Nicht ursächlich (gemessen, jeweils unter 2 ms): Prozesstabelle neu füllen, La
 | Fenstergröße ändern (40 Schritte), Median | 344 / 121 ms | **144 / 135 ms** |
 | RAM (Working Set) | 42 MB | **42–44 MB** |
 
+**Nachmessung mit Standardintervall 30 s** (Option A, nur Ansicht Übersicht, 05.11.2026 15:12):
+
+| Messwert (Übersicht) | 2.1.1 | 2.2.0 mit 15 s | **2.2.0 mit 30 s** |
+|---|---|---|---|
+| CPU sichtbar (% eines Kerns) | 84 | 34,4 | **16,6** |
+| CPU minimiert (% eines Kerns) | 84 | 6,4 | **0,6** |
+| Timer-Verspätung, Maximum | 713 ms | 376 ms | **285 ms** |
+| Timer über 50 ms / über 100 ms | 222 / 177 | 124 / 69 | **63 / 34** |
+| Messungen in 60 s (Soll 30) | 9 | 21 | **25** |
+| Prozess-Scans in 60 s (je Median) | 9 (5,6 s) | 4 (5,3 s) | **2 (5,1 s)** |
+| Tab-Wechsel, Median | 33–59 ms | 20–38 ms | **22–40 ms** |
+| Fenstergröße ändern, Median / P95 | 344 / 1458 ms | 144 / 1254 ms | **143 / 181 ms** |
+
+2 Scans × 5,1 s = 10 s von 60 s, also etwa 17 %; gemessen wurden 16,6 % eines Kerns. Das passt zusammen. Die Oberfläche ruckelt nur noch, **während** ein Scan läuft (Timer bis 285 ms, `_show_drives` bis 83 ms statt 0,3 ms); außerhalb davon ist alles unter 30 ms. Das spricht dafür, dass die Scan-Abfragen Python während des Scans zeitweise festhalten. Bewiesen ist das nicht.
+
 **Einordnung:**
 - **Netzwerk-Ansicht (und jede Ansicht außer Übersicht):** deutlich besser, 1 % eines Kerns, keine Verspätung über 50 ms, volle 30 Messungen pro Minute.
 - **Übersicht:** CPU von 84 % auf 34 % eines Kerns gesenkt, Ruckler aber nicht weg. Die Prozessliste lief im Test viermal in 60 s und dauerte jeweils ca. 5,3 s (Median). 4 × 5,3 s = 21 s, also etwa 35 % der Zeit; das passt zur gemessenen CPU. Während dieser Zeit stockt die Oberfläche (Timer bis 376 ms, `_show_drives` bis 140 ms) und es werden weniger Messungen gemacht (21 statt 30). Die Ursache der Stocker ist **nicht bewiesen**; vermutlich halten die Abfragen pro Prozess Python lange fest.
-- **Minimiert 6,4 % in der Übersicht:** vermutlich lief noch ein Prozess-Scan aus der Phase davor zu Ende. Das ist nicht belegt.
+- **Minimiert 6,4 % in der Übersicht (15 s):** In der Nachmessung mit 30 s waren es 0,6 %. Das passt zu einem auslaufenden Scan aus der Phase davor, ist aber nicht bewiesen.
 - **Fenstergröße ändern:** 135–144 ms je Schritt (Tk-Layout der Neon-Oberfläche). In der Übersicht bis 1,3 s, wenn dabei gerade ein Prozess-Scan läuft. Ursache nicht untersucht.
 
 Früher eingebaut (ab 2.1, weiter aktiv): Messung im Hintergrund-Thread, Threadwechsel 1 ms (`sys.setswitchinterval`), WLAN/Bluetooth nur bei geöffnetem Tab, winget erst beim Öffnen des Updates-Tabs, CSV gebündelt alle 30 s, `memory_percent` selbst berechnet.
