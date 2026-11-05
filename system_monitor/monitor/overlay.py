@@ -12,7 +12,7 @@ import threading
 import tkinter as tk
 
 from .config import Config
-from .overlay_logic import overlay_geometry, parse_hotkey
+from .overlay_logic import OverlayData, overlay_geometry, overlay_text, parse_hotkey, tile_lines
 from .winutil import IS_WINDOWS
 
 log = logging.getLogger("monitor.overlay")
@@ -47,24 +47,89 @@ def set_ex_style(widget: tk.Misc, add: int, remove: int = 0) -> bool:
         return False
 
 
-class OverlayWindow:
-    """Randloses, halbtransparentes Fenster ganz oben. Wird nur bei neuem Text neu gezeichnet."""
+class MiniBar(tk.Canvas):
+    """Kleiner Balken für die Mini-Kachel; zeichnet nur bei geändertem Wert oder geänderter Farbe."""
 
-    def __init__(self, root: tk.Tk, config: Config, font, colors: dict[str, str]) -> None:
-        self.root, self.config, self.colors = root, config, colors
+    def __init__(self, parent, width: int, height: int, track: str, bg: str) -> None:
+        super().__init__(parent, width=width, height=height, bg=bg, bd=0, highlightthickness=0)
+        self._bw, self._bh = width, height               # nicht _w: das ist tkinters interner Widget-Pfad
+        self._pct, self._color = -1.0, ""
+        self.create_rectangle(0, 0, width - 1, height - 1, fill=track, outline="")
+        self._fill = self.create_rectangle(0, 0, 0, height - 1, fill=track, outline="")
+
+    def set(self, pct: float, color: str) -> None:
+        if abs(pct - self._pct) < 0.5 and color == self._color:
+            return
+        self._pct = pct
+        if color != self._color:
+            self._color = color
+            self.itemconfig(self._fill, fill=color)
+        self.coords(self._fill, 0, 0, max(0.0, min(100.0, pct)) / 100 * (self._bw - 1), self._bh - 1)
+
+
+class OverlayWindow:
+    """Randloses, halbtransparentes Fenster ganz oben in einem von drei Stilen:
+    bar = Leiste, tile = Mini-Kachel mit Balken, numbers = nur Zahlen ohne Hintergrund.
+    Gezeichnet wird nur, wenn sich ein Text oder eine Farbe ändert."""
+
+    TRANSPARENT_KEY = "#010203"          # Farbe, die im Stil "numbers" durchsichtig wird (Windows)
+
+    def __init__(self, root: tk.Tk, config: Config, font, colors: dict[str, str],
+                 state_colors: dict[str, str]) -> None:
+        self.root, self.config, self.font = root, config, font
+        self.colors, self.state_colors = colors, state_colors
         self.visible = False
-        self._text = ""
-        self._color = ""
+        self._style = ""
+        self._cache: dict[str, str] = {}
         self.top = tk.Toplevel(root)
         self.top.withdraw()
         self.top.overrideredirect(True)
-        self.top.configure(bg=colors["bg"])
-        self.label = tk.Label(self.top, text="", width=TEXT_WIDTH, anchor="w", font=font, fg=colors["cyan"],
-                              bg=colors["bg"], padx=10, pady=3)
-        self.label.pack()
+        self.body: tk.Frame | None = None
+        self._build()
 
+    # ------------------------------------------------------------ Aufbau je Stil
+    def _build(self) -> None:
+        style = self.config.overlay_style
+        if self.body is not None:
+            self.body.destroy()
+        self._style, self._cache = style, {}
+        bg = self.TRANSPARENT_KEY if style == "numbers" else self.colors["bg"]
+        self.top.configure(bg=bg)
+        self.body = tk.Frame(self.top, bg=bg)
+        self.body.pack()
+        c = self.colors
+        if style == "tile":
+            self.name_lbl, self.bar, self.pct_lbl = {}, {}, {}
+            for row, name in enumerate(("CPU", "RAM")):
+                tk.Label(self.body, text=name, font=self.font, fg=c["muted"], bg=bg, anchor="w").grid(
+                    row=row, column=0, sticky="w", padx=(10, 6), pady=(6 if row == 0 else 0, 0))
+                self.bar[name] = MiniBar(self.body, 80, 10, c["track"], bg)
+                self.bar[name].grid(row=row, column=1, pady=(6 if row == 0 else 0, 0))
+                self.pct_lbl[name] = tk.Label(self.body, text="", font=self.font, fg=c["cyan"], bg=bg, width=5,
+                                              anchor="e")
+                self.pct_lbl[name].grid(row=row, column=2, padx=(6, 10), pady=(6 if row == 0 else 0, 0))
+            self.down_lbl = tk.Label(self.body, text="", font=self.font, fg=c["cyan"], bg=bg, anchor="w")
+            self.down_lbl.grid(row=2, column=0, columnspan=3, sticky="w", padx=10)
+            self.up_lbl = tk.Label(self.body, text="", font=self.font, fg=c["pink"], bg=bg, anchor="w")
+            self.up_lbl.grid(row=3, column=0, columnspan=3, sticky="w", padx=10, pady=(0, 6))
+        else:
+            width = 22 if style == "numbers" else TEXT_WIDTH
+            self.label = tk.Label(self.body, text="", width=width, anchor="w", font=self.font, fg=c["cyan"], bg=bg,
+                                  padx=10 if style == "bar" else 2, pady=3 if style == "bar" else 0)
+            self.label.pack()
+
+    def _set(self, widget, key: str, **kw) -> None:
+        """Nur ändern, wenn sich etwas geändert hat."""
+        sig = repr(sorted(kw.items()))
+        if self._cache.get(key) != sig:
+            self._cache[key] = sig
+            widget.config(**kw)
+
+    # ------------------------------------------------------------ Steuerung
     def apply_config(self, config: Config) -> None:
         self.config = config
+        if config.overlay_style != self._style:
+            self._build()
         if self.visible:
             self._place()
             self._apply_styles()
@@ -77,14 +142,12 @@ class OverlayWindow:
         self.top.geometry(f"{w}x{h}+{x}+{y}")
 
     def _apply_styles(self) -> None:
-        try:
-            self.top.attributes("-alpha", self.config.overlay_alpha)
-        except tk.TclError:
-            log.info("Transparenz wird auf diesem System nicht unterstützt")
-        try:
-            self.top.attributes("-topmost", True)
-        except tk.TclError:
-            pass
+        for attr, value in (("-alpha", self.config.overlay_alpha), ("-topmost", True),
+                            ("-transparentcolor", self.TRANSPARENT_KEY if self._style == "numbers" else "")):
+            try:
+                self.top.attributes(attr, value)
+            except tk.TclError:             # z. B. -transparentcolor gibt es nur unter Windows
+                log.info("Fensterattribut %s wird auf diesem System nicht unterstützt", attr)
         # kein Fokusklau, nicht in Taskleiste/Alt+Tab; optional Mausklicks durchlassen
         add = WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_LAYERED
         remove = 0
@@ -105,13 +168,19 @@ class OverlayWindow:
         self.visible = False
         self.top.withdraw()
 
-    def update(self, text: str, color: str) -> None:
-        if text != self._text:
-            self._text = text
-            self.label.config(text=text)
-        if color != self._color:
-            self._color = color
-            self.label.config(fg=color)
+    def update(self, d: OverlayData) -> None:
+        sc = self.state_colors
+        if self._style == "tile":
+            cpu_c, ram_c = sc[d.levels[0]], sc[d.levels[1]]
+            self.bar["CPU"].set(d.cpu, cpu_c)
+            self.bar["RAM"].set(d.ram, ram_c)
+            self._set(self.pct_lbl["CPU"], "cpu", text=f"{min(100, round(d.cpu))}%", fg=cpu_c)
+            self._set(self.pct_lbl["RAM"], "ram", text=f"{min(100, round(d.ram))}%", fg=ram_c)
+            down, up = tile_lines(d)
+            self._set(self.down_lbl, "down", text=down)
+            self._set(self.up_lbl, "up", text=up)
+        else:
+            self._set(self.label, "label", text=overlay_text(self._style, d), fg=sc[d.worst_level()])
 
     def destroy(self) -> None:
         try:

@@ -7,7 +7,7 @@ import os
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 
-from .overlay_logic import POSITIONS, parse_hotkey
+from .overlay_logic import OVERLAY_STYLES, POSITIONS, parse_hotkey
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +37,7 @@ class Config:
     bt_refresh_s: int = 60           # Bluetooth neu abfragen alle n s (nur bei offenem Tab)
     check_updates_on_start: bool = False  # winget sofort beim Start (sonst beim 1. Öffnen des Tabs)
     overlay_enabled: bool = False    # Overlay beim Start anzeigen
+    overlay_style: str = "bar"       # bar = Leiste, tile = Mini-Kachel, numbers = nur Zahlen
     overlay_position: str = "top-center"   # top-/bottom- + left/center/right
     overlay_alpha: float = 0.7       # Deckkraft des Overlays (0,2 = fast durchsichtig ... 1 = deckend)
     overlay_click_through: bool = True     # Mausklicks gehen durch das Overlay hindurch
@@ -62,6 +63,8 @@ class Config:
             raise ValueError("process_interval_s muss zwischen 1 und 3600 liegen")
         if not 0 <= self.csv_flush_s <= 3600:
             raise ValueError("csv_flush_s muss zwischen 0 und 3600 liegen")
+        if self.overlay_style not in OVERLAY_STYLES:
+            raise ValueError(f"overlay_style muss eines von {', '.join(OVERLAY_STYLES)} sein (ist {self.overlay_style!r})")
         if self.overlay_position not in POSITIONS:
             raise ValueError(f"overlay_position muss eines von {', '.join(POSITIONS)} sein (ist {self.overlay_position!r})")
         if not 0.2 <= self.overlay_alpha <= 1.0:

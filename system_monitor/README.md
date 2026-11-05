@@ -7,20 +7,23 @@
 - **WLAN-Verbindung** und **Bluetooth-Geräte**
 - **Datenverkehr (Up & Down)** mit Verlaufsdiagramm
 
-Version 2.2 ergänzt ein **Overlay** (kleine, immer sichtbare Leiste mit CPU, RAM und Netzwerk), ein dunkles Design (Farbpalette aus der Cyberpunk-Version), eine **Kopfzeile mit den Kennzahlen auf jedem Tab** und deutlich weniger CPU-Last (siehe „Performance“).
+Version 2.2 bringt die **Cyberpunk-Oberfläche** (Kopfzeile, Seitenleiste, Neon-Reiter, rechte Spalte mit Meldungen), ein **Overlay** in drei Stilen (Leiste, Mini-Kachel, nur Zahlen) und deutlich weniger CPU-Last (siehe „Performance“).
 
 Das Programm läuft mit Fenster (tkinter, 5 Tabs) oder im Terminal.
 
 ![Übersicht](docs/screenshots/tab_uebersicht.png)
 
-> Die Screenshots in `docs/screenshots/` stammen aus Testläufen unter Linux. `tab_uebersicht.png` und `overlay.png` zeigen das neue dunkle Design (2.2, Linux-Schrift). Die Bilder der übrigen Tabs zeigen noch das helle Design von 2.1; ihre Windows-Ausgaben (netsh, Bluetooth, winget) waren aus Beispieltexten nachgestellt.
+**Mindestgröße des Fensters:** 1020×640 (Seitenleiste und rechte Spalte brauchen die Breite). Die frühere Vorgabe 720×560 gilt für die Cyberpunk-Oberfläche nicht mehr.
+
+> Die Screenshots in `docs/screenshots/` stammen aus Testläufen unter Linux (Linux-Schrift). `tab_uebersicht.png`, `einstellungen.png` und `overlay_*.png` zeigen die Version 2.2. Die Bilder der übrigen Tabs zeigen noch das helle Design von 2.1; ihre Windows-Ausgaben (netsh, Bluetooth, winget) waren aus Beispieltexten nachgestellt.
 
 ## Funktionen
 
 | Tab | Inhalt | Datenquelle |
 |---|---|---|
-| **Kopfzeile** (immer sichtbar) | CPU, RAM, Systemlaufwerk als farbige Balken mit Prozentwert; Knöpfe Pause, Einstellungen, Overlay, Beenden. Die Netzwerkrate steht rechts in der Statuszeile. | `psutil` |
-| **Übersicht** | Details (Kerne, GB, Laufzeit, Schwellen), Top-Prozesse (nur hier erstellt), Meldungen (höchstens 500) | `psutil` |
+| **Seitenleiste** (immer sichtbar) | Pause, Einstellungen, Overlay, Meldungen leeren, Beenden; Schwellen und Systemwerte | – |
+| **Rechte Spalte** (immer sichtbar) | Meldungen (höchstens 500) und Farblegende | – |
+| **Übersicht** | CPU, RAM, Systemlaufwerk als Neon-Balken mit Schwellenstrich; Top-Prozesse (nur hier erstellt) | `psutil` |
 | **Laufwerke** | alle Laufwerke mit belegtem, freiem und gesamtem Speicher; externe Medien blau markiert; Meldung beim Anstecken und Entfernen | `psutil.disk_partitions`, Bus-Typ über PowerShell `Get-Disk` |
 | **Netzwerk / WLAN** | Adapter, Status, SSID, Signalstärke, Standard, Band, Kanal, Datenrate, Sicherheit | `netsh wlan show interfaces`, ersatzweise `Get-NetAdapter` |
 | | Download/Upload je Sekunde, Summen seit Start, Diagramm der letzten 60 Messungen, Netzwerkkarte wählbar | `psutil.net_io_counters` |
@@ -35,20 +38,22 @@ Weitere Funktionen:
 
 ## Overlay
 
-Eine kleine, randlose Leiste ganz oben auf dem Bildschirm, z. B. über einem Spiel im randlosen Fenstermodus:
+Eine kleine, randlose Anzeige ganz oben auf dem Bildschirm, z. B. über einem Spiel im randlosen Fenstermodus. Es gibt drei Stile (`overlay_style`, auch im Einstellungsdialog):
 
-```
-CPU  23%  RAM  61%  ↓ 1.20 MB/s  ↑ 0.10 MB/s  14:32
-```
+| Stil | Aussehen | Größe (Linux, JetBrains Mono; unter Windows je nach Schrift anders) |
+|---|---|---|
+| `bar` – kompakte Leiste (Standard) | `CPU  23%  RAM  61%  ↓ 1.20 MB/s  ↑ 0.10 MB/s  14:32` | 470×28 px |
+| `tile` – Mini-Kachel | CPU und RAM mit kleinem Balken und Prozent, darunter ↓ und ↑ | 184×108 px |
+| `numbers` – nur Zahlen | `23% · 61% · ↓1.2M`, ohne Hintergrund (Windows: durchsichtiger Hintergrund über `-transparentcolor`) | 182×22 px |
 
-![Overlay über der Übersicht (Testbild unter Linux)](docs/screenshots/overlay.png)
+![Leiste](docs/screenshots/overlay_bar.png) ![Kachel](docs/screenshots/overlay_tile.png) ![Zahlen](docs/screenshots/overlay_numbers.png)
 
-- **Ein-/Ausschalten:** Knopf **Overlay** in der Kopfzeile oder das globale Tastenkürzel (Standard `Strg+Alt+O`, funktioniert auch, wenn ein Spiel im Vordergrund ist). Das Kürzel ist nur unter Windows verfügbar und ändert sich erst nach einem Neustart.
-- **Farbe:** Cyan = normal, gelb = innerhalb von 10 Punkten unter einer Schwelle, rot = Schwelle erreicht.
+- **Ein-/Ausschalten:** Knopf **OVERLAY** in der Seitenleiste oder das globale Tastenkürzel (Standard `Strg+Alt+O`, funktioniert auch, wenn ein Spiel im Vordergrund ist). Das Kürzel ist nur unter Windows verfügbar und ändert sich erst nach einem Neustart.
+- **Farbe:** Cyan = normal, gelb = innerhalb von 10 Punkten unter einer Schwelle, rot = Schwelle erreicht (bei der Kachel je Balken).
 - **Kein Prozess-Scan:** Das Overlay zeigt nie die Prozessliste. Ist es an und das Hauptfenster versteckt, wird nichts im Hauptfenster gezeichnet.
 - **Hauptfenster verstecken** (`overlay_hide_main`): nur, wenn das Tastenkürzel wirklich registriert werden konnte. Sonst bleibt das Hauptfenster sichtbar, weil man sonst nicht mehr zurückkäme.
 - **Klick-Durchlässigkeit** (`overlay_click_through`): Mausklicks gehen durch das Overlay hindurch (`WS_EX_LAYERED` + `WS_EX_TRANSPARENT`); außerdem kein Fokusklau und kein Eintrag in Taskleiste/Alt+Tab (`WS_EX_NOACTIVATE`, `WS_EX_TOOLWINDOW`).
-- **Einstellungen:** Position (6 Ecken/Mitten), Deckkraft 0,2–1, Tastenkürzel, „beim Start anzeigen“ – im Einstellungsdialog und in `config.json`.
+- **Einstellungen:** Stil, Position (6 Ecken/Mitten), Deckkraft 0,2–1, Tastenkürzel, „beim Start anzeigen“ – im Einstellungsdialog (rechte Spalte) und in `config.json`.
 
 **Grenzen (nicht verschweigen):**
 
@@ -61,7 +66,7 @@ CPU  23%  RAM  61%  ↓ 1.20 MB/s  ↑ 0.10 MB/s  14:32
 | Anti-Cheat | Das Overlay ist ein normales Fenster und hakt sich nicht in das Spiel ein. Ob ein bestimmtes Spiel/Anti-Cheat es toleriert, ist **nicht geprüft**. | – |
 | Für exklusiven Vollbild | Nur Tools, die sich in die Grafikausgabe einklinken (z. B. RTSS/MSI Afterburner). Das ist Fremdsoftware mit eigenem Risiko; manche Spiele blockieren sie (z. B. [Roblox](https://devforum.roblox.com/t/rtss-msi-afterburner-blocked-by-hyperion/3274953)). | – |
 
-**Getestet:** Überlagerung, Texte, Position und Ein-/Ausschalten unter Linux (Xvfb) per Test. **Nicht getestet** (nur unter Windows prüfbar): Klick-Durchlässigkeit, Tastenkürzel, Verhalten über einem echten Spiel.
+**Getestet:** Anzeige aller drei Stile, Texte, Position und Ein-/Ausschalten unter Linux (Xvfb) per Test. **Nicht getestet** (nur unter Windows prüfbar): Klick-Durchlässigkeit, durchsichtiger Hintergrund im Stil `numbers`, Tastenkürzel, Verhalten über einem echten Spiel.
 
 ## Wichtige Hinweise (Windows)
 
@@ -97,9 +102,9 @@ Nicht ursächlich (gemessen, jeweils unter 2 ms): Prozesstabelle neu füllen, La
 |---|---|
 | Prozessliste nur, wenn das Fenster sichtbar und der Tab **Übersicht** offen ist (`skip_processes`); Standardintervall 15 s statt 5 s | Erwartung aus den Messwerten: ca. 4 s je Aufbau alle 15 s, also ca. 25 % eines Kerns nur solange man die Liste sieht, sonst ca. 1 %. **Auf Windows noch nicht gemessen.** |
 | Netzwerkzähler werden im Mess-Thread gelesen | ca. 6–11 ms weniger im Hauptthread je Messung |
-| Minimiert oder Overlay-Modus: nichts zeichnen | Messung, Warnungen und CSV laufen weiter |
+| Minimiert oder Overlay-Modus (Hauptfenster versteckt): nichts zeichnen | Messung, Warnungen und CSV laufen weiter |
 | Meldungsliste auf 500 Einträge begrenzt | begrenzt den Speicher im Dauerbetrieb |
-| Texte und Balken nur bei Änderung setzen | spart Neuzeichnen |
+| Texte, Balken und Tabellenzeilen nur bei Änderung setzen (Neon-Oberfläche), Overlay ebenso | spart Neuzeichnen |
 
 **Status der 2.2.0-Messung:** ❓ Eine Windows-Messung der neuen Version steht noch aus. Starten mit `tools\messung_starten.bat`; danach Vergleich mit `py tools\messung_windows.py --vergleich messungen\vorher_….json messungen\nachher_….json`.
 
@@ -156,6 +161,7 @@ py main.py --updates      :: verfügbare winget-Updates auflisten
 | `bt_refresh_s` | 60 | Bluetooth neu abfragen alle n s (nur bei geöffnetem Tab) |
 | `check_updates_on_start` | false | sofort beim Start nach Updates suchen; sonst beim ersten Öffnen des Tabs |
 | `overlay_enabled` | false | Overlay beim Start anzeigen |
+| `overlay_style` | `"bar"` | `bar` (Leiste), `tile` (Mini-Kachel), `numbers` (nur Zahlen) |
 | `overlay_position` | `"top-center"` | `top-`/`bottom-` + `left`/`center`/`right` |
 | `overlay_alpha` | 0.7 | Deckkraft 0,2 – 1 |
 | `overlay_click_through` | true | Mausklicks gehen durch das Overlay |
@@ -182,11 +188,11 @@ system_monitor/
 │   ├── updates.py       NEU: winget-Parser und Update-Start
 │   ├── winutil.py       NEU: Befehle ausführen, Codepage, PowerShell-JSON
 │   ├── tasks.py         NEU: BackgroundRunner (Threads + Queue)
-│   ├── gui.py           Fenster mit Kopfzeile und 5 Tabs (dunkles Design)
-│   ├── overlay.py       NEU 2.2: OverlayWindow, HotkeyListener (nur Windows)
-│   ├── overlay_logic.py NEU 2.2: Position, Text, Tastenkürzel (ohne tkinter testbar)
+│   ├── gui.py           Cyberpunk-Oberfläche: MonitorApp, NeonButton, NeonBar, SettingsDialog
+│   ├── overlay.py       NEU 2.2: OverlayWindow (3 Stile), MiniBar, HotkeyListener (nur Windows)
+│   ├── overlay_logic.py NEU 2.2: Position, Texte, Stile, Tastenkürzel (ohne tkinter testbar)
 │   └── cli.py           Terminal-Ausgabe
-├── tests/               pytest (84 Tests, 4 davon brauchen einen Bildschirm)
+├── tests/               pytest (96 Tests, 8 davon brauchen einen Bildschirm)
 ├── tools/               temporäre Messskripte für Windows (nicht Teil des Programms)
 └── docs/
     ├── pap_hauptprogramm.*   PAP 1: Hauptprogramm

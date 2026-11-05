@@ -21,5 +21,6 @@
     "overlay_alpha": 0.7,
     "overlay_click_through": true,
     "overlay_hotkey": "ctrl+alt+o",
-    "overlay_hide_main": true
+    "overlay_hide_main": true,
+    "overlay_style": "bar"
 }

@@ -61,6 +61,8 @@ def patch(cls, name: str) -> None:
     """Methode so umhüllen, dass ihre Laufzeit aufgezeichnet wird (inklusive aufgerufener Methoden)."""
     orig = getattr(cls, name, None)
     if orig is None:
+        if name in ("_on_tab_changed", "_on_view_changed"):      # je nach Oberfläche gibt es nur eine davon
+            return
         NOTES.append(f"Methode {cls.__name__}.{name} gibt es nicht – übersprungen")
         return
 
@@ -75,9 +77,17 @@ def patch(cls, name: str) -> None:
     setattr(cls, name, wrapper)
 
 
+def select_tab(app, idx: int) -> None:
+    """Ansicht wechseln: Cyberpunk-Oberfläche (select_view) oder ältere Tabs (notebook)."""
+    if hasattr(app, "select_view"):
+        app.select_view(idx)
+    else:
+        app.notebook.select(idx)
+
+
 def install_probes() -> None:
     for name in ("_tick", "_show_measurement", "_update_traffic", "_draw_graph", "_show_drives",
-                 "_poll_background", "_on_tab_changed"):
+                 "_poll_background", "_on_tab_changed", "_on_view_changed"):
         patch(gui.MonitorApp, name)
     patch(SystemCollector, "_top_processes")
 
@@ -229,16 +239,17 @@ def sync_tests(root: tk.Tk, app, tab_index: int, do_bell: bool) -> None:
         for _ in range(10):
             for idx in (gui.TAB_OVERVIEW, gui.TAB_DRIVES, gui.TAB_NETWORK):
                 t0 = time.perf_counter()
-                app.notebook.select(idx)
+                select_tab(app, idx)
                 root.update()
                 record(f"tabwechsel_nach_{idx}", (time.perf_counter() - t0) * 1000)
-        app.notebook.select(tab_index)
+        select_tab(app, tab_index)
         root.update()
 
     def resize():
         geo = root.geometry()
+        min_w, min_h = root.minsize()
         for i in range(40):
-            w, h = 760 + (i % 20) * 12, 580 + (i % 20) * 8
+            w, h = max(min_w, 760) + (i % 20) * 12, max(min_h, 580) + (i % 20) * 8
             t0 = time.perf_counter()
             root.geometry(f"{w}x{h}")
             root.update()
@@ -279,7 +290,7 @@ def run_measurement(args) -> dict:
     root = tk.Tk()
     app = gui.MonitorApp(root, Monitor(cfg, tmpdir), tmpdir / "config.json")
     root.update()
-    app.notebook.select(tab_index)
+    select_tab(app, tab_index)
     root.update()
     result["rss_mb"]["nach_start"] = round(rss_mb(), 1)
     cpu = CpuMeter(root)

@@ -156,3 +156,60 @@ def test_monitor_reicht_skip_processes_weiter(tmp_path):
     assert calls == []
     mon.step()
     assert calls == [1]
+
+
+# ---------------------------------------------------------------- Overlay-Stile (A Leiste, B Kachel, C nur Zahlen)
+from monitor.overlay_logic import (OVERLAY_STYLES, OverlayData, compact_rate, overlay_text,  # noqa: E402
+                                   tile_lines)
+
+
+def test_stile():
+    assert OVERLAY_STYLES == ("bar", "tile", "numbers")
+
+
+def test_compact_rate():
+    assert compact_rate(0) == "0K"
+    assert compact_rate(340 * 1024) == "340K"
+    assert compact_rate(1.25 * 1024 ** 2) == "1.2M"
+    assert compact_rate(15.5 * 1024 ** 2) == "15.5M"
+
+
+def _data(**kw):
+    base = dict(cpu=23.4, ram=61.0, down_bps=1.5 * 1024 ** 2, up_bps=100 * 1024, clock="14:32")
+    base.update(kw)
+    return OverlayData(**base)
+
+
+def test_text_stil_leiste_wie_bisher():
+    assert overlay_text("bar", _data()) == "CPU  23%  RAM  61%  ↓ 1.50 MB/s  ↑ 100.0 KB/s  14:32"
+
+
+def test_text_stil_nur_zahlen():
+    assert overlay_text("numbers", _data()) == "23% · 61% · ↓1.5M"
+    assert overlay_text("numbers", _data(cpu=100, ram=7.4, down_bps=0)) == "100% · 7% · ↓0K"
+
+
+def test_text_stil_kachel_hat_vier_zeilen():
+    lines = overlay_text("tile", _data()).splitlines()
+    assert lines == ["CPU  23%", "RAM  61%", "↓ 1.50 MB/s", "↑ 100.0 KB/s"]
+    assert tile_lines(_data()) == ("↓ 1.50 MB/s", "↑ 100.0 KB/s")
+
+
+def test_text_unbekannter_stil():
+    with pytest.raises(ValueError):
+        overlay_text("rund", _data())
+
+
+def test_schlimmste_stufe():
+    assert _data(levels=("normal", "nah", "normal")).worst_level() == "nah"
+    assert _data(levels=("normal", "nah", "alarm")).worst_level() == "alarm"
+    assert _data().worst_level() == "normal"
+
+
+def test_overlay_stil_in_einstellungen(tmp_path):
+    assert Config().overlay_style == "bar"
+    with pytest.raises(ValueError):
+        Config(overlay_style="rund").validate()
+    path = tmp_path / "c.json"
+    Config(overlay_style="tile").save(path)
+    assert Config.load(path).overlay_style == "tile"

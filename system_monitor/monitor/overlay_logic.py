@@ -1,8 +1,11 @@
 """GUI-freie Logik des Overlays: Position, Text, Farbstufe und Tastenkürzel (ohne tkinter testbar)."""
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from .network import format_rate
 
+OVERLAY_STYLES = ("bar", "tile", "numbers")      # A Leiste, B Mini-Kachel, C nur Zahlen
 POSITIONS = ("top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right")
 
 # Werte wie bei der Windows-Funktion RegisterHotKey (MOD_ALT, MOD_CONTROL, MOD_SHIFT, MOD_WIN)
@@ -71,3 +74,43 @@ def normalize_hotkey(hotkey: str) -> str:
     mods, vk = parse_hotkey(hotkey)
     key = _split(hotkey)[1]
     return "+".join([_MOD_NAME[m] for m in (MOD_CONTROL, MOD_ALT, MOD_SHIFT, MOD_WIN) if mods & m] + [key])
+
+
+_ORDER = {"normal": 0, "nah": 1, "alarm": 2}
+
+
+@dataclass(frozen=True)
+class OverlayData:
+    """Alles, was das Overlay anzeigt. levels = Stufen von (CPU, RAM, Festplatte)."""
+    cpu: float
+    ram: float
+    down_bps: float
+    up_bps: float
+    clock: str
+    levels: tuple[str, str, str] = ("normal", "normal", "normal")
+
+    def worst_level(self) -> str:
+        return max(self.levels, key=_ORDER.get)
+
+
+def compact_rate(bps: float) -> str:
+    """Kurzform für den Stil 'nur Zahlen': 1.2M, 340K."""
+    if bps >= 1024 ** 2:
+        return f"{bps / 1024 ** 2:.1f}M"
+    return f"{bps / 1024:.0f}K"
+
+
+def tile_lines(d: OverlayData) -> tuple[str, str]:
+    return f"↓ {format_rate(d.down_bps)}", f"↑ {format_rate(d.up_bps)}"
+
+
+def overlay_text(style: str, d: OverlayData) -> str:
+    """Text je Stil (die Kachel zeigt die Balken zusätzlich grafisch)."""
+    if style == "bar":
+        return format_overlay_text(d.cpu, d.ram, d.down_bps, d.up_bps, d.clock)
+    if style == "numbers":
+        return f"{min(100, round(d.cpu))}% · {min(100, round(d.ram))}% · ↓{compact_rate(d.down_bps)}"
+    if style == "tile":
+        down, up = tile_lines(d)
+        return "\n".join((f"CPU {min(100, round(d.cpu)):3d}%", f"RAM {min(100, round(d.ram)):3d}%", down, up))
+    raise ValueError(f"Unbekannter Overlay-Stil: {style!r}")
