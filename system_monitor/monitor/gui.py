@@ -447,6 +447,10 @@ class MonitorApp:
 
         procs = self._panel(view, "TOP-PROZESSE (NACH CPU)")
         procs.grid(row=1, column=0, sticky="nsew")
+        self._small_button(procs.head, "JETZT AKTUALISIEREN", self.refresh_processes, width=190).pack(
+            side="right", padx=10, pady=6)
+        self.proc_stamp = self._label(procs.head, "Stand –", fg=C["muted"], font=self.f_small)
+        self.proc_stamp.pack(side="right", padx=6)
         self.tree = self._tree(procs.body, [("pid", "PID", 70, "e", False), ("name", "NAME", 150, "w", True),
                                             ("cpu", "CPU %", 70, "e", False), ("ram", "RAM %", 70, "e", False),
                                             ("mb", "RAM MB", 80, "e", False)], height=6)
@@ -787,6 +791,7 @@ class MonitorApp:
         if s.processes is not self._last_processes:       # Prozessliste unverändert -> nichts tun
             self._last_processes = s.processes
             self._update_tree(s)
+            self._set(self.proc_stamp, f"Stand {s.timestamp:%H:%M:%S}", fg=C["muted"])
 
     def _update_tree(self, s: Snapshot) -> None:
         """Vorhandene Zeilen wiederverwenden, nur geänderte Werte schreiben."""
@@ -981,6 +986,16 @@ class MonitorApp:
                       fg=C["green"])
         except Exception as exc:
             messagebox.showerror("Updates", str(exc), parent=self.root)
+
+    def refresh_processes(self) -> None:
+        """Prozessliste sofort neu erstellen (Knopf). Sie wird sonst nur alle process_interval_s Sekunden erstellt,
+        und nur, solange die Ansicht Übersicht sichtbar ist (der Scan dauert unter Windows mehrere Sekunden)."""
+        if self._minimized() or self._view != TAB_OVERVIEW:
+            return
+        self.monitor.collector.invalidate_processes()
+        self._set(self.proc_stamp, "wird erstellt …", fg=C["yellow"])
+        self.runner.submit("measure", lambda: self._measure(False),
+                           lambda res: self._handle("Messung", res, self._show_measurement))
 
     # ================================================================== Overlay
     def toggle_overlay(self) -> None:

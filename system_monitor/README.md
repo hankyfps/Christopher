@@ -100,13 +100,13 @@ Nicht ursächlich (gemessen, jeweils unter 2 ms): Prozesstabelle neu füllen, La
 
 | Maßnahme | Wirkung |
 |---|---|
-| Prozessliste nur, wenn das Fenster sichtbar und die Ansicht **Übersicht** offen ist (`skip_processes`); Intervall 15 s statt 5 s | gemessen, siehe Tabelle: in jeder anderen Ansicht ca. 1 % eines Kerns |
+| Prozessliste nur, wenn das Fenster sichtbar und die Ansicht **Übersicht** offen ist (`skip_processes`); Intervall **30 s** statt 5 s (seit der Messung unten; gemessen wurde mit 15 s) und Knopf **JETZT AKTUALISIEREN** mit Anzeige „Stand hh:mm:ss“ | in jeder anderen Ansicht gemessen ca. 1 % eines Kerns. Für 30 s erwarte ich in der Übersicht rund 18 % statt 35 % Scan-Anteil (Rechnung: 5,3 s von 30 s) – **noch nicht gemessen**. |
 | Netzwerkzähler werden im Mess-Thread gelesen | `_update_traffic` im Hauptthread: 0,1–1,5 ms statt 162–545 ms |
 | Minimiert oder Overlay-Modus (Hauptfenster versteckt): nichts zeichnen | Messung, Warnungen und CSV laufen weiter |
 | Meldungsliste auf 500 Einträge begrenzt | begrenzt den Speicher im Dauerbetrieb |
 | Texte, Balken und Tabellenzeilen nur bei Änderung setzen (Neon-Oberfläche), Overlay ebenso | spart Neuzeichnen |
 
-**Messung 2.2.0 auf Windows** (gleicher Rechner und gleiche Messung wie oben, Fenster 1220×760, Läufe vom 05.11.2026 14:52 und 14:55):
+**Messung 2.2.0 auf Windows** (gleicher Rechner und gleiche Messung wie oben, Fenster 1220×760, Läufe vom 05.11.2026 14:52 und 14:55, **mit Prozessliste-Intervall 15 s**; der Standard ist seitdem 30 s, dazu gibt es noch keine Messung):
 
 | Messwert (Übersicht / Netzwerk) | 2.1.1 | **2.2.0** |
 |---|---|---|
@@ -170,7 +170,7 @@ py main.py --updates      :: verfügbare winget-Updates auflisten
 | `disk_path` | `""` | Laufwerk für die Übersicht; leer = Systemlaufwerk |
 | `alert_cooldown_s` | 60 | Mindestabstand gleicher Warnungen in s |
 | `top_processes` | 10 | Anzahl angezeigter Prozesse |
-| `process_interval_s` | 15 | Prozessliste neu erstellen alle n s (teuerster Teil der Messung, nur bei sichtbarer Übersicht) |
+| `process_interval_s` | 30 | Prozessliste neu erstellen alle n s (teuerster Teil der Messung, nur bei sichtbarer Übersicht); sofort per Knopf **JETZT AKTUALISIEREN** |
 | `csv_logging` | true | Messwerte in CSV schreiben |
 | `csv_flush_s` | 30 | CSV gebündelt alle n s schreiben (0 = sofort) |
 | `log_dir` | `"logs"` | Ordner für Log und CSV |

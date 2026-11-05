@@ -27,7 +27,7 @@ class Config:
     disk_path: str = ""              # leer = Systemlaufwerk automatisch
     alert_cooldown_s: int = 60       # Mindestabstand zwischen gleichen Warnungen
     top_processes: int = 10          # Anzahl angezeigter Prozesse
-    process_interval_s: float = 15.0  # Prozessliste neu erstellen alle n s (teuerster Teil, nur wenn sichtbar)
+    process_interval_s: float = 30.0  # Prozessliste neu erstellen alle n s (teuerster Teil, nur wenn sichtbar)
     csv_logging: bool = True         # Messwerte zusätzlich in CSV schreiben
     csv_flush_s: int = 30            # CSV gebündelt alle n s schreiben (0 = sofort)
     log_dir: str = "logs"            # Ordner für Log- und CSV-Dateien

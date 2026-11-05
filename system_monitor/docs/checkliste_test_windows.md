@@ -9,7 +9,8 @@ Ankreuzen: ✅ geht, ❌ geht nicht (kurz notieren was), ❓ nicht geprüft.
 | 2 | Fenster verschieben | läuft ruckelfrei, Anzeige läuft weiter | |
 | 3 | Fenster vergrößern/verkleinern (kleinstmöglich: 1020×640) | nichts abgeschnitten, kein Ruckeln | |
 | 4 | Tabs: Übersicht, Laufwerke, Netzwerk, Bluetooth, Updates | jede Ansicht öffnet; Seitenleiste und Meldungen bleiben sichtbar | |
-| 5 | Übersicht: Prozessliste | nach ca. 5–10 s gefüllt; danach nur alle ca. 15 s neu | |
+| 5 | Übersicht: Prozessliste | nach ca. 5–10 s gefüllt; danach nur alle ca. 30 s neu; „Stand“ im Kopf der Tabelle ändert sich | |
+| 5a | Knopf JETZT AKTUALISIEREN drücken | „wird erstellt …“, nach einigen Sekunden neuer Stand; Oberfläche ruckelt kurz (bekannt, Scan dauert ca. 5 s) | |
 | 6 | Anderer Tab öffnen, CPU im Task-Manager ansehen (Prozess `python.exe`) | deutlich unter 5 % eines Kerns | |
 | 7 | Fenster minimieren, 30 s warten, wiederherstellen | Werte sofort wieder da, keine Fehlermeldung | |
 | 8 | Pause / Fortsetzen | Anzeige friert ein / läuft weiter | |

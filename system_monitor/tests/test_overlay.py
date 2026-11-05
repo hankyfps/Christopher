@@ -85,7 +85,7 @@ def test_overlay_standardwerte():
     assert cfg.overlay_click_through is True
     assert cfg.overlay_hotkey == "ctrl+alt+o"
     assert cfg.overlay_hide_main is True
-    assert cfg.process_interval_s == 15.0
+    assert cfg.process_interval_s == 30.0
 
 
 @pytest.mark.parametrize("field, value", [

@@ -193,7 +193,7 @@
 <polygon fill="none" stroke="black" points="83,-1666.92 83,-1720.92 332,-1720.92 332,-1666.92 83,-1666.92"/>
 <text text-anchor="start" x="92" y="-1703.12" font-family="DejaVu Sans" font-size="11.00">Messwerte erfassen (Hintergrund&#45;Thread)</text>
 <text text-anchor="start" x="94" y="-1691.12" font-family="DejaVu Sans" font-size="11.00">CPU, RAM, Platte, Netz; Prozesse nur bei</text>
-<text text-anchor="start" x="124.5" y="-1679.12" font-family="DejaVu Sans" font-size="11.00">sichtbarer Übersicht, alle 15 s</text>
+<text text-anchor="start" x="124.5" y="-1679.12" font-family="DejaVu Sans" font-size="11.00">sichtbarer Übersicht, alle 30 s</text>
 <polygon fill="none" stroke="black" points="332,-1666.92 332,-1720.92 350,-1720.92 350,-1666.92 332,-1666.92"/>
 <polygon fill="none" stroke="black" points="63.5,-1665.92 63.5,-1721.92 350.5,-1721.92 350.5,-1665.92 63.5,-1665.92"/>
 </g>

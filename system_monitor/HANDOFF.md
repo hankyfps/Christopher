@@ -5,7 +5,7 @@ Stand: 2026-11-05 · Phase 1 (Analyse): Läufe Übersicht und Netzwerk gemessen,
 ## Aktueller Stand
 - Version **2.2.0**, Branch `claude/epic-cannon-mzki1z`. Alle Wünsche umgesetzt: Prozessliste nur bei Bedarf, Overlay in **drei Stilen** (A Leiste `bar`, B Mini-Kachel `tile`, C nur Zahlen `numbers`), **Cyberpunk-Komplettumbau**.
 - Basis der Oberfläche ist jetzt die Cyberpunk-`gui.py` des Nutzers (Seitenleiste, NeonButton/NeonBar, rechte Spalte). Mein Zwischenstand "helle/dunkle ttk-Oberfläche mit Kopfzeile (L3)" ist ersetzt (nicht im Repo; nur im Git-Verlauf, Commit `2262309`).
-- Aus meinem Teil in die Cyberpunk-GUI übernommen: Prozessliste nur bei sichtbarer Ansicht Übersicht (`skip_processes`, Intervall 15 s), Netzwerkzähler im Mess-Thread (`_measure`), Overlay-Knopf + globales Tastenkürzel, Overlay-Einstellungen (zweispaltiger Dialog), Overlay-Daten (`OverlayData`).
+- Aus meinem Teil in die Cyberpunk-GUI übernommen: Prozessliste nur bei sichtbarer Ansicht Übersicht (`skip_processes`, Intervall jetzt 30 s, Knopf JETZT AKTUALISIEREN mit "Stand"-Anzeige; die Messung unten lief noch mit 15 s), Netzwerkzähler im Mess-Thread (`_measure`), Overlay-Knopf + globales Tastenkürzel, Overlay-Einstellungen (zweispaltiger Dialog), Overlay-Daten (`OverlayData`).
 - **Mindestgröße jetzt 1020×640** (Vorgabe 720×560 gilt nicht mehr; Seitenleiste + rechte Spalte).
 - Tests: 96 grün unter Linux mit Bildschirm (Xvfb, Python 3.12), 88 grün + 8 übersprungen ohne Bildschirm. Windows/Python 3.14: **nicht ausgeführt**.
 - **Auf Windows gemessen:** Performance von 2.2.0 (siehe unten). **Nicht auf Windows getestet:** Klick-Durchlässigkeit, durchsichtiger Hintergrund im Stil `numbers` (`-transparentcolor`), globales Tastenkürzel, Overlay über einem Spiel. Checkliste: `docs/checkliste_test_windows.md`.
@@ -64,7 +64,7 @@ Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptt
 
 ## Offene Punkte
 - Nutzer: Checkliste `docs/checkliste_test_windows.md` von Hand (Overlay, Tastenkürzel, Klick-Durchlässigkeit, `numbers`).
-- Entscheidung offen: Rest-Ruckeln in der Übersicht beheben (Intervall 30 s bzw. Prozessliste auf Knopfdruck; Prozess-Scan in eigenem Prozess; schneller Weg per ctypes als Prototyp zum Messen).
+- Option A umgesetzt (Intervall 30 s + Knopf). Nächste Messung nötig: `tools\messung_starten.bat` (Übersicht), Erwartung Scan-Anteil ca. 18 % statt 35 %. Danach entscheiden: B (Scan in eigenem Prozess) oder C (ctypes-Prototyp).
 - Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
 - Screenshots der Ansichten Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design von 2.1.
 - Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf.

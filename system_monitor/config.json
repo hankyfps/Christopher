@@ -7,7 +7,7 @@
     "disk_path": "",
     "alert_cooldown_s": 60,
     "top_processes": 10,
-    "process_interval_s": 15.0,
+    "process_interval_s": 30.0,
     "csv_logging": true,
     "csv_flush_s": 30,
     "log_dir": "logs",

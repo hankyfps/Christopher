@@ -104,3 +104,28 @@ def test_hauptfenster_versteckt_zeichnet_nichts_und_scannt_nicht(app):
     app._hotkey_events.put("toggle")                # Tastenkürzel zurück
     pump(app, 0.5)
     assert not app.overlay.visible and app.root.state() == "normal"
+
+
+def test_knopf_aktualisiert_die_prozessliste_sofort(app):
+    pump(app, 2.5)
+    app.monitor.collector.process_interval_s = 3600      # automatisch praktisch nie
+    app.monitor.collector.invalidate_processes()
+    pump(app, 2.5)                                       # ein Scan läuft jetzt noch
+    before = len(app.process_calls)
+    pump(app, 2.0)
+    assert len(app.process_calls) == before              # ohne Knopf passiert nichts
+    app.refresh_processes()
+    pump(app, 3.0)
+    assert len(app.process_calls) == before + 1
+    assert app.proc_stamp.cget("text").startswith("Stand")
+
+
+def test_knopf_ist_in_anderer_ansicht_wirkungslos_bis_zur_uebersicht(app):
+    from monitor import gui
+    pump(app, 2.0)
+    app.select_view(gui.TAB_DRIVES)
+    app.monitor.collector.process_interval_s = 3600
+    n = len(app.process_calls)
+    app.refresh_processes()                              # nicht in der Übersicht: kein Scan
+    pump(app, 2.0)
+    assert len(app.process_calls) == n
