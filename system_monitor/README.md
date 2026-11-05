@@ -100,13 +100,32 @@ Nicht ursächlich (gemessen, jeweils unter 2 ms): Prozesstabelle neu füllen, La
 
 | Maßnahme | Wirkung |
 |---|---|
-| Prozessliste nur, wenn das Fenster sichtbar und der Tab **Übersicht** offen ist (`skip_processes`); Standardintervall 15 s statt 5 s | Erwartung aus den Messwerten: ca. 4 s je Aufbau alle 15 s, also ca. 25 % eines Kerns nur solange man die Liste sieht, sonst ca. 1 %. **Auf Windows noch nicht gemessen.** |
-| Netzwerkzähler werden im Mess-Thread gelesen | ca. 6–11 ms weniger im Hauptthread je Messung |
+| Prozessliste nur, wenn das Fenster sichtbar und die Ansicht **Übersicht** offen ist (`skip_processes`); Intervall 15 s statt 5 s | gemessen, siehe Tabelle: in jeder anderen Ansicht ca. 1 % eines Kerns |
+| Netzwerkzähler werden im Mess-Thread gelesen | `_update_traffic` im Hauptthread: 0,1–1,5 ms statt 162–545 ms |
 | Minimiert oder Overlay-Modus (Hauptfenster versteckt): nichts zeichnen | Messung, Warnungen und CSV laufen weiter |
 | Meldungsliste auf 500 Einträge begrenzt | begrenzt den Speicher im Dauerbetrieb |
 | Texte, Balken und Tabellenzeilen nur bei Änderung setzen (Neon-Oberfläche), Overlay ebenso | spart Neuzeichnen |
 
-**Status der 2.2.0-Messung:** ❓ Eine Windows-Messung der neuen Version steht noch aus. Starten mit `tools\messung_starten.bat`; danach Vergleich mit `py tools\messung_windows.py --vergleich messungen\vorher_….json messungen\nachher_….json`.
+**Messung 2.2.0 auf Windows** (gleicher Rechner und gleiche Messung wie oben, Fenster 1220×760, Läufe vom 05.11.2026 14:52 und 14:55):
+
+| Messwert (Übersicht / Netzwerk) | 2.1.1 | **2.2.0** |
+|---|---|---|
+| CPU sichtbar (% eines Kerns) | 84 / 75 | **34,4 / 1,0** |
+| CPU minimiert (% eines Kerns) | 84 / 68 | **6,4 / 0,6** |
+| Timer-Verspätung, Maximum | 713 / 1204 ms | **376 / 23 ms** |
+| Timer über 50 ms (in 60 s) | 222 / 222 | **124 / 0** |
+| Timer über 100 ms (in 60 s) | 177 / 143 | **69 / 0** |
+| Messungen in 60 s (Soll 30) | 9 / 10 | **21 / 30** |
+| `_tick` im Hauptthread, Median | 213 / 610 ms | **2,4 / 1,5 ms** |
+| Tab-Wechsel, Median | 33–59 / 217–653 ms | **20–38 / 19–36 ms** |
+| Fenstergröße ändern (40 Schritte), Median | 344 / 121 ms | **144 / 135 ms** |
+| RAM (Working Set) | 42 MB | **42–44 MB** |
+
+**Einordnung:**
+- **Netzwerk-Ansicht (und jede Ansicht außer Übersicht):** deutlich besser, 1 % eines Kerns, keine Verspätung über 50 ms, volle 30 Messungen pro Minute.
+- **Übersicht:** CPU von 84 % auf 34 % eines Kerns gesenkt, Ruckler aber nicht weg. Die Prozessliste lief im Test viermal in 60 s und dauerte jeweils ca. 5,3 s (Median). 4 × 5,3 s = 21 s, also etwa 35 % der Zeit; das passt zur gemessenen CPU. Während dieser Zeit stockt die Oberfläche (Timer bis 376 ms, `_show_drives` bis 140 ms) und es werden weniger Messungen gemacht (21 statt 30). Die Ursache der Stocker ist **nicht bewiesen**; vermutlich halten die Abfragen pro Prozess Python lange fest.
+- **Minimiert 6,4 % in der Übersicht:** vermutlich lief noch ein Prozess-Scan aus der Phase davor zu Ende. Das ist nicht belegt.
+- **Fenstergröße ändern:** 135–144 ms je Schritt (Tk-Layout der Neon-Oberfläche). In der Übersicht bis 1,3 s, wenn dabei gerade ein Prozess-Scan läuft. Ursache nicht untersucht.
 
 Früher eingebaut (ab 2.1, weiter aktiv): Messung im Hintergrund-Thread, Threadwechsel 1 ms (`sys.setswitchinterval`), WLAN/Bluetooth nur bei geöffnetem Tab, winget erst beim Öffnen des Updates-Tabs, CSV gebündelt alle 30 s, `memory_percent` selbst berechnet.
 
