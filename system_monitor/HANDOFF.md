@@ -63,7 +63,8 @@ Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptt
 - temporär: `tools/messung_windows.py` (läuft mit beiden Oberflächen), `tools/messung_starten.bat` (Label `nachher`), `tools/prozess_diagnose.py`, `tools/zusatzmessung_starten.bat`
 
 ## Offene Punkte
-- Nutzer: Windows-Test per Checkliste und `tools\messung_starten.bat` (nachher), Ergebnis schicken -> README "Performance" mit 2.2.0-Werten ergänzen.
+- Nutzer: Checkliste `docs/checkliste_test_windows.md` von Hand (Overlay, Tastenkürzel, Klick-Durchlässigkeit, `numbers`).
+- Entscheidung offen: Rest-Ruckeln in der Übersicht beheben (Intervall 30 s bzw. Prozessliste auf Knopfdruck; Prozess-Scan in eigenem Prozess; schneller Weg per ctypes als Prototyp zum Messen).
 - Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
 - Screenshots der Ansichten Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design von 2.1.
 - Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf.
