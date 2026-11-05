@@ -266,6 +266,9 @@ def run_measurement(args) -> dict:
     tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
     tmpdir = Path(tmp.name)
     cfg = replace(cfg, log_dir=str(tmpdir))
+    if args.prozess_intervall is not None:
+        cfg = replace(cfg, process_interval_s=args.prozess_intervall)
+        NOTES.append(f"process_interval_s auf {args.prozess_intervall:g} s gesetzt (A/B-Test)")
     tab_index = TABS[args.tab]
     result: dict = {"cpu": {}, "rss_mb": {}}
 
@@ -459,6 +462,8 @@ def main() -> int:
     p.add_argument("--mikro", type=int, default=10, help="Durchläufe der Einzeltests")
     p.add_argument("--label", default="", help="z. B. vorher / nachher")
     p.add_argument("--ohne-bell", action="store_true", help="root.bell() nicht testen (kein Ton)")
+    p.add_argument("--prozess-intervall", type=float, default=None,
+                   help="process_interval_s überschreiben (z. B. 3600 = Prozessliste praktisch aus; für A/B-Vergleich)")
     p.add_argument("--config", type=Path, default=ROOT / "config.json")
     p.add_argument("--vergleich", nargs=2, type=Path, metavar=("A.json", "B.json"))
     args = p.parse_args()
