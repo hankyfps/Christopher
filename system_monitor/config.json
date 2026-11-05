@@ -1,0 +1,19 @@
+{
+    "interval_s": 2.0,
+    "cpu_threshold": 85.0,
+    "ram_threshold": 85.0,
+    "disk_threshold": 90.0,
+    "hysteresis": 5.0,
+    "disk_path": "",
+    "alert_cooldown_s": 60,
+    "top_processes": 10,
+    "process_interval_s": 5.0,
+    "csv_logging": true,
+    "csv_flush_s": 30,
+    "log_dir": "logs",
+    "net_interface": "",
+    "drive_refresh_s": 10,
+    "wlan_refresh_s": 15,
+    "bt_refresh_s": 60,
+    "check_updates_on_start": false
+}

@@ -1,0 +1,111 @@
+// Programmablaufplan nach DIN 66001 – Hauptprogramm System-Monitor (main.py)
+// Symbole: Grenzstelle = abgerundetes Rechteck, Operation = Rechteck,
+//          Unterprogramm = Rechteck mit doppelten Seitenlinien,
+//          Ein-/Ausgabe = Parallelogramm, Verzweigung = Raute
+digraph PAP {
+    graph [label="PAP 1: Hauptprogramm (main.py)", labelloc=t, fontsize=20, fontname="DejaVu Sans Bold",
+           nodesep=0.45, ranksep=0.32, splines=ortho, bgcolor=white, pad=0.4];
+    node  [fontname="DejaVu Sans", fontsize=11, shape=box, width=3.0, height=0.55, style=filled, fillcolor=white];
+    edge  [fontname="DejaVu Sans", fontsize=10, arrowsize=0.7];
+
+    // ---------- Knoten Hauptstrang (group=main hält ihn senkrecht) ----------
+    start   [group=main, label="Start", style="rounded,filled", width=1.6];
+    args    [group=main, label="Programmparameter einlesen\n(--nogui, --once, --config)", shape=parallelogram];
+    loadcfg [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Konfiguration laden<BR/>(config.json)</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    cfgok   [group=main, label="Datei vorhanden\nund gültig?", shape=diamond, width=2.6, height=1.1];
+    m1      [group=main, shape=point, width=0.06];
+    logset  [group=main, label="Logging einrichten\n(monitor.log, messwerte.csv)"];
+    init    [group=main, label="Monitor initialisieren\n(Collector, AlertManager)"];
+    gui     [group=main, label="GUI gewünscht und\ntkinter verfügbar?", shape=diamond, width=2.6, height=1.1];
+    m2      [group=main, shape=point, width=0.06];
+    loop    [group=main, shape=point, width=0.06];
+    measure [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Messwerte erfassen (Hintergrund-Thread)<BR/>CPU, RAM, Platte; Prozesse alle 5 s</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    check   [group=main, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="190">Grenzwerte prüfen<BR/>(siehe PAP 2)</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    newal   [group=main, label="Neue Meldungen?", shape=diamond, width=2.6, height=1.0];
+    m3      [group=main, shape=point, width=0.06];
+    csvq    [group=main, label="CSV-Protokoll\naktiv?", shape=diamond, width=2.6, height=1.0];
+    m4      [group=main, shape=point, width=0.06];
+    show    [group=main, label="Anzeige aktualisieren\n(Balken, Prozesse, Meldungen,\nSignalton bei Warnung)", shape=parallelogram];
+    traffic [group=main, label="Datenverkehr berechnen\n(Δ Bytes / Δ Zeit)"];
+    dueq    [group=main, label="Abfrage fällig? (Laufwerke;\nWLAN/Bluetooth nur bei offenem Tab)", shape=diamond, width=2.9, height=1.2];
+    m8      [group=main, shape=point, width=0.06];
+    resq    [group=main, label="Hintergrund-Ergebnis\neingetroffen?", shape=diamond, width=2.8, height=1.1];
+    m9      [group=main, shape=point, width=0.06];
+    once    [group=main, label="Modus --once?", shape=diamond, width=2.6, height=1.0];
+    quitq   [group=main, label="Beenden angefordert?\n(Button / Strg+C)", shape=diamond, width=2.6, height=1.1];
+    setq    [group=main, label="Einstellungen\ngeändert?", shape=diamond, width=2.6, height=1.0];
+    m5      [group=main, shape=point, width=0.06];
+    pauseq  [group=main, label="Pause aktiv?", shape=diamond, width=2.6, height=1.0];
+    m6      [group=main, shape=point, width=0.06];
+    wait    [group=main, label="Messintervall abwarten\n(interval_s)"];
+
+    // ---------- Seitenzweige ----------
+    std     [group=side, label="Standardwerte verwenden\n(fehlt Datei: anlegen)"];
+    p1      [group=side, shape=point, width=0.01];
+    win     [group=left, label="Fenster aufbauen", width=2.2];
+    p2l     [group=left, shape=point, width=0.01];
+    term    [group=side, label="Terminal-Modus starten", width=2.4];
+    p2r     [group=side, shape=point, width=0.01];
+    logal   [group=side, label="Meldungen in\nmonitor.log schreiben"];
+    p3      [group=side, shape=point, width=0.01];
+    csvw    [group=side, label="Messwerte puffern,\nalle 30 s in CSV schreiben"];
+    p4      [group=side, shape=point, width=0.01];
+    setup   [group=side, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="170">Eingaben prüfen,<BR/>speichern, übernehmen</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    p5      [group=side, shape=point, width=0.01];
+    wait_p  [group=side, label="Auf „Fortsetzen“ warten"];
+    p6      [group=side, shape=point, width=0.01];
+    bgjob   [group=side, shape=plain, label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="8"><TR><TD WIDTH="6"></TD><TD WIDTH="170">Abfrage im Hintergrund<BR/>starten (Thread)</TD><TD WIDTH="6"></TD></TR></TABLE>>];
+    p8      [group=side, shape=point, width=0.01];
+    tabupd  [group=side, label="Tab aktualisieren\n(neues ext. Laufwerk → Meldung)", shape=parallelogram];
+    p9      [group=side, shape=point, width=0.01];
+    bye     [group=side, label="CSV-Puffer schreiben,\nLogeintrag „Programm beendet“"];
+    ende    [group=side, label="Ende", style="rounded,filled", width=1.6];
+
+    // ---------- Hauptstrang ----------
+    start -> args -> loadcfg -> cfgok;
+    cfgok -> m1     [xlabel="ja ", arrowhead=none];
+    m1 -> logset -> init -> gui;
+    gui -> m2       [style=invis];
+    m2 -> loop      [arrowhead=none];
+    loop -> measure -> check -> newal;
+    newal -> m3     [xlabel="nein ", arrowhead=none];
+    m3 -> csvq;
+    csvq -> m4      [xlabel="nein ", arrowhead=none];
+    m4 -> show -> traffic -> dueq;
+    dueq -> m8      [xlabel="nein ", arrowhead=none];
+    m8 -> resq;
+    resq -> m9      [xlabel="nein ", arrowhead=none];
+    m9 -> once;
+    once -> quitq   [xlabel="nein "];
+    quitq -> setq   [xlabel="nein "];
+    setq -> m5      [xlabel="nein ", arrowhead=none];
+    m5 -> pauseq;
+    pauseq -> m6    [xlabel="nein ", arrowhead=none];
+    m6 -> wait;
+    wait -> loop    [constraint=false];            // Schleife: zurück zur Messung
+
+    // ---------- Zweige und Zusammenführungen ----------
+    cfgok -> std    [xlabel="nein"];  std -> p1 [arrowhead=none];  m1 -> p1 [arrowhead=none];
+    gui -> win      [xlabel="ja "];   win -> p2l [arrowhead=none]; p2l -> m2 [arrowhead=none];
+    gui -> term     [xlabel="nein"];  term -> p2r [arrowhead=none]; m2 -> p2r [arrowhead=none];
+    newal -> logal  [xlabel="ja"];    logal -> p3 [arrowhead=none]; m3 -> p3 [arrowhead=none];
+    csvq -> csvw    [xlabel="ja"];    csvw -> p4 [arrowhead=none];  m4 -> p4 [arrowhead=none];
+    setq -> setup   [xlabel="ja"];    setup -> p5 [arrowhead=none]; m5 -> p5 [arrowhead=none];
+    pauseq -> wait_p [xlabel="ja"];   wait_p -> p6 [arrowhead=none]; m6 -> p6 [arrowhead=none];
+    dueq -> bgjob   [xlabel="ja"];    bgjob -> p8 [arrowhead=none]; m8 -> p8 [arrowhead=none];
+    resq -> tabupd  [xlabel="ja"];    tabupd -> p9 [arrowhead=none]; m9 -> p9 [arrowhead=none];
+    once -> bye     [xlabel="ja"];
+    quitq -> bye    [xlabel="ja"];
+    bye -> ende;
+
+    {rank=same; m1; p1}
+    {rank=same; win; term}
+    {rank=same; p2l; m2; p2r}
+    {rank=same; m3; p3}
+    {rank=same; m4; p4}
+    {rank=same; quitq; bye}
+    {rank=same; m8; p8}
+    {rank=same; m9; p9}
+    {rank=same; m5; p5}
+    {rank=same; m6; p6}
+}

@@ -1,0 +1,71 @@
+// Programmablaufplan nach DIN 66001 – Updates suchen und installieren (Tab "Updates")
+// Kreis "A" = Übergangsstelle (Konnektor) nach DIN 66001
+digraph PAP3 {
+    graph [label="PAP 3: Updates suchen und installieren (winget)", labelloc=t, fontsize=18,
+           fontname="DejaVu Sans Bold", nodesep=0.45, ranksep=0.32, splines=ortho, bgcolor=white, pad=0.4];
+    node  [fontname="DejaVu Sans", fontsize=11, shape=box, width=3.0, height=0.55, style=filled, fillcolor=white];
+    edge  [fontname="DejaVu Sans", fontsize=10, arrowsize=0.7];
+
+    // linke Spalte: Suchen und Auswerten
+    start  [group=L, label="Start", style="rounded,filled", width=1.6];
+    run    [group=L, label="„winget upgrade“ im Hintergrund\nausführen (max. 3 Minuten)"];
+    okq    [group=L, label="winget vorhanden und\nAntwort erhalten?", shape=diamond, width=2.8, height=1.1];
+    parse  [group=L, label="Fortschrittszeichen entfernen,\nTrennlinie „-----“ suchen"];
+    cols   [group=L, label="Spaltenanfänge aus der\nKopfzeile bestimmen"];
+    loop   [group=L, shape=point, width=0.06];
+    rowq   [group=L, label="Weitere\nTabellenzeile?", shape=diamond, width=2.6, height=1.0];
+    valq   [group=L, label="ID ohne Leerzeichen und\nbeide Versionen vorhanden?", shape=diamond, width=3.0, height=1.2];
+    add    [group=L, label="Update zur Liste hinzufügen"];
+    mv     [group=L, shape=point, width=0.06];
+    pv     [group=L0, shape=point, width=0.01];
+
+    // rechte Spalte: Anzeigen und Installieren
+    errA   [group=R2, label="Fehlermeldung anzeigen", shape=parallelogram];
+    cA1    [group=R2, label="A", shape=circle, width=0.4, fixedsize=true];
+    show   [group=R, label="Liste anzeigen\n(Tab „Updates (n)“)", shape=parallelogram];
+    selq   [group=R, label="„Aktualisieren“\ngeklickt?", shape=diamond, width=2.6, height=1.0];
+    conf   [group=R, label="Sicherheitsabfrage\nbestätigt?", shape=diamond, width=2.6, height=1.0];
+    idq    [group=R, label="Alle IDs gültig?\n(Buchstaben, Ziffern . - _ +)", shape=diamond, width=3.0, height=1.2];
+    exec   [group=R, label="winget upgrade --id … in\neigenem Konsolenfenster starten"];
+    mend   [group=R, shape=point, width=0.06];
+    ende   [group=R, label="Ende", style="rounded,filled", width=1.6];
+    cS     [group=R2, label="A", shape=circle, width=0.4, fixedsize=true];
+    cC     [group=R2, label="A", shape=circle, width=0.4, fixedsize=true];
+    err2   [group=R2, label="Fehlermeldung anzeigen", shape=parallelogram];
+    cE     [group=R2, label="A", shape=circle, width=0.4, fixedsize=true];
+    cEnd   [group=R2, label="A", shape=circle, width=0.4, fixedsize=true];
+
+    start -> run -> okq;
+    okq -> parse  [xlabel="ja "];
+    okq -> errA   [xlabel="nein"];
+    errA -> cA1;
+    parse -> cols -> loop;
+    loop -> rowq;
+    rowq -> valq  [xlabel="ja "];
+    rowq -> show  [xlabel="nein"];
+    valq -> add   [xlabel="ja "];
+    valq -> pv    [xlabel="nein", arrowhead=none];
+    pv -> mv      [arrowhead=none];
+    add -> mv     [arrowhead=none];
+    mv -> loop    [constraint=false];
+
+    show -> selq;
+    selq -> conf  [xlabel="ja "];
+    selq -> cS    [xlabel="nein"];
+    conf -> idq   [xlabel="ja "];
+    conf -> cC    [xlabel="nein"];
+    idq -> exec   [xlabel="ja "];
+    idq -> err2   [xlabel="nein"];
+    err2 -> cE;
+    exec -> mend  [arrowhead=none];
+    cEnd -> mend;
+    mend -> ende;
+
+    {rank=same; okq; errA}
+    {rank=same; rowq; show}
+    {rank=same; valq; pv}
+    {rank=same; selq; cS}
+    {rank=same; conf; cC}
+    {rank=same; idq; err2}
+    {rank=same; mend; cEnd}
+}

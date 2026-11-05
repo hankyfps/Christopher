@@ -1,0 +1,52 @@
+// Programmablaufplan nach DIN 66001 – Unterprogramm "Grenzwerte prüfen"
+// entspricht AlertManager.check() in monitor/alerts.py
+digraph PAP2 {
+    graph [label="PAP 2: Unterprogramm „Grenzwerte prüfen“ (AlertManager.check)", labelloc=t, fontsize=18,
+           fontname="DejaVu Sans Bold", nodesep=0.45, ranksep=0.32, splines=ortho, bgcolor=white, pad=0.4];
+    node  [fontname="DejaVu Sans", fontsize=11, shape=box, width=3.0, height=0.55, style=filled, fillcolor=white];
+    edge  [fontname="DejaVu Sans", fontsize=10, arrowsize=0.7];
+
+    start  [group=main, label="Grenzwerte prüfen", style="rounded,filled", width=2.2];
+    inp    [group=main, label="Eingabe: Messwerte\n(CPU, RAM, Festplatte)", shape=parallelogram];
+    clear  [group=main, label="Meldungsliste leeren"];
+    loop   [group=main, shape=point, width=0.06];
+    more   [group=main, label="Noch eine Kennzahl\nzu prüfen?", shape=diamond, width=2.6, height=1.1];
+    next   [group=main, label="Nächste Kennzahl holen\n(Wert, Schwelle)"];
+    ge     [group=main, label="Wert ≥ Schwelle?", shape=diamond, width=2.6, height=1.0];
+    act    [group=main, label="Warnung aktiv UND\nWarnungs-Pause läuft?", shape=diamond, width=2.8, height=1.1];
+    warn   [group=main, label="WARNUNG erzeugen,\nZeitpunkt merken"];
+    mw     [group=main, shape=point, width=0.06];
+    back   [group=main, shape=point, width=0.06];
+
+    hyst   [group=side, label="Warnung aktiv UND\nWert < Schwelle − Hysterese?", shape=diamond, width=3.2, height=1.2];
+    ok     [group=side, label="Entwarnung (OK) erzeugen,\nWarnung zurücksetzen"];
+    mh     [group=side, shape=point, width=0.06];
+    pa     [group=left, shape=point, width=0.01];
+
+    out    [group=right, label="Ausgabe: Meldungsliste", shape=parallelogram];
+    ende   [group=right, label="Rücksprung", style="rounded,filled", width=1.8];
+
+    start -> inp -> clear -> loop;
+    loop -> more   [arrowhead=normal];
+    more -> next   [xlabel="ja "];
+    more -> out    [xlabel="nein"];
+    out -> ende;
+    next -> ge;
+    ge -> act      [xlabel="ja "];
+    act -> warn    [xlabel="nein "];
+    act -> pa      [xlabel="ja", arrowhead=none];
+    pa -> mw       [arrowhead=none];
+    warn -> mw     [arrowhead=none];
+    ge -> hyst     [xlabel="nein"];
+    hyst -> ok     [xlabel="ja "];
+    hyst -> mh     [xlabel="nein", arrowhead=none];
+    ok -> mh       [arrowhead=none];
+    mh -> back     [arrowhead=none];
+    mw -> back     [arrowhead=none];
+    back -> loop   [constraint=false];
+
+    {rank=same; more; out}
+    {rank=same; ge; hyst}
+    {rank=same; act; ok}
+    {rank=same; pa; mw; mh}
+}
