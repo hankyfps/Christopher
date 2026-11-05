@@ -1,6 +1,6 @@
 # HANDOFF – System-Monitor 2.1.1 → 2.2.0
 
-Stand: 2026-11-05 · Phase 1 (Analyse): Läufe Übersicht und Netzwerk gemessen, Zusatzmessung (A/B ohne Prozessliste) ausstehend
+Stand: 2026-11-05 · Phase 1 (Analyse): Läufe Übersicht und Netzwerk gemessen, Zusatzmessung (A/B ohne Prozessliste) gemessen, Phase 2 Vorschläge gemacht, Auswahl des Nutzers ausstehend
 
 ## Aktueller Stand
 - Phase 1: Code gelesen, Messskript `tools/messung_windows.py` geschrieben und unter Linux/Xvfb auf Funktion geprüft (Python 3.12, Tk 8.6.14).
@@ -39,6 +39,27 @@ Windows 11 (10.0.26300), Python 3.14.6, Tk 8.6, psutil 7.2.2, 14 logische CPUs. 
 Einschränkung: Die GUI-Werte (c) entstanden, während die Prozessliste im Hintergrund fast dauernd lief (5,3-5,6 s bei 5 s Intervall). Ob sie dadurch verfälscht sind, klärt der A/B-Lauf mit `--prozess-intervall 3600` (`tools/zusatzmessung_starten.bat`). Indiz dafür: `_draw_graph` beim Größe ändern Median 2,1 ms, im Betrieb Median 400 ms.
 Zusätzliche Auffälligkeit (nicht untersucht): einmal "WARNUNG CPU 100 %" beim Start im Einzeltest.
 
+## Zusatzmessung (14:11-14:17): Prozessliste-Diagnose und A/B ohne Prozessliste
+Diagnose (500 Prozesse, `tools/prozess_diagnose.py`): process_iter nur pid/name: 2,2-2,5 ms. Jeder Wert, der pro Prozess etwas abfragt (cpu_percent, cpu_times, memory_info): 3,7-3,9 s. memory_info einzeln: Summe 3680 ms bei 496 Prozessen, also ~7 ms je Prozess gleichmäßig (langsamster 69 ms). Kein Prozess ohne Zugriff. Ursache der 7 ms je Prozess: NICHT ermittelt.
+Hauptthread-Aufrufe ruhig vs. während Prozessliste läuft: net_io_counters 6,2 -> 24,7 ms; disk_usage 0,0 -> 19,1 ms.
+
+| Messwert | mit Prozessliste (Übers./Netzw.) | ohne Prozessliste (Übers./Netzw.) |
+|---|---|---|
+| Timer Max | 713 / 1204 ms | 25,6 / 25,3 ms |
+| Timer >50 ms / >100 ms | 222 / 222 x ; 177 / 143 x | 0 / 0 |
+| CPU sichtbar (% eines Kerns) | 84,0 / 75,0 | 0,99 / 0,94 |
+| CPU minimiert (% eines Kerns) | 84,0 / 67,8 | 1,02 / 0,94 |
+| Messungen in 60 s (Soll 30) | 9 / 10 | 30 / 29 |
+| `_tick` Median | 213 / 610 ms | 12,6 / 13,1 ms |
+| `_update_traffic` Median | 165 / 545 ms | 11,0 / 11,6 ms |
+| `_show_drives` Median | 63 / 82 ms | 0,26 / 0,28 ms |
+| `_draw_graph` im Betrieb | 400 ms (Netzw.) | 0,94 ms |
+| Tab-Wechsel Median | 33-59 / 217-653 ms | 24-41 / 24-39 ms |
+| Fenstergröße Median / P95 | 344 / 1458 ; 121 / 1896 ms | 111 / 121 ; 72 / 99 ms |
+| RAM nach Idle | 42,3 / 42,2 MB | 42,2 / 41,3 MB |
+
+Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptthread-Aufrufe und das zu seltene Messen (9-10 statt 30 Messungen/min). Restkosten ohne Liste: `_update_traffic` 11 ms, Fenstergröße ändern 72-111 ms/Schritt (Tk-Layout, Diagramm nur ~1 ms).
+
 ## Entscheidungen des Nutzers
 - noch keine (Phase 2 steht aus: Performance-Maßnahmen, Overlay-Variante, Layout, Design hell/Cyberpunk)
 
@@ -47,11 +68,11 @@ Zusätzliche Auffälligkeit (nicht untersucht): einmal "WARNUNG CPU 100 %" beim 
 - neu: `HANDOFF.md`
 
 ## Offene Punkte
-- Nutzer startet `tools/zusatzmessung_starten.bat` (Diagnose Prozessliste + Läufe ohne Prozessliste) und schickt die Ausgabe.
+- Antworten des Nutzers auf die 4 Phase-2-Fragen (Prozessliste, Overlay-Variante, Layout, Design).
+- Ursache für ~7 ms je Prozess unbekannt; schneller Weg per ctypes (eine Abfrage für alle Prozesse) ist Hypothese, ungemessen, nur als Prototyp mit Messung.
 - v1.1-Ordner (`system_monitor` mit Cyberpunk-Look) als ZIP nachreichen, falls Look/Sparmodus daraus übernommen werden sollen.
 - Ursachen-Tabelle (Phase 1) mit Messwerten füllen; ohne Messung gilt keine Ursache als belegt.
 
 ## Nächster Schritt
-1. Nutzer-Messung auswerten → Ursachen-Tabelle (gemessen ja/nein, ms, Aufwand, Risiko).
-2. Phase 2: Vorschläge (Performance, Overlay mit ASCII-Skizzen, Layout, Design-Frage), max. 4 Fragen, auf Auswahl warten.
-3. Erst danach Phase 3 (vorher Backup `../system_monitor_v2.1.1_backup`).
+1. Auf Auswahl des Nutzers warten (nichts am Programmcode ändern bis dahin).
+2. Dann Phase 3 (vorher Backup `../system_monitor_v2.1.1_backup`).
