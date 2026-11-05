@@ -1,6 +1,6 @@
 # Ergebnis Handtest Windows, 05.11.2026
 
-Gemeldet vom Nutzer anhand von `docs/checkliste_test_windows.md` (Stand der Checkliste mit „alle ca. 15 s“ bei Punkt 5, also noch vor dem Standardintervall 30 s und ohne Punkt 5a). Nicht von Claude ausgeführt oder nachgeprüft. Welches Spiel, welcher Anti-Cheat und welche Programmversion (ZIP) getestet wurden, ist nicht angegeben.
+Gemeldet vom Nutzer anhand von `docs/checkliste_test_windows.md` (Stand der Checkliste mit „alle ca. 15 s“ bei Punkt 5, also noch vor dem Standardintervall 30 s und ohne Punkt 5a). Nicht von Claude ausgeführt oder nachgeprüft. Welches Spiel, welcher Anti-Cheat und welche Programmversion (ZIP) getestet wurden, ist nicht angegeben; das Spiel ist für das Projekt unerheblich (Mini-Projekt im Rahmen einer Umschulung).
 
 | # | Test | Ergebnis |
 |---|---|---|

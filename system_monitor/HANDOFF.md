@@ -66,13 +66,13 @@ Fazit: Prozessliste ist Ursache für CPU, Timer-Verspätung, ausgebremste Hauptt
 - temporär: `tools/messung_windows.py` (läuft mit beiden Oberflächen), `tools/messung_starten.bat` (Label `nachher`), `tools/prozess_diagnose.py`, `tools/zusatzmessung_starten.bat`
 
 ## Offene Punkte
-- Nutzer: Punkt 16 (exklusiver Vollbild: war das Overlay sichtbar?), Spiel/Anti-Cheat nennen, 17b nachholen, Version bestätigen.
-- Option A umgesetzt und gemessen (siehe Nachmessung). Entscheidung offen: B (Scan in eigenem Prozess, beseitigt Stocker, CPU bleibt), C (ctypes-Prototyp mit Selbsttest/Rückfall auf psutil, Hypothese: Millisekunden), oder so lassen.
-- Ursache der ~7 ms je Prozess unbekannt; schneller Weg (ein Systemaufruf für alle Prozesse per ctypes) nur Hypothese, ungemessen.
+- Entscheidung Nutzer: Spiele sind egal, es ist ein Mini-Projekt im Rahmen einer Umschulung -> Spiel/Anti-Cheat/Punkt 16 werden nicht weiter verfolgt. Rest-Ruckeln beim Prozess-Scan: Option D (so lassen); B (eigener Prozess) und C (ctypes-Prototyp) nicht umgesetzt.
+- Ursache der ~7 ms je Prozess unbekannt; schneller Weg per ctypes nur Hypothese, ungemessen.
+- Handtest Punkt 17b (Lesbarkeit `numbers`) nicht geprüft.
 - Screenshots der Ansichten Laufwerke/Netzwerk/Bluetooth/Updates zeigen noch das helle Design von 2.1.
-- Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf.
-- Overlay-Größen im README sind Linux-Werte (JetBrains Mono); unter Windows andere Schrift.
-- Python 3.14 (Nutzer): Tests dort nicht gelaufen.
+- Ungeklärt: einmalige "CPU 100 %"-Warnung beim Start im Messlauf; Fenstergröße ändern 143 ms je Schritt (Neon-Layout), nicht untersucht.
+- Tests liefen nicht unter Python 3.14 (Nutzer-Version); Handtest unter Windows wurde vom Nutzer gemeldet, Programmversion nicht bestätigt.
+- `tools/` enthält temporäre Messskripte (nicht Teil des Programms).
 
 ## Nächster Schritt
-Auswahl des Nutzers zum Rest-Ruckeln in der Übersicht abwarten; Ergebnisse der Handcheckliste einarbeiten.
+Keiner offen. Projekt ist auf Stand 2.2.0 (Branch `claude/epic-cannon-mzki1z`).
